@@ -4,8 +4,29 @@
   <meta charset="UTF-8">
   <title>Afet Bilinci Oyunu</title>
   <style>
-    body { font-family: Arial; text-align: center; margin-top: 100px; }
-    button { margin: 10px; padding: 10px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin-top: 100px;
+    }
+    h1 {
+      color: #222;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -46,7 +67,11 @@
         if (choice === 3) score += 20;
         let bilincli = Math.min(100, score);
         document.getElementById("title").innerText = "Oyun bitti!";
-        document.getElementById("choices").innerHTML = <p>Bilinç puanın: <b>${bilincli}%</b></p>;
+        document.getElementById("choices").innerHTML = `
+          <p style="font-size:20px;">Bilinç puanın: <b>${bilincli}%</b></p>
+          <p>Yeniden oynamak ister misin?</p>
+          <button onclick="window.location.reload()">Tekrar Oyna</button>
+        `;
       }
     }
   </script>
