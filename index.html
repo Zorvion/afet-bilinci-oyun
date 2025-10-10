@@ -61,60 +61,91 @@ document.addEventListener("DOMContentLoaded", () => {
     (type === "deprem") ? deprem() : yangin();
   }
 
-  // === DEPREM ===
-  function deprem() {
-    if (step === 1) {
-      app.innerHTML = `
-        <h1>Deprem oluyor! Ne yaparsın?</h1>
-        <div id="buttons"></div>`;
-      createButtons(["Kaç", "Çök, Kapan, Tutun", "Boş dur"], [1, 2, 3]);
-    } else if (step === 2) {
-      if (choice === 2) score += 25; else mistakes.push("Deprem anında çök-kapan-tutun yapmadın.");
-      app.innerHTML = <h1>Dolap devriliyor! Ne yaparsın?</h1><div id="buttons"></div>;
-      createButtons(["Dolabı tut", "Kafanı koru", "Pencereye koş"], [1, 2, 3]);
-    } else if (step === 3) {
-      if (choice === 2) score += 25; else mistakes.push("Kendini korumadın.");
-      app.innerHTML = <h1>Deprem bitti! Ne yaparsın?</h1><div id="buttons"></div>;
-      createButtons(["Evde kal", "Dışarı çık"], [1, 2]);
-    } else if (step === 4) {
-      if (choice === 2) score += 25; else mistakes.push("Dışarı çıkmadın.");
-      finish();
-    }
+  // ============= DEPREM =============
+  function depremScene(choice) {
+    const scenes = [
+      { // 1
+        text: "Deprem oluyor! Ne yaparsın?",
+        options: ["Kaç", "Çök, Kapan, Tutun", "Boş dur"],
+        correct: 1
+      },
+      { // 2
+        text: "Dolap sallanıyor! Ne yaparsın?",
+        options: ["Dolabı tut", "Kafanı koru", "Pencereye koş"],
+        correct: 1
+      },
+      { // 3
+        text: "Sarsıntı azaldı, ne yaparsın?",
+        options: ["Evin içinde kal", "Dışarı çık", "Elektrikleri kontrol et"],
+        correct: 2
+      },
+      { // 4
+        text: "Dışarıdasın, insanlar panikte! Ne yaparsın?",
+        options: ["Kalabalığa karış", "Açık alanda dur", "Arabaya bin"],
+        correct: 2
+      },
+      { // 5
+        text: "Deprem bitti, ne yaparsın?",
+        options: ["Yaralılara yardım et", "Eve dön", "Elektrikleri aç"],
+        correct: 1
+      }
+    ];
+    playScene(scenes, choice);
   }
 
-  // === YANGIN ===
-  function yangin() {
-    if (step === 1) {
-      app.innerHTML = `
-        <h1>Evde yangın çıktı! Ne yaparsın?</h1>
-        <div id="buttons"></div>`;
-      createButtons(["Su dök", "Elektrikleri kapat"], [1, 2]);
-    } else if (step === 2) {
-      if (choice === 2) score += 50; else mistakes.push("Elektrikleri kapatmadın.");
-      app.innerHTML = <h1>Duman yayıldı! Ne yaparsın?</h1><div id="buttons"></div>;
-      createButtons(["Koş", "Eğilerek ilerle"], [1, 2]);
-    } else if (step === 3) {
-      if (choice === 2) score += 50; else mistakes.push("Dumanı soludun.");
-      finish();
-    }
+  // ============= YANGIN =============
+  function yanginScene(choice) {
+    const scenes = [
+      { // 1
+        text: "Evde yangın çıktı! Ne yaparsın?",
+        options: ["Su dök", "Elektrikleri kapat", "Kaç"],
+        correct: 2
+      },
+      { // 2
+        text: "Duman yayılıyor! Ne yaparsın?",
+        options: ["Koş", "Eğilerek ilerle", "Cam aç"],
+        correct: 2
+      },
+      { // 3
+        text: "Çıkışa geldin! Ne yaparsın?",
+        options: ["Kapıyı kontrol etmeden aç", "Kapının sıcaklığını kontrol et", "Geri dön"],
+        correct: 2
+      },
+      { // 4
+        text: "Dışarıdasın! Ne yaparsın?",
+        options: ["112'yi ara", "Eve geri dön", "Komşuya koş"],
+        correct: 1
+      }
+    ];
+    playScene(scenes, choice);
   }
 
-  // === GENEL BUTON OLUŞTURMA ===
-  function createButtons(texts, values) {
-    const container = document.getElementById("buttons");
-    texts.forEach((txt, i) => {
-      const btn = document.createElement("button");
-      btn.textContent = txt;
-      btn.addEventListener("click", () => {
-        choice = values[i];
-        step++;
-        (type === "deprem") ? deprem() : yangin();
+  // ============= ORTAK SAHNE MEKANİĞİ =============
+  function playScene(scenes, choice) {
+    if (choice !== undefined) {
+      const prevScene = scenes[step - 1];
+      if (choice === prevScene.correct) score += 20;
+      else mistakes.push(prevScene.text);
+    }
+
+    if (step < scenes.length) {
+      const scene = scenes[step];
+      app.innerHTML = <h1>${scene.text}</h1><div id="buttons"></div>;
+      const btns = document.getElementById("buttons");
+      scene.options.forEach((txt, i) => {
+        const b = document.createElement("button");
+        b.textContent = txt;
+        b.addEventListener("click", () => {
+          step++;
+          if (type === "deprem") depremScene(i + 1);
+          else yanginScene(i + 1);
+        });
+        btns.appendChild(b);
       });
-      container.appendChild(btn);
-    });
+    } else finish();
   }
 
-  // === SONUÇ ===
+  // ============= SONUÇ =============
   function finish() {
     const bilincli = Math.min(100, score);
     const hataListesi = mistakes.length
@@ -123,12 +154,14 @@ document.addEventListener("DOMContentLoaded", () => {
     app.innerHTML = `
       <h1>Oyun Bitti!</h1>
       <p>Bilinç Puanın: <b>${bilincli}%</b></p>
-      <h3>Yaptığın Hatalar:</h3>
+      <h3>Yanlış Davranışların:</h3>
       <ul>${hataListesi}</ul>
-      <button id="menuBtn">Ana Menüye Dön</button>`;
-    document.getElementById("menuBtn").addEventListener("click", showMenu);
+      <br>
+      <button id="menuBtn">Ana Menüye Dön</button>
+    `;
+    document.getElementById("menuBtn").addEventListener("click", mainMenu);
   }
 });
 </script>
 </body>
-</html>
+</html> 
