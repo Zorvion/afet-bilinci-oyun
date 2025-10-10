@@ -1,167 +1,145 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Afet Bilinci Oyunu</title>
-<style>
-  body {
-    font-family: "Segoe UI", sans-serif;
-    text-align: center;
-    background: linear-gradient(135deg, #bbdefb, #e3f2fd);
-    margin: 0;
-    padding: 0;
-  }
-  .box {
-    max-width: 600px;
-    margin: 80px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  }
-  h1 { color: #0d47a1; }
-  button {
-    margin: 10px;
-    padding: 12px 25px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #1976d2;
-    color: white;
-    transition: 0.25s;
-  }
-  button:hover { background-color: #0d47a1; }
-  ul { text-align: left; }
-</style>
+  <meta charset="UTF-8">
+  <title>Afet Bilinci Oyunu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f2f4f7;
+      margin-top: 80px;
+    }
+    h1 {
+      color: #222;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-<div class="box" id="app"></div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const app = document.getElementById("app");
-  let score = 0, step = 0, type = "", mistakes = [];
+  <h1 id="title">Afet Bilinci Oyunu</h1>
+  <div id="choices">
+    <button onclick="start('deprem')">🌋 Deprem</button>
+    <button onclick="start('yangin')">🔥 Yangın</button>
+  </div>
 
-  showMenu();
+  <script>
+    let score = 0;
+    let step = 0;
+    let type = "";
 
-  function showMenu() {
-    app.innerHTML = `
-      <h1>Afet Bilinci Oyunu</h1>
-      <p>Bir afet türü seç:</p>
-      <button id="depremBtn">🌋 Deprem</button>
-      <button id="yanginBtn">🔥 Yangın</button>
-    `;
-    document.getElementById("depremBtn").addEventListener("click", () => start("deprem"));
-    document.getElementById("yanginBtn").addEventListener("click", () => start("yangin"));
-  }
-
-  function start(t) {
-    type = t; score = 0; step = 1; mistakes = [];
-    (type === "deprem") ? deprem() : yangin();
-  }
-
-  // ============= DEPREM =============
-  function depremScene(choice) {
-    const scenes = [
-      { // 1
-        text: "Deprem oluyor! Ne yaparsın?",
-        options: ["Kaç", "Çök, Kapan, Tutun", "Boş dur"],
-        correct: 1
-      },
-      { // 2
-        text: "Dolap sallanıyor! Ne yaparsın?",
-        options: ["Dolabı tut", "Kafanı koru", "Pencereye koş"],
-        correct: 1
-      },
-      { // 3
-        text: "Sarsıntı azaldı, ne yaparsın?",
-        options: ["Evin içinde kal", "Dışarı çık", "Elektrikleri kontrol et"],
-        correct: 2
-      },
-      { // 4
-        text: "Dışarıdasın, insanlar panikte! Ne yaparsın?",
-        options: ["Kalabalığa karış", "Açık alanda dur", "Arabaya bin"],
-        correct: 2
-      },
-      { // 5
-        text: "Deprem bitti, ne yaparsın?",
-        options: ["Yaralılara yardım et", "Eve dön", "Elektrikleri aç"],
-        correct: 1
-      }
-    ];
-    playScene(scenes, choice);
-  }
-
-  // ============= YANGIN =============
-  function yanginScene(choice) {
-    const scenes = [
-      { // 1
-        text: "Evde yangın çıktı! Ne yaparsın?",
-        options: ["Su dök", "Elektrikleri kapat", "Kaç"],
-        correct: 2
-      },
-      { // 2
-        text: "Duman yayılıyor! Ne yaparsın?",
-        options: ["Koş", "Eğilerek ilerle", "Cam aç"],
-        correct: 2
-      },
-      { // 3
-        text: "Çıkışa geldin! Ne yaparsın?",
-        options: ["Kapıyı kontrol etmeden aç", "Kapının sıcaklığını kontrol et", "Geri dön"],
-        correct: 2
-      },
-      { // 4
-        text: "Dışarıdasın! Ne yaparsın?",
-        options: ["112'yi ara", "Eve geri dön", "Komşuya koş"],
-        correct: 1
-      }
-    ];
-    playScene(scenes, choice);
-  }
-
-  // ============= ORTAK SAHNE MEKANİĞİ =============
-  function playScene(scenes, choice) {
-    if (choice !== undefined) {
-      const prevScene = scenes[step - 1];
-      if (choice === prevScene.correct) score += 20;
-      else mistakes.push(prevScene.text);
+    function start(t) {
+      type = t;
+      score = 0;
+      step = 1;
+      if (type === "deprem") deprem(step);
+      else yangin(step);
     }
 
-    if (step < scenes.length) {
-      const scene = scenes[step];
-      app.innerHTML = <h1>${scene.text}</h1><div id="buttons"></div>;
-      const btns = document.getElementById("buttons");
-      scene.options.forEach((txt, i) => {
-        const b = document.createElement("button");
-        b.textContent = txt;
-        b.addEventListener("click", () => {
-          step++;
-          if (type === "deprem") depremScene(i + 1);
-          else yanginScene(i + 1);
-        });
-        btns.appendChild(b);
-      });
-    } else finish();
-  }
+    // ==================== DEPREM ====================
+    function deprem(choice) {
+      const title = document.getElementById("title");
+      const choices = document.getElementById("choices");
 
-  // ============= SONUÇ =============
-  function finish() {
-    const bilincli = Math.min(100, score);
-    const hataListesi = mistakes.length
-      ? mistakes.map(x => <li>${x}</li>).join("")
-      : "<li>Hiç hata yapmadın, mükemmelsin!</li>";
-    app.innerHTML = `
-      <h1>Oyun Bitti!</h1>
-      <p>Bilinç Puanın: <b>${bilincli}%</b></p>
-      <h3>Yanlış Davranışların:</h3>
-      <ul>${hataListesi}</ul>
-      <br>
-      <button id="menuBtn">Ana Menüye Dön</button>
-    `;
-    document.getElementById("menuBtn").addEventListener("click", mainMenu);
-  }
-});
-</script>
+      if (step === 1) {
+        title.innerText = "Deprem oluyor! Ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="answer(1,2)">Kaç</button>
+          <button onclick="answer(2,2)">Çök, Kapan, Tutun</button>
+          <button onclick="answer(3,2)">Boş dur</button>
+        `;
+      } 
+      else if (step === 2) {
+        if (choice === 2) score += 30;
+        title.innerText = "Dolap sallanıyor, ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="answer(1,3)">Dolabı tut</button>
+          <button onclick="answer(2,3)">Kafanı koru</button>
+          <button onclick="answer(3,3)">Pencereye koş</button>
+        `;
+      } 
+      else if (step === 3) {
+        if (choice === 2) score += 30;
+        title.innerText = "Sarsıntı azaldı, ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="answer(1,4)">Evin içinde kal</button>
+          <button onclick="answer(2,4)">Dışarı çık</button>
+          <button onclick="answer(3,4)">Elektrikleri kontrol et</button>
+        `;
+      } 
+      else if (step === 4) {
+        if (choice === 2) score += 40;
+        showResult();
+      }
+    }
+
+    // ==================== YANGIN ====================
+    function yangin(choice) {
+      const title = document.getElementById("title");
+      const choices = document.getElementById("choices");
+
+      if (step === 1) {
+        title.innerText = "Evde yangın çıktı! Ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="answer(1,2)">Su dök</button>
+          <button onclick="answer(2,2)">Kaç</button>
+          <button onclick="answer(3,2)">Pencereden bak</button>
+        `;
+      } 
+      else if (step === 2) {
+        if (choice === 2) score += 30;
+        title.innerText = "Duman yayılıyor, ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="answer(1,3)">Koş</button>
+          <button onclick="answer(2,3)">Eğilerek ilerle</button>
+          <button onclick="answer(3,3)">Cam aç</button>
+        `;
+      } 
+      else if (step === 3) {
+        if (choice === 2) score += 40;
+        title.innerText = "Dışarıdasın! Ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="answer(1,4)">112'yi ara</button>
+          <button onclick="answer(2,4)">Eve geri dön</button>
+          <button onclick="answer(3,4)">Komşuya koş</button>
+        `;
+      } 
+      else if (step === 4) {
+        if (choice === 1) score += 30;
+        showResult();
+      }
+    }
+
+    // ==================== GENEL ====================
+    function answer(choice, nextStep) {
+      if (type === "deprem") deprem(choice);
+      else yangin(choice);
+      step = nextStep;
+    }
+
+    function showResult() {
+      const bilincli = Math.min(100, score);
+      document.getElementById("title").innerText = "Oyun Bitti!";
+      document.getElementById("choices").innerHTML = `
+        <p style="font-size:20px;">Bilinç Puanın: <b>${bilincli}%</b></p>
+        <button onclick="window.location.reload()">Ana Menüye Dön</button>
+      `;
+    }
+  </script>
+
 </body>
-</html> 
+</html>
