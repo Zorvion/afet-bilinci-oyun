@@ -36,96 +36,97 @@
 </style>
 </head>
 <body>
-<div class="box" id="app">
-  <h1>Afet Bilinci Oyunu</h1>
-  <p>Bir afet türü seç:</p>
-  <button id="depremBtn">🌋 Deprem</button>
-  <button id="yanginBtn">🔥 Yangın</button>
-</div>
+<div class="box" id="app"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const app = document.getElementById("app");
   let score = 0, step = 0, type = "", mistakes = [];
 
-  document.getElementById("depremBtn").onclick = () => start("deprem");
-  document.getElementById("yanginBtn").onclick = () => start("yangin");
+  showMenu();
+
+  function showMenu() {
+    app.innerHTML = `
+      <h1>Afet Bilinci Oyunu</h1>
+      <p>Bir afet türü seç:</p>
+      <button id="depremBtn">🌋 Deprem</button>
+      <button id="yanginBtn">🔥 Yangın</button>
+    `;
+    document.getElementById("depremBtn").addEventListener("click", () => start("deprem"));
+    document.getElementById("yanginBtn").addEventListener("click", () => start("yangin"));
+  }
 
   function start(t) {
     type = t; score = 0; step = 1; mistakes = [];
-    if (type === "deprem") deprem(); else yangin();
+    (type === "deprem") ? deprem() : yangin();
   }
 
-  // === DEPREM SENARYOSU ===
-  function deprem(choice) {
+  // === DEPREM ===
+  function deprem() {
     if (step === 1) {
       app.innerHTML = `
         <h1>Deprem oluyor! Ne yaparsın?</h1>
-        <button onclick="nextDeprem(1)">Kaç</button>
-        <button onclick="nextDeprem(2)">Çök, Kapan, Tutun</button>
-        <button onclick="nextDeprem(3)">Boş dur</button>`;
+        <div id="buttons"></div>`;
+      createButtons(["Kaç", "Çök, Kapan, Tutun", "Boş dur"], [1, 2, 3]);
     } else if (step === 2) {
       if (choice === 2) score += 25; else mistakes.push("Deprem anında çök-kapan-tutun yapmadın.");
-      app.innerHTML = `
-        <h1>Dolap devriliyor! Ne yaparsın?</h1>
-        <button onclick="nextDeprem(1)">Dolabı tut</button>
-        <button onclick="nextDeprem(2)">Kafanı koru</button>
-        <button onclick="nextDeprem(3)">Pencereye koş</button>`;
+      app.innerHTML = <h1>Dolap devriliyor! Ne yaparsın?</h1><div id="buttons"></div>;
+      createButtons(["Dolabı tut", "Kafanı koru", "Pencereye koş"], [1, 2, 3]);
     } else if (step === 3) {
       if (choice === 2) score += 25; else mistakes.push("Kendini korumadın.");
-      app.innerHTML = `
-        <h1>Deprem bitti! Ne yaparsın?</h1>
-        <button onclick="nextDeprem(1)">Evde kal</button>
-        <button onclick="nextDeprem(2)">Dışarı çık</button>`;
+      app.innerHTML = <h1>Deprem bitti! Ne yaparsın?</h1><div id="buttons"></div>;
+      createButtons(["Evde kal", "Dışarı çık"], [1, 2]);
     } else if (step === 4) {
       if (choice === 2) score += 25; else mistakes.push("Dışarı çıkmadın.");
       finish();
     }
   }
 
-  // Deprem adımları
-  window.nextDeprem = (choice) => {
-    step++;
-    deprem(choice);
-  };
-
-  // === YANGIN SENARYOSU ===
-  function yangin(choice) {
+  // === YANGIN ===
+  function yangin() {
     if (step === 1) {
       app.innerHTML = `
         <h1>Evde yangın çıktı! Ne yaparsın?</h1>
-        <button onclick="nextYangin(1)">Su dök</button>
-        <button onclick="nextYangin(2)">Elektrikleri kapat</button>`;
+        <div id="buttons"></div>`;
+      createButtons(["Su dök", "Elektrikleri kapat"], [1, 2]);
     } else if (step === 2) {
       if (choice === 2) score += 50; else mistakes.push("Elektrikleri kapatmadın.");
-      app.innerHTML = `
-        <h1>Duman yayıldı! Ne yaparsın?</h1>
-        <button onclick="nextYangin(1)">Koş</button>
-        <button onclick="nextYangin(2)">Eğilerek ilerle</button>`;
+      app.innerHTML = <h1>Duman yayıldı! Ne yaparsın?</h1><div id="buttons"></div>;
+      createButtons(["Koş", "Eğilerek ilerle"], [1, 2]);
     } else if (step === 3) {
       if (choice === 2) score += 50; else mistakes.push("Dumanı soludun.");
       finish();
     }
   }
 
-  window.nextYangin = (choice) => {
-    step++;
-    yangin(choice);
-  };
+  // === GENEL BUTON OLUŞTURMA ===
+  function createButtons(texts, values) {
+    const container = document.getElementById("buttons");
+    texts.forEach((txt, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = txt;
+      btn.addEventListener("click", () => {
+        choice = values[i];
+        step++;
+        (type === "deprem") ? deprem() : yangin();
+      });
+      container.appendChild(btn);
+    });
+  }
 
-  // === SONUÇ EKRANI ===
+  // === SONUÇ ===
   function finish() {
-    let bilincli = Math.min(100, score);
-    let hataListesi = mistakes.length === 0
-      ? "<li>Hiç hata yapmadın, mükemmel bir bilinç düzeyindesin!</li>"
-      : mistakes.map(x => <li>${x}</li>).join("");
+    const bilincli = Math.min(100, score);
+    const hataListesi = mistakes.length
+      ? mistakes.map(x => <li>${x}</li>).join("")
+      : "<li>Hiç hata yapmadın, mükemmelsin!</li>";
     app.innerHTML = `
       <h1>Oyun Bitti!</h1>
       <p>Bilinç Puanın: <b>${bilincli}%</b></p>
       <h3>Yaptığın Hatalar:</h3>
       <ul>${hataListesi}</ul>
-      <br>
-      <button onclick="location.reload()">Ana Menüye Dön</button>`;
+      <button id="menuBtn">Ana Menüye Dön</button>`;
+    document.getElementById("menuBtn").addEventListener("click", showMenu);
   }
 });
 </script>
