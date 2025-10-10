@@ -1,14 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <title>Afet Bilinci Oyunu</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 100px; }
+    button { margin: 10px; padding: 10px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; }
+  </style>
 </head>
 <body>
-  <h1>Afet Bilinci Testine Hoş Geldin!</h1>
-  <p>Deprem oluyor! Ne yaparsın?</p>
-  <button>Kaç</button>
-  <button>Çök, Kapan, Tutun</button>
-  <button>Boş otur</button>
+
+  <h1 id="title">Deprem oluyor! Ne yaparsın?</h1>
+  <div id="choices">
+    <button onclick="next(1)">Kaç</button>
+    <button onclick="next(2)">Çök, Kapan, Tutun</button>
+    <button onclick="next(3)">Boş otur</button>
+  </div>
+
+  <script>
+    let score = 0;
+    let step = 1;
+
+    function next(choice) {
+      if (step === 1) {
+        if (choice === 2) score += 40;
+        document.getElementById("title").innerText = "Deprem devam ediyor, dolap devrilmek üzere!";
+        document.getElementById("choices").innerHTML = `
+          <button onclick="next(1)">Pencereye koş</button>
+          <button onclick="next(2)">Köşeye çekil</button>
+          <button onclick="next(3)">Kafanı koru</button>
+        `;
+        step = 2;
+      }
+      else if (step === 2) {
+        if (choice === 3) score += 40;
+        document.getElementById("title").innerText = "Deprem bitti! Ne yaparsın?";
+        document.getElementById("choices").innerHTML = `
+          <button onclick="next(1)">Evin içinde kal</button>
+          <button onclick="next(2)">Elektrikleri kontrol et</button>
+          <button onclick="next(3)">Dışarı çık</button>
+        `;
+        step = 3;
+      }
+      else if (step === 3) {
+        if (choice === 3) score += 20;
+        let bilincli = Math.min(100, score);
+        document.getElementById("title").innerText = "Oyun bitti!";
+        document.getElementById("choices").innerHTML = <p>Bilinç puanın: <b>${bilincli}%</b></p>;
+      }
+    }
+  </script>
+
 </body>
 </html>
