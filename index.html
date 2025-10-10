@@ -13,15 +13,13 @@
     }
     .container {
       max-width: 600px;
-      margin: 100px auto;
+      margin: 80px auto;
       background: white;
       padding: 40px;
       border-radius: 20px;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
-    h1 {
-      color: #004d80;
-    }
+    h1 { color: #004d80; }
     button {
       margin: 10px;
       padding: 12px 25px;
@@ -33,86 +31,142 @@
       color: white;
       transition: 0.25s;
     }
-    button:hover {
-      background-color: #01579b;
-    }
-    p {
-      font-size: 18px;
-    }
+    button:hover { background-color: #01579b; }
+    p { font-size: 18px; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1 id="title">Deprem oluyor! Ne yaparsın?</h1>
-    <div id="choices">
-      <button onclick="next(1)">Kaç</button>
-      <button onclick="next(2)">Çök, Kapan, Tutun</button>
-      <button onclick="next(3)">Boş otur</button>
-    </div>
+  <div class="container" id="gameBox">
+    <h1>Afet Bilinci Oyunu</h1>
+    <p>Bir afet türü seç:</p>
+    <button onclick="start('deprem')">Deprem</button>
+    <button onclick="start('yangin')">Yangın</button>
   </div>
 
   <script>
     let score = 0;
-    let step = 1;
+    let step = 0;
+    let afet = "";
     let mistakes = [];
 
-    function next(choice) {
+    function start(type) {
+      afet = type;
+      score = 0;
+      step = 1;
+      mistakes = [];
+      if (afet === "deprem") depremStep();
+      else yanginStep();
+    }
+
+    // ===== DEPREM =====
+    function depremStep(choice) {
       if (step === 1) {
-        if (choice === 2) score += 20; else mistakes.push("Deprem anında çök-kapan-tutun yapmadın.");
-        document.getElementById("title").innerText = "Deprem sürüyor, dolap sallanıyor!";
-        document.getElementById("choices").innerHTML = `
-          <button onclick="next(1)">Dolabı tut</button>
-          <button onclick="next(2)">Kafanı koru</button>
-          <button onclick="next(3)">Pencereye koş</button>
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Deprem oluyor! Ne yaparsın?</h1>
+          <button onclick="depremStep(1)">Kaç</button>
+          <button onclick="depremStep(2)">Çök, Kapan, Tutun</button>
+          <button onclick="depremStep(3)">Boş otur</button>
         `;
         step = 2;
       }
       else if (step === 2) {
-        if (choice === 2) score += 20; else mistakes.push("Kendini korumadın, eşyalar devrilebilirdi.");
-        document.getElementById("title").innerText = "Sarsıntı azaldı. Ne yaparsın?";
-        document.getElementById("choices").innerHTML = `
-          <button onclick="next(1)">Evin içinde kal</button>
-          <button onclick="next(2)">Dışarı çık</button>
-          <button onclick="next(3)">Elektrikleri kontrol et</button>
+        if (choice === 2) score += 25; else mistakes.push("Deprem anında çök-kapan-tutun yapmadın.");
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Dolap devrilmek üzere, ne yaparsın?</h1>
+          <button onclick="depremStep(1)">Dolabı tut</button>
+          <button onclick="depremStep(2)">Kafanı koru</button>
+          <button onclick="depremStep(3)">Pencereye koş</button>
         `;
         step = 3;
       }
       else if (step === 3) {
-        if (choice === 2) score += 20; else mistakes.push("Deprem sonrası hemen dışarı çıkman gerekiyordu.");
-        document.getElementById("title").innerText = "Dışarıdasın, insanlar panik yapıyor!";
-        document.getElementById("choices").innerHTML = `
-          <button onclick="next(1)">Kalabalığa karış</button>
-          <button onclick="next(2)">Açık alanda dur</button>
-          <button onclick="next(3)">Arabaya bin</button>
+        if (choice === 2) score += 25; else mistakes.push("Kafanı korumadın, eşyalar devrilebilirdi.");
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Deprem bitti! Şimdi ne yaparsın?</h1>
+          <button onclick="depremStep(1)">Evin içinde kal</button>
+          <button onclick="depremStep(2)">Dışarı çık</button>
+          <button onclick="depremStep(3)">Elektrikleri aç</button>
         `;
         step = 4;
       }
       else if (step === 4) {
-        if (choice === 2) score += 20; else mistakes.push("Açık alanda durmak en güvenli seçenektir.");
-        document.getElementById("title").innerText = "Deprem bitti! Şimdi ne yaparsın?";
-        document.getElementById("choices").innerHTML = `
-          <button onclick="next(1)">Yaralılara yardım et</button>
-          <button onclick="next(2)">Eve geri dön</button>
-          <button onclick="next(3)">Elektrikleri aç</button>
+        if (choice === 2) score += 25; else mistakes.push("Deprem sonrası hemen dışarı çıkman gerekiyordu.");
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Dışarıdasın, ne yaparsın?</h1>
+          <button onclick="depremStep(1)">Açık alanda bekle</button>
+          <button onclick="depremStep(2)">Arabaya bin</button>
+          <button onclick="depremStep(3)">Binaya yaklaş</button>
         `;
         step = 5;
       }
       else if (step === 5) {
-        if (choice === 1) score += 20; else mistakes.push("Deprem sonrası eve dönmek tehlikelidir.");
-        let bilincli = Math.min(100, score);
-        let hataListesi = mistakes.length === 0
-          ? "<li>Hiç hata yapmadın, mükemmel bir bilinç düzeyindesin!</li>"
-          : mistakes.map(m => <li>${m}</li>).join("");
-        document.querySelector(".container").innerHTML = `
-          <h1>Oyun Bitti!</h1>
-          <p>Bilinç Puanın: <b>${bilincli}%</b></p>
-          <h3>Yaptığın Hatalar:</h3>
-          <ul style="text-align:left;">${hataListesi}</ul>
-          <br>
-          <button onclick="window.location.reload()">Tekrar Oyna</button>
-        `;
+        if (choice === 1) score += 25; else mistakes.push("Açık alanda kalmalıydın.");
+        gameOver();
       }
+    }
+
+    // ===== YANGIN =====
+    function yanginStep(choice) {
+      if (step === 1) {
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Evde yangın çıktı! Ne yaparsın?</h1>
+          <button onclick="yanginStep(1)">Su dök</button>
+          <button onclick="yanginStep(2)">Elektrikleri kapat</button>
+          <button onclick="yanginStep(3)">Pencereden bak</button>
+        `;
+        step = 2;
+      }
+      else if (step === 2) {
+        if (choice === 2) score += 25; else mistakes.push("Elektrikleri kapatmadın, yangın büyüyebilirdi.");
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Duman yayıldı! Ne yaparsın?</h1>
+          <button onclick="yanginStep(1)">Koş</button>
+          <button onclick="yanginStep(2)">Eğilerek ilerle</button>
+          <button onclick="yanginStep(3)">Kapıyı aç</button>
+        `;
+        step = 3;
+      }
+      else if (step === 3) {
+        if (choice === 2) score += 25; else mistakes.push("Duman solumamak için eğilmeliydin.");
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Çıkışa ulaştın, ne yaparsın?</h1>
+          <button onclick="yanginStep(1)">Kapıyı hemen aç</button>
+          <button onclick="yanginStep(2)">Kapı sıcak mı kontrol et</button>
+          <button onclick="yanginStep(3)">Pencereye yönel</button>
+        `;
+        step = 4;
+      }
+      else if (step === 4) {
+        if (choice === 2) score += 25; else mistakes.push("Kapının sıcak olup olmadığını kontrol etmeliydin.");
+        document.getElementById("gameBox").innerHTML = `
+          <h1>Dışarı çıktın! Şimdi ne yaparsın?</h1>
+          <button onclick="yanginStep(1)">İtfaiyeyi ara</button>
+          <button onclick="yanginStep(2)">İçeri dön</button>
+          <button onclick="yanginStep(3)">Fotoğraf çek</button>
+        `;
+        step = 5;
+      }
+      else if (step === 5) {
+        if (choice === 1) score += 25; else mistakes.push("İtfaiyeyi aramak önceliğin olmalıydı.");
+        gameOver();
+      }
+    }
+
+    // ===== SON EKRAN =====
+    function gameOver() {
+      let bilincli = Math.min(100, score);
+      let hataListesi = mistakes.length === 0
+        ? "<li>Hiç hata yapmadın, mükemmel bir bilinç düzeyindesin!</li>"
+        : mistakes.map(m => <li>${m}</li>).join("");
+      document.getElementById("gameBox").innerHTML = `
+        <h1>Oyun Bitti!</h1>
+        <p>Bilinç Puanın: <b>${bilincli}%</b></p>
+        <h3>Yaptığın Hatalar:</h3>
+        <ul style="text-align:left;">${hataListesi}</ul>
+        <br>
+        <button onclick="window.location.reload()">Ana Menüye Dön</button>
+      `;
     }
   </script>
 
