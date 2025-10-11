@@ -7,12 +7,10 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background-color: #f2f4f7;
-      margin-top: 80px;
+      background-color: #eef3f7;
+      margin-top: 70px;
     }
-    h1 {
-      color: #222;
-    }
+    h1 { color: #222; }
     button {
       margin: 10px;
       padding: 10px 25px;
@@ -24,9 +22,8 @@
       color: white;
       transition: 0.2s;
     }
-    button:hover {
-      background-color: #0056b3;
-    }
+    button:hover { background-color: #0056b3; }
+    ul { text-align: left; max-width: 400px; margin: 10px auto; }
   </style>
 </head>
 <body>
@@ -41,11 +38,13 @@
     let score = 0;
     let step = 0;
     let type = "";
+    let mistakes = [];
 
     function start(t) {
       type = t;
       score = 0;
       step = 1;
+      mistakes = [];
       if (type === "deprem") deprem(step);
       else yangin(step);
     }
@@ -55,34 +54,58 @@
       const title = document.getElementById("title");
       const choices = document.getElementById("choices");
 
+      // önceki sahnede yanlış yaptıysa not al
+      if (step > 1) checkAnswer(choice);
+
       if (step === 1) {
-        title.innerText = "Deprem oluyor! Ne yaparsın?";
+        title.innerText = "Deprem başladı! Ne yaparsın?";
         choices.innerHTML = `
-          <button onclick="answer(1,2)">Kaç</button>
-          <button onclick="answer(2,2)">Çök, Kapan, Tutun</button>
-          <button onclick="answer(3,2)">Boş dur</button>
+          <button onclick="next(2,2)">Kaç</button>
+          <button onclick="next(2,1)">Çök, Kapan, Tutun</button>
+          <button onclick="next(2,3)">Camdan bak</button>
         `;
       } 
       else if (step === 2) {
-        if (choice === 2) score += 30;
-        title.innerText = "Dolap sallanıyor, ne yaparsın?";
+        title.innerText = "Dolap devriliyor, ne yaparsın?";
         choices.innerHTML = `
-          <button onclick="answer(1,3)">Dolabı tut</button>
-          <button onclick="answer(2,3)">Kafanı koru</button>
-          <button onclick="answer(3,3)">Pencereye koş</button>
+          <button onclick="next(3,1)">Dolabı tut</button>
+          <button onclick="next(3,2)">Kafanı koru</button>
+          <button onclick="next(3,3)">Pencereye koş</button>
         `;
       } 
       else if (step === 3) {
-        if (choice === 2) score += 30;
-        title.innerText = "Sarsıntı azaldı, ne yaparsın?";
+        title.innerText = "Sarsıntı azalıyor, ne yaparsın?";
         choices.innerHTML = `
-          <button onclick="answer(1,4)">Evin içinde kal</button>
-          <button onclick="answer(2,4)">Dışarı çık</button>
-          <button onclick="answer(3,4)">Elektrikleri kontrol et</button>
+          <button onclick="next(4,3)">Elektrikleri kontrol et</button>
+          <button onclick="next(4,2)">Dışarı çık</button>
+          <button onclick="next(4,1)">Evin içinde kal</button>
         `;
       } 
       else if (step === 4) {
-        if (choice === 2) score += 40;
+        title.innerText = "Dışarıdasın, çevre kalabalık. Ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="next(5,2)">Açık alanda dur</button>
+          <button onclick="next(5,1)">Arabaya bin</button>
+          <button onclick="next(5,3)">Binalara yaklaş</button>
+        `;
+      }
+      else if (step === 5) {
+        title.innerText = "Artçı sarsıntılar başladı, ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="next(6,2)">Yine Çök-Kapan-Tutun</button>
+          <button onclick="next(6,1)">Koş</button>
+          <button onclick="next(6,3)">Duvarda bekle</button>
+        `;
+      }
+      else if (step === 6) {
+        title.innerText = "Deprem bitti! Ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="next(7,1)">Eve dön</button>
+          <button onclick="next(7,2)">Yaralılara yardım et</button>
+          <button onclick="next(7,3)">Elektrikleri aç</button>
+        `;
+      }
+      else if (step === 7) {
         showResult();
       }
     }
@@ -92,50 +115,82 @@
       const title = document.getElementById("title");
       const choices = document.getElementById("choices");
 
+      if (step > 1) checkAnswer(choice);
+
       if (step === 1) {
         title.innerText = "Evde yangın çıktı! Ne yaparsın?";
         choices.innerHTML = `
-          <button onclick="answer(1,2)">Su dök</button>
-          <button onclick="answer(2,2)">Kaç</button>
-          <button onclick="answer(3,2)">Pencereden bak</button>
+          <button onclick="next(2,1)">Su dök</button>
+          <button onclick="next(2,2)">Kaç</button>
+          <button onclick="next(2,3)">Pencereye bak</button>
         `;
       } 
       else if (step === 2) {
-        if (choice === 2) score += 30;
         title.innerText = "Duman yayılıyor, ne yaparsın?";
         choices.innerHTML = `
-          <button onclick="answer(1,3)">Koş</button>
-          <button onclick="answer(2,3)">Eğilerek ilerle</button>
-          <button onclick="answer(3,3)">Cam aç</button>
+          <button onclick="next(3,1)">Koş</button>
+          <button onclick="next(3,2)">Eğilerek ilerle</button>
+          <button onclick="next(3,3)">Camı aç</button>
         `;
       } 
       else if (step === 3) {
-        if (choice === 2) score += 40;
-        title.innerText = "Dışarıdasın! Ne yaparsın?";
+        title.innerText = "Kapıya ulaştın, ne yaparsın?";
         choices.innerHTML = `
-          <button onclick="answer(1,4)">112'yi ara</button>
-          <button onclick="answer(2,4)">Eve geri dön</button>
-          <button onclick="answer(3,4)">Komşuya koş</button>
+          <button onclick="next(4,1)">Kapıyı aç</button>
+          <button onclick="next(4,2)">Kapının sıcaklığını kontrol et</button>
+          <button onclick="next(4,3)">Geri dön</button>
         `;
-      } 
+      }
       else if (step === 4) {
-        if (choice === 1) score += 30;
+        title.innerText = "Dışarı çıktın! Ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="next(5,1)">Komşuya koş</button>
+          <button onclick="next(5,2)">112’yi ara</button>
+          <button onclick="next(5,3)">Eve geri dön</button>
+        `;
+      }
+      else if (step === 5) {
+        title.innerText = "Yangın söndü. Ne yaparsın?";
+        choices.innerHTML = `
+          <button onclick="next(6,1)">Eve gir</button>
+          <button onclick="next(6,2)">Yetkililerin izni bekle</button>
+          <button onclick="next(6,3)">Camdan bak</button>
+        `;
+      }
+      else if (step === 6) {
         showResult();
       }
     }
 
-    // ==================== GENEL ====================
-    function answer(choice, nextStep) {
-      if (type === "deprem") deprem(choice);
-      else yangin(choice);
+    // ==================== ORTAK ====================
+    function next(nextStep, correct) {
+      let func = type === "deprem" ? deprem : yangin;
+      checkAnswer(correct);
       step = nextStep;
+      func();
+    }
+
+    function checkAnswer(choice) {
+      const correctAnswers = {
+        deprem: {1:2,2:2,3:2,4:2,5:2,6:2},
+        yangin: {1:2,2:2,3:2,4:2,5:2}
+      };
+      const right = correctAnswers[type][step];
+      if (choice === right) score += 15;
+      else mistakes.push(document.getElementById("title").innerText);
     }
 
     function showResult() {
       const bilincli = Math.min(100, score);
+      const hatalar = mistakes.length > 0
+        ? mistakes.map(x => <li>${x}</li>).join("")
+        : "<li>Hiç hata yapmadın, mükemmelsin!</li>";
+
       document.getElementById("title").innerText = "Oyun Bitti!";
       document.getElementById("choices").innerHTML = `
         <p style="font-size:20px;">Bilinç Puanın: <b>${bilincli}%</b></p>
+        <h3>Yanlış Davranışların:</h3>
+        <ul>${hatalar}</ul>
         <button onclick="window.location.reload()">Ana Menüye Dön</button>
       `;
     }
