@@ -37,7 +37,7 @@
     </div>
 
     <script>
-        // Sayfanın tamamı yüklendikten sonra JavaScript kodunu çalıştırıyoruz.
+        // Sayfanın tamamen yüklendiğinden emin olmak için window.onload kullanıldı.
         window.onload = function() {
             let score = 0;
             let step = 0;
@@ -45,7 +45,6 @@
             let mistakes = [];
             let maxScorePerGame = 0;
 
-            // Senaryo Verileri: c: Doğru cevap seçeneğinin endeksi (1, 2 veya 3)
             const scenes = {
                 deprem: [
                     { q: "Deprem başladı! Ne yaparsın?", o: ["Kaç", "Çök, Kapan, Tutun", "Camdan bak"], c: 2 },
@@ -76,7 +75,7 @@
                 score = 0;
                 step = 1;
                 mistakes = [];
-                maxScorePerGame = scenes[type].length; // Maksimum doğru sayısı
+                maxScorePerGame = scenes[type].length;
                 showScene();
             }
 
@@ -91,14 +90,13 @@
                 }
 
                 const scene = data[step - 1];
-                // Hata Düzeltildi: Template Literal (ters tırnak `) kullanılarak değişkenler çağrıldı.
+                // $ işareti hatası düzeltildi.
                 title.innerText = Soru ${step}/${data.length}: ${scene.q}; 
-                choices.innerHTML = ""; // Önceki butonları temizle
+                choices.innerHTML = ""; 
 
                 scene.o.forEach((opt, i) => {
                     const btn = document.createElement("button");
                     btn.textContent = opt;
-                    // Tıklama işlevi atandı
                     btn.onclick = () => handleAnswer(i + 1, scene.c, scene.q, opt, scene.o[scene.c - 1]);
                     choices.appendChild(btn);
                 });
@@ -106,9 +104,8 @@
 
             function handleAnswer(choice, correct, question, selectedOption, correctAnswerText) {
                 if (choice === correct) {
-                    score++; // Her doğru cevap 1 puan
+                    score++;
                 } else {
-                    // Hatalı cevapta soruyu, seçilen yanlış şıkkı ve doğru şıkkı kaydet
                     mistakes.push({
                         question: question,
                         selected: selectedOption,
@@ -125,7 +122,6 @@
             }
 
             function showResult() {
-                // Puanı 100 üzerinden yüzdelik olarak hesapla
                 const percentageScore = maxScorePerGame > 0 ? Math.round((score / maxScorePerGame) * 100) : 0;
 
                 const hatalar = mistakes.length
@@ -140,7 +136,6 @@
 
                 document.getElementById("title").innerText = ${type.charAt(0).toUpperCase() + type.slice(1)} Senaryosu Bitti!;
                 
-                // Hata Düzeltildi: Bu kısımda fazladan $ işareti yok.
                 document.getElementById("choices").innerHTML = `
                     <p style="font-size:24px; margin-bottom: 25px;">
                         Afet Bilinci Başarı Puanın: 
@@ -155,10 +150,9 @@
                     <button id="menuBtn">Ana Menüye Dön</button>
                 `;
 
-                // Ana Menü butonu işlevi
                 document.getElementById("menuBtn").addEventListener("click", () => location.reload());
             }
-        }; // window.onload sonu
+        }; 
     </script>
 
 </body>
