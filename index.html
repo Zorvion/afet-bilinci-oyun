@@ -8,7 +8,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #eef3f7;
-            margin-top: 50px; /* Üst boşluğu biraz azalttım */
+            margin-top: 50px;
         }
         h1 { color: #222; }
         button {
@@ -23,9 +23,9 @@
             transition: 0.2s;
         }
         button:hover { background-color: #0056b3; }
-        ul { text-align: left; max-width: 500px; margin: 20px auto; padding-left: 20px; } /* Liste ayarları */
+        ul { text-align: left; max-width: 500px; margin: 20px auto; padding-left: 20px; }
         li { margin-bottom: 8px; }
-        .correct-answer { color: green; font-weight: bold; } /* Doğru cevapları vurgulamak için */
+        .correct-answer { color: green; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -37,120 +37,125 @@
     </div>
 
     <script>
-        let score = 0;
-        let step = 0;
-        let type = "";
-        let mistakes = [];
-        let maxScorePerGame = 0; // Maksimum puanı tutacak değişken
+        // Sayfanın tamamı yüklendikten sonra JavaScript kodunu çalıştırıyoruz.
+        window.onload = function() {
+            let score = 0;
+            let step = 0;
+            let type = "";
+            let mistakes = [];
+            let maxScorePerGame = 0; // Maksimum puanı tutacak değişken
 
-        const depremBtn = document.getElementById("depremBtn");
-        const yanginBtn = document.getElementById("yanginBtn");
+            // Senaryo Verileri: c: Doğru cevap seçeneğinin endeksi (1, 2 veya 3)
+            const scenes = {
+                deprem: [
+                    { q: "Deprem başladı! Ne yaparsın?", o: ["Kaç", "Çök, Kapan, Tutun", "Camdan bak"], c: 2 },
+                    { q: "Dolap devriliyor, ne yaparsın?", o: ["Dolabı tut", "Kafanı koru (Korunma alanına geç)", "Pencereye koş"], c: 2 },
+                    { q: "Sarsıntı azalıyor, ne yaparsın?", o: ["Evin içinde kal", "Dışarı çık", "Elektrikleri kontrol et"], c: 2 },
+                    { q: "Dışarıdasın, çevre kalabalık. Ne yaparsın?", o: ["Arabaya bin", "Açık alanda dur", "Binalara yaklaş"], c: 2 },
+                    { q: "Artçı sarsıntılar başladı, ne yaparsın?", o: ["Koş", "Yine Çök-Kapan-Tutun", "Duvarda bekle"], c: 2 },
+                    { q: "Deprem bitti, dışarıdasın. Ne yaparsın?", o: ["Eve hemen dön", "Yaralılara yardım et (Gerekliyse)", "Elektrikleri aç"], c: 2 }
+                ],
+                yangin: [
+                    { q: "Evde yangın çıktı! Ne yaparsın?", o: ["Su dök (Büyükse)", "90 saniyede çıkış yolunu belirle ve kaç", "Pencereye bak"], c: 2 },
+                    { q: "Duman yayılıyor, ne yaparsın?", o: ["Koş", "Eğilerek ilerle", "Camı aç"], c: 2 },
+                    { q: "Kapıya ulaştın, ne yaparsın?", o: ["Kapıyı aç", "Kapının sıcaklığını kontrol et", "Geri dön"], c: 2 },
+                    { q: "Dışarı çıktın! Ne yaparsın?", o: ["Komşuya koş", "112’yi/110'u ara ve toplanma alanına git", "Eve geri dön"], c: 2 },
+                    { q: "Yangın söndü. Ne yaparsın?", o: ["Eve gir", "Yetkililerin iznini bekle", "Camdan bak"], c: 2 }
+                ]
+            };
 
-        // Senaryo Verileri: c: Doğru cevap seçeneğinin endeksi (1, 2 veya 3)
-        const scenes = {
-            deprem: [
-                { q: "Deprem başladı! Ne yaparsın?", o: ["Kaç", "Çök, Kapan, Tutun", "Camdan bak"], c: 2 }, // Doğru: Çök, Kapan, Tutun (2. şık)
-                { q: "Dolap devriliyor, ne yaparsın?", o: ["Dolabı tut", "Kafanı koru (Korunma alanına geç)", "Pencereye koş"], c: 2 }, // Doğru: Kafanı koru (2. şık)
-                { q: "Sarsıntı azalıyor, ne yaparsın?", o: ["Evin içinde kal", "Dışarı çık", "Elektrikleri kontrol et"], c: 2 }, // Doğru: Dışarı çık (Güvenli alana) (2. şık)
-                { q: "Dışarıdasın, çevre kalabalık. Ne yaparsın?", o: ["Arabaya bin", "Açık alanda dur", "Binalara yaklaş"], c: 2 }, // Doğru: Açık alanda dur (2. şık)
-                { q: "Artçı sarsıntılar başladı, ne yaparsın?", o: ["Koş", "Yine Çök-Kapan-Tutun", "Duvarda bekle"], c: 2 }, // Doğru: Yine Çök-Kapan-Tutun (2. şık)
-                { q: "Deprem bitti, dışarıdasın. Ne yaparsın?", o: ["Eve hemen dön", "Yaralılara yardım et (Gerekliyse)", "Elektrikleri aç"], c: 2 } // Doğru: Yaralılara yardım et (2. şık)
-            ],
-            yangin: [
-                { q: "Evde yangın çıktı! Ne yaparsın?", o: ["Su dök (Büyükse)", "90 saniyede çıkış yolunu belirle ve kaç", "Pencereye bak"], c: 2 }, // Doğru: Kaç (2. şık)
-                { q: "Duman yayılıyor, ne yaparsın?", o: ["Koş", "Eğilerek ilerle", "Camı aç"], c: 2 }, // Doğru: Eğilerek ilerle (2. şık)
-                { q: "Kapıya ulaştın, ne yaparsın?", o: ["Kapıyı aç", "Kapının sıcaklığını kontrol et", "Geri dön"], c: 2 }, // Doğru: Kapının sıcaklığını kontrol et (2. şık)
-                { q: "Dışarı çıktın! Ne yaparsın?", o: ["Komşuya koş", "112’yi/110'u ara ve toplanma alanına git", "Eve geri dön"], c: 2 }, // Doğru: 112’yi/110'u ara (2. şık)
-                { q: "Yangın söndü. Ne yaparsın?", o: ["Eve gir", "Yetkililerin iznini bekle", "Camdan bak"], c: 2 } // Doğru: Yetkililerin iznini bekle (2. şık)
-            ]
-        };
+            const depremBtn = document.getElementById("depremBtn");
+            const yanginBtn = document.getElementById("yanginBtn");
 
-        depremBtn.addEventListener("click", () => start("deprem"));
-        yanginBtn.addEventListener("click", () => start("yangin"));
+            // Butonlara olay dinleyicilerini ekle
+            depremBtn.addEventListener("click", () => start("deprem"));
+            yanginBtn.addEventListener("click", () => start("yangin"));
 
-        function start(t) {
-            type = t;
-            score = 0;
-            step = 1;
-            mistakes = [];
-            maxScorePerGame = scenes[type].length; // Maksimum doğru sayısı
-            showScene();
-        }
-
-        function showScene() {
-            const title = document.getElementById("title");
-            const choices = document.getElementById("choices");
-            const data = scenes[type];
-
-            if (step > data.length) {
-                showResult();
-                return;
+            function start(t) {
+                type = t;
+                score = 0;
+                step = 1;
+                mistakes = [];
+                maxScorePerGame = scenes[type].length; // Maksimum doğru sayısı
+                showScene();
             }
 
-            const scene = data[step - 1];
-            title.innerText = Soru ${step}/${data.length}: ${scene.q}; // Soru numarasını ekledim
-            choices.innerHTML = "";
+            function showScene() {
+                const title = document.getElementById("title");
+                const choices = document.getElementById("choices");
+                const data = scenes[type];
 
-            scene.o.forEach((opt, i) => {
-                const btn = document.createElement("button");
-                btn.textContent = opt;
-                // Cevap endeksi (i + 1) ve doğru cevap (scene.c) gönderiliyor
-                btn.onclick = () => handleAnswer(i + 1, scene.c, scene.q, opt, scene.o[scene.c - 1]);
-                choices.appendChild(btn);
-            });
-        }
+                if (step > data.length) {
+                    showResult();
+                    return;
+                }
 
-        function handleAnswer(choice, correct, question, selectedOption, correctAnswerText) {
-            if (choice === correct) {
-                score++; // Her doğru cevap 1 puan
-            } else {
-                // Hatalı cevapta soruyu, seçilen yanlış şıkkı ve doğru şıkkı kaydet
-                mistakes.push({
-                    question: question,
-                    selected: selectedOption,
-                    correct: correctAnswerText
+                const scene = data[step - 1];
+                title.innerText = Soru ${step}/${data.length}: ${scene.q}; // Soru numarasını ekledim
+                choices.innerHTML = ""; // Butonları temizle
+
+                scene.o.forEach((opt, i) => {
+                    const btn = document.createElement("button");
+                    btn.textContent = opt;
+                    // Cevap endeksi (i + 1) ve doğru cevap (scene.c) gönderiliyor
+                    btn.onclick = () => handleAnswer(i + 1, scene.c, scene.q, opt, scene.o[scene.c - 1]);
+                    choices.appendChild(btn);
                 });
             }
 
-            step++;
-            if (step > scenes[type].length) {
-                showResult();
-            } else {
-                showScene();
+            function handleAnswer(choice, correct, question, selectedOption, correctAnswerText) {
+                if (choice === correct) {
+                    score++; // Her doğru cevap 1 puan
+                } else {
+                    // Hatalı cevapta soruyu, seçilen yanlış şıkkı ve doğru şıkkı kaydet
+                    mistakes.push({
+                        question: question,
+                        selected: selectedOption,
+                        correct: correctAnswerText
+                    });
+                }
+
+                step++;
+                if (step > scenes[type].length) {
+                    showResult();
+                } else {
+                    showScene();
+                }
             }
-        }
 
-        function showResult() {
-            // Puanı 100 üzerinden yüzdelik olarak hesapla (Doğru Sayısı / Toplam Soru Sayısı) * 100
-            const percentageScore = maxScorePerGame > 0 ? Math.round((score / maxScorePerGame) * 100) : 0;
+            function showResult() {
+                // Puanı 100 üzerinden yüzdelik olarak hesapla
+                const percentageScore = maxScorePerGame > 0 ? Math.round((score / maxScorePerGame) * 100) : 0;
 
-            const hatalar = mistakes.length
-                ? mistakes.map(m => `
-                    <li>
-                        <b>Soru:</b> ${m.question}<br>
-                        <b>Senin Cevabın:</b> <span style="color: red;">${m.selected}</span><br>
-                        <b>Doğru Cevap:</b> <span class="correct-answer">${m.correct}</span>
-                    </li>
-                  `).join("")
-                : "<li>Hiç hata yapmadın, afet bilincin mükemmel!</li>";
+                const hatalar = mistakes.length
+                    ? mistakes.map(m => `
+                        <li>
+                            <b>Soru:</b> ${m.question}<br>
+                            <b>Senin Cevabın:</b> <span style="color: red;">${m.selected}</span><br>
+                            <b>Doğru Cevap:</b> <span class="correct-answer">${m.correct}</span>
+                        </li>
+                      `).join("")
+                    : "<li>Hiç hata yapmadın, afet bilincin mükemmel!</li>";
 
-            document.getElementById("title").innerText = ${type.charAt(0).toUpperCase() + type.slice(1)} Senaryosu Bitti!;
-            document.getElementById("choices").innerHTML = `
-                <p style="font-size:24px; margin-bottom: 25px;">
-                    Afet Bilinci Başarı Puanın: 
-                    <b style="color: ${percentageScore >= 80 ? 'green' : (percentageScore >= 50 ? 'orange' : 'red')};">
-                        %${percentageScore}
-                    </b>
-                    <br>(${score} Doğru / ${maxScorePerGame} Soru)
-                </p>
-                
-                <h3>Gözden Geçirmen Gerekenler (${mistakes.length} Yanlış Davranış):</h3>
-                <ul>${hatalar}</ul>
-                <button id="menuBtn">Ana Menüye Dön</button>
-            `;
+                document.getElementById("title").innerText = ${type.charAt(0).toUpperCase() + type.slice(1)} Senaryosu Bitti!;
+                document.getElementById("choices").innerHTML = `
+                    <p style="font-size:24px; margin-bottom: 25px;">
+                        Afet Bilinci Başarı Puanın: 
+                        <b style="color: ${percentageScore >= 80 ? 'green' : (percentageScore >= 50 ? 'orange' : 'red')};">
+                            %${percentageScore}
+                        </b>
+                        <br>(${score} Doğru / ${maxScorePerGame} Soru)
+                    </p>
+                    
+                    <h3>Gözden Geçirmen Gerekenler (${mistakes.length} Yanlış Davranış):</h3>
+                    <ul>${hatalar}</ul>
+                    <button id="menuBtn">Ana Menüye Dön</button>
+                `;
 
-            document.getElementById("menuBtn").addEventListener("click", () => location.reload());
-        }
+                // Ana Menü butonu işlevi
+                document.getElementById("menuBtn").addEventListener("click", () => location.reload());
+            }
+        }; // window.onload sonu
     </script>
 
 </body>
