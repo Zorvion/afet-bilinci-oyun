@@ -45,15 +45,21 @@
 
     const scenes = {
       deprem: [
-        { q: "Deprem başladı! Ne yaparsın?", o: ["Kaç", "Çök, Kapan, Tutun", "Camdan bak"], c: 2 },
-        { q: "Dolap devriliyor, ne yaparsın?", o: ["Dolabı tut", "Kafanı koru", "Pencereye koş"], c: 2 },
-        { q: "Sarsıntı azalıyor, ne yaparsın?", o: ["Evin içinde kal", "Dışarı çık", "Elektrikleri kontrol et"], c: 2 },
-      ],
+  { q: "Deprem başladı! Ne yaparsın?", o: ["Pencerelere koşarım","Çök-Kapan-Tutun yaparım","Hiçbir şey yapmam"], c: 2 },
+  { q: "Dolap sallanıyor, ne yaparsın?", o: ["Dolabı tutmaya çalışırım","Kafamı korurum (başımı siperlerim)","Pencereye koşarım"], c: 2 },
+  { q: "Sarsıntı azalıyor, ne yaparsın?", o: ["Evin içinde kalırım","Hemen dışarı çıkarım","Elektrik/ocak kontrolü yaparım"], c: 1 },
+  { q: "Dışarıdasın, çevre kalabalık. Ne yaparsın?", o: ["Kalabalığın içinde kalırım","Açık alana geçerim","Binalara yaklaşırım"], c: 2 },
+  { q: "Artçı sarsıntı geldi, ne yaparsın?", o: ["Hemen koşarım","Tekrar Çök-Kapan-Tutun yaparım","Bina duvarına yaslanırım"], c: 2 },
+  { q: "Deprem bitti. İlk yapılması gereken nedir?", o: ["Eve geri dönüp eşyaları kontrol ederim","Yaralılara yardım edip yetkilileri bilgilendiririm","Elektrikleri hemen açarım"], c: 2 }
+],
       yangin: [
-        { q: "Evde yangın çıktı! Ne yaparsın?", o: ["Su dök", "Kaçış yolunu bul ve çık", "Pencereye bak"], c: 2 },
-        { q: "Duman yayılıyor, ne yaparsın?", o: ["Koş", "Eğilerek ilerle", "Camı aç"], c: 2 },
-        { q: "Kapıya ulaştın, ne yaparsın?", o: ["Kapıyı aç", "Sıcaklığı kontrol et", "Geri dön"], c: 2 }
-      ]
+  { q: "Evde yangın çıktı! İlk ne yaparsın?", o: ["Suyla dökmeye çalışırım (küçükse)","Derhal binayı terk edip çıkış yolunu bulurum","Pencereden izlerim"], c: 2 },
+  { q: "Duman yayıldı, ne yaparsın?", o: ["Ayakta dik yürürüm","Eğilerek/zemine yakın ilerlerim","Koşarak kaçmaya çalışırım"], c: 2 },
+  { q: "Kapıya geldin, ne yaparsın?", o: ["Kapıyı hemen açarım","Kapının sıcaklığını el ile kontrol ederim","Geri dönüp eşyaları alırım"], c: 2 },
+  { q: "Çıkışa ulaştın, dışardasın; ne yaparsın?", o: ["Komşulara haber veririm","112/110'u ararım ve toplanma alanına giderim","Eve geri dönerim"], c: 2 },
+  { q: "Yangın söndü, ne yapmalısın?", o: ["Yetkililerin iznini beklemeden eve girerim","Yetkililerin iznini beklerim","Olay yerinin fotoğrafını çekip paylaşırım"], c: 2 },
+  { q: "Yanık yaralısı gördün, ne yaparsın?", o: ["Yanığı soğuk suyla yıkarım/hafif pansuman yaparım ve yardım çağırırım","Kendim müdahale edip ilaç veririm","Yanına su doldurup ateşi söndürmeye çalışırım"], c: 1 }
+]
     };
 
     function start(t) {
