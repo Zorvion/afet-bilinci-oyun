@@ -37,7 +37,6 @@
     </div>
 
     <script>
-        // Sayfanın tamamen yüklendiğinden emin olmak için window.onload kullanıldı.
         window.onload = function() {
             let score = 0;
             let step = 0;
@@ -58,7 +57,7 @@
                     { q: "Evde yangın çıktı! Ne yaparsın?", o: ["Su dök (Büyükse)", "90 saniyede çıkış yolunu belirle ve kaç", "Pencereye bak"], c: 2 },
                     { q: "Duman yayılıyor, ne yaparsın?", o: ["Koş", "Eğilerek ilerle", "Camı aç"], c: 2 },
                     { q: "Kapıya ulaştın, ne yaparsın?", o: ["Kapıyı aç", "Kapının sıcaklığını kontrol et", "Geri dön"], c: 2 },
-                    { q: "Dışarı çıktın! Ne yaparsın?", o: ["Komşuya koş", "112’yi/110'u ara ve toplanma alanına git", "Eve geri dön"], c: 2 },
+                    { q: "Dışarı çıktın! Ne yaparsın?", o: ["Komşuya koş", "112'yi/110'u ara ve toplanma alanına git", "Eve geri dön"], c: 2 },
                     { q: "Yangın söndü. Ne yaparsın?", o: ["Eve gir", "Yetkililerin iznini bekle", "Camdan bak"], c: 2 }
                 ]
             };
@@ -66,7 +65,6 @@
             const depremBtn = document.getElementById("depremBtn");
             const yanginBtn = document.getElementById("yanginBtn");
 
-            // Başlangıç butonlarına olay dinleyicilerini ekle
             depremBtn.addEventListener("click", () => start("deprem"));
             yanginBtn.addEventListener("click", () => start("yangin"));
 
@@ -90,9 +88,8 @@
                 }
 
                 const scene = data[step - 1];
-                // $ işareti hatası düzeltildi.
-                title.innerText = Soru ${step}/${data.length}: ${scene.q}; 
-                choices.innerHTML = ""; 
+                title.innerText = Soru ${step}/${data.length}: ${scene.q};
+                choices.innerHTML = "";
 
                 scene.o.forEach((opt, i) => {
                     const btn = document.createElement("button");
@@ -152,7 +149,7 @@
 
                 document.getElementById("menuBtn").addEventListener("click", () => location.reload());
             }
-        }; 
+        };
     </script>
 
 </body>
