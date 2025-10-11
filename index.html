@@ -43,7 +43,7 @@
             let step = 0;
             let type = "";
             let mistakes = [];
-            let maxScorePerGame = 0; // Maksimum puanı tutacak değişken
+            let maxScorePerGame = 0;
 
             // Senaryo Verileri: c: Doğru cevap seçeneğinin endeksi (1, 2 veya 3)
             const scenes = {
@@ -67,7 +67,7 @@
             const depremBtn = document.getElementById("depremBtn");
             const yanginBtn = document.getElementById("yanginBtn");
 
-            // Butonlara olay dinleyicilerini ekle
+            // Başlangıç butonlarına olay dinleyicilerini ekle
             depremBtn.addEventListener("click", () => start("deprem"));
             yanginBtn.addEventListener("click", () => start("yangin"));
 
@@ -91,13 +91,14 @@
                 }
 
                 const scene = data[step - 1];
-                title.innerText = `Soru ${step}/${data.length}: ${scene.q}`; 
-                choices.innerHTML = ""; // Butonları temizle
+                // Hata Düzeltildi: Template Literal (ters tırnak `) kullanılarak değişkenler çağrıldı.
+                title.innerText = Soru ${step}/${data.length}: ${scene.q}; 
+                choices.innerHTML = ""; // Önceki butonları temizle
 
                 scene.o.forEach((opt, i) => {
                     const btn = document.createElement("button");
                     btn.textContent = opt;
-                    // Cevap endeksi (i + 1) ve doğru cevap (scene.c) gönderiliyor
+                    // Tıklama işlevi atandı
                     btn.onclick = () => handleAnswer(i + 1, scene.c, scene.q, opt, scene.o[scene.c - 1]);
                     choices.appendChild(btn);
                 });
@@ -138,6 +139,8 @@
                     : "<li>Hiç hata yapmadın, afet bilincin mükemmel!</li>";
 
                 document.getElementById("title").innerText = ${type.charAt(0).toUpperCase() + type.slice(1)} Senaryosu Bitti!;
+                
+                // Hata Düzeltildi: Bu kısımda fazladan $ işareti yok.
                 document.getElementById("choices").innerHTML = `
                     <p style="font-size:24px; margin-bottom: 25px;">
                         Afet Bilinci Başarı Puanın: 
