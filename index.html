@@ -91,7 +91,7 @@
                 }
 
                 const scene = data[step - 1];
-                title.innerText = Soru ${step}/${data.length}: ${scene.q}; // Soru numarasını ekledim
+                title.innerText = `Soru ${step}/${data.length}: ${scene.q}`; 
                 choices.innerHTML = ""; // Butonları temizle
 
                 scene.o.forEach((opt, i) => {
