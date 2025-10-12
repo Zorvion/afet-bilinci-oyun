@@ -7,10 +7,22 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background-color: #eef3f7;
+      background: linear-gradient(to bottom right, #e0f7fa, #bbdefb);
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #222;
       margin-top: 50px;
     }
-    h1 { color: #222; }
+    #container {
+      background: white;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
     button {
       margin: 10px;
       padding: 10px 25px;
@@ -22,18 +34,21 @@
       color: white;
       transition: 0.2s;
     }
-    button:hover { background-color: #0056b3; }
-    ul { text-align: left; max-width: 500px; margin: 20px auto; padding-left: 20px; }
-    li { margin-bottom: 8px; }
-    .correct-answer { color: green; font-weight: bold; }
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+    p { font-size: 18px; }
   </style>
 </head>
 <body>
 
-  <h1 id="title">Afet Bilinci Oyunu</h1>
-  <div id="choices">
-    <button onclick="start('deprem')">🌋 Deprem Senaryosu</button>
-    <button onclick="start('yangin')">🔥 Yangın Senaryosu</button>
+  <div id="container">
+    <h1 id="title">Afet Bilinci Oyunu</h1>
+    <div id="choices">
+      <button onclick="start('deprem')">🌋 Deprem Senaryosu</button>
+      <button onclick="start('yangin')">🔥 Yangın Senaryosu</button>
+    </div>
   </div>
 
   <script>
@@ -45,21 +60,21 @@
 
     const scenes = {
       deprem: [
-  { q: "Deprem başladı! Ne yaparsın?", o: ["Pencerelere koşarım","Çök-Kapan-Tutun yaparım","Hiçbir şey yapmam"], c: 2 },
-  { q: "Dolap sallanıyor, ne yaparsın?", o: ["Dolabı tutmaya çalışırım","Kafamı korurum (başımı siperlerim)","Pencereye koşarım"], c: 2 },
-  { q: "Sarsıntı azalıyor, ne yaparsın?", o: ["Evin içinde kalırım","Hemen dışarı çıkarım","Elektrik/ocak kontrolü yaparım"], c: 1 },
-  { q: "Dışarıdasın, çevre kalabalık. Ne yaparsın?", o: ["Kalabalığın içinde kalırım","Açık alana geçerim","Binalara yaklaşırım"], c: 2 },
-  { q: "Artçı sarsıntı geldi, ne yaparsın?", o: ["Hemen koşarım","Tekrar Çök-Kapan-Tutun yaparım","Bina duvarına yaslanırım"], c: 2 },
-  { q: "Deprem bitti. İlk yapılması gereken nedir?", o: ["Eve geri dönüp eşyaları kontrol ederim","Yaralılara yardım edip yetkilileri bilgilendiririm","Elektrikleri hemen açarım"], c: 2 }
-],
+        { q: "Deprem başladı! Ne yaparsın?", o: ["Kaç", "Çök, Kapan, Tutun", "Camdan bak"], c: 2 },
+        { q: "Dolap devriliyor, ne yaparsın?", o: ["Dolabı tut", "Kafanı koru", "Pencereye koş"], c: 2 },
+        { q: "Sarsıntı azalıyor, ne yaparsın?", o: ["Evin içinde kal", "Dışarı çık", "Elektrikleri kontrol et"], c: 2 },
+        { q: "Artçı sarsıntılar geliyor, ne yaparsın?", o: ["Korkup kaç", "Yine güvenli pozisyona geç", "Camdan dışarı bak"], c: 2 },
+        { q: "Binadan çıkarken neye dikkat edersin?", o: ["Asansör kullanmam", "Asansöre binerim", "Hızlı koşarım"], c: 1 },
+        { q: "Toplanma alanında ne yaparsın?", o: ["Telefonla arama yaparım", "Acil durum bilgisi paylaşırım", "Eve dönerim"], c: 2 }
+      ],
       yangin: [
-  { q: "Evde yangın çıktı! İlk ne yaparsın?", o: ["Suyla dökmeye çalışırım (küçükse)","Derhal binayı terk edip çıkış yolunu bulurum","Pencereden izlerim"], c: 2 },
-  { q: "Duman yayıldı, ne yaparsın?", o: ["Ayakta dik yürürüm","Eğilerek/zemine yakın ilerlerim","Koşarak kaçmaya çalışırım"], c: 2 },
-  { q: "Kapıya geldin, ne yaparsın?", o: ["Kapıyı hemen açarım","Kapının sıcaklığını el ile kontrol ederim","Geri dönüp eşyaları alırım"], c: 2 },
-  { q: "Çıkışa ulaştın, dışardasın; ne yaparsın?", o: ["Komşulara haber veririm","112/110'u ararım ve toplanma alanına giderim","Eve geri dönerim"], c: 2 },
-  { q: "Yangın söndü, ne yapmalısın?", o: ["Yetkililerin iznini beklemeden eve girerim","Yetkililerin iznini beklerim","Olay yerinin fotoğrafını çekip paylaşırım"], c: 2 },
-  { q: "Yanık yaralısı gördün, ne yaparsın?", o: ["Yanığı soğuk suyla yıkarım/hafif pansuman yaparım ve yardım çağırırım","Kendim müdahale edip ilaç veririm","Yanına su doldurup ateşi söndürmeye çalışırım"], c: 1 }
-]
+        { q: "Evde yangın çıktı! Ne yaparsın?", o: ["Su dök", "Kaçış yolunu bul ve çık", "Pencereye bak"], c: 2 },
+        { q: "Duman yayılıyor, ne yaparsın?", o: ["Koş", "Eğilerek ilerle", "Camı aç"], c: 2 },
+        { q: "Kapıya ulaştın, ne yaparsın?", o: ["Kapıyı aç", "Sıcaklığı kontrol et", "Geri dön"], c: 2 },
+        { q: "Kapı sıcak, ne yaparsın?", o: ["Açarım", "Islak bezle kapatırım", "Beklerim"], c: 2 },
+        { q: "Yangından çıktın, ne yaparsın?", o: ["İçeri dönüp eşyaları alırım", "112’yi ararım", "Yangını izlerim"], c: 2 },
+        { q: "Sonrasında ne yaparsın?", o: ["Olayı bildiririm", "Eve girerim", "Hiçbir şey yapmam"], c: 1 }
+      ]
     };
 
     function start(t) {
@@ -92,6 +107,7 @@
 
     function handleAnswer(choice, correct) {
       if (choice === correct) score++;
+      else mistakes.push(step + 1);
       step++;
       showScene();
     }
@@ -100,8 +116,10 @@
       const pct = Math.round((score / maxScorePerGame) * 100);
       const title = document.getElementById("title");
       const choices = document.getElementById("choices");
+      let errorText = mistakes.length ? Yanlış cevap verdiğin sahneler: ${mistakes.join(", ")} : "Tüm sahneleri doğru bildin!";
       title.innerText = "Oyun Bitti!";
       choices.innerHTML = `<p>Bilinç puanın: <b>${pct}%</b></p>
+      <p>${errorText}</p>
       <button onclick="window.location.reload()">Ana Menüye Dön</button>`;
     }
   </script>
