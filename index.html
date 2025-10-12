@@ -1,223 +1,110 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Afet Bilinci Oyunu</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #eef3f7;
-      margin: 0;
-      padding: 30px 10px;
-    }
-    #card {
-      max-width: 760px;
-      margin: 20px auto;
-      background: #fff;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(15,30,50,0.06);
-    }
-    h1 { color: #222; margin-top: 0; }
-    #choices { margin-top: 14px; }
-    button {
-      margin: 8px;
-      padding: 10px 22px;
-      font-size: 15px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-    }
-    button:hover { background-color: #0056b3; transform: none; }
-    .muted { color: #666; font-size: 14px; margin-top: 6px; }
-    #progressWrap { width: 100%; background:#e6eefc; height:12px; border-radius:8px; margin-top:12px; overflow:hidden; }
-    #progressBar { height:100%; width:0%; background:linear-gradient(90deg,#4caf50,#1976d2); }
-    ul { text-align:left; max-width:700px; margin:14px auto; padding-left:20px; }
-    li { margin-bottom:8px; }
-    .small { font-size:13px; color:#444; }
-    .best { font-size:13px; color:#2e7d32; margin-left:8px; }
-    @media (max-width:500px){ button{padding:10px 14px; font-size:14px;} #card{padding:14px;} }
-  </style>
+<meta charset="UTF-8">
+<title>Afet Bilinci Oyunu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {font-family: Arial; text-align:center; background:#eef3f7; margin:0; padding:20px;}
+#card {max-width:700px; margin:auto; background:white; padding:20px; border-radius:12px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+button {margin:8px; padding:10px 20px; border:none; border-radius:8px; background:#007bff; color:white; cursor:pointer;}
+button:hover {background:#0056b3;}
+#progress {height:10px; background:#e6eefc; border-radius:6px; overflow:hidden; margin:10px 0;}
+#bar {height:100%; width:0; background:#4caf50;}
+</style>
 </head>
 <body>
 
-  <div id="card">
-    <h1 id="title">Afet Bilinci Oyunu</h1>
-    <div id="meta" class="muted">Tarz: tek dosya — aynı çalışan yapıyı koruyoruz</div>
+<div id="card">
+<h1>Afet Bilinci Oyunu</h1>
+<div id="menu">
+  <p>Bir senaryo seç:</p>
+  <button onclick="start('deprem')">🌋 Deprem</button>
+  <button onclick="start('yangin')">🔥 Yangın</button>
+</div>
 
-    <div id="menu" style="margin-top:16px;">
-      <p class="small">Bir senaryo seç:</p>
-      <div id="choices">
-        <button onclick="start('deprem')">🌋 Deprem Senaryosu</button>
-        <button onclick="start('yangin')">🔥 Yangın Senaryosu</button>
-      </div>
-      <div class="muted small" id="bestScores" style="margin-top:10px;"></div>
-    </div>
+<div id="game" style="display:none;">
+  <div id="progress"><div id="bar"></div></div>
+  <h2 id="q"></h2>
+  <div id="opts"></div>
+  <p id="msg" style="color:#555;"></p>
+</div>
 
-    <div id="game" style="display:none;">
-      <div id="progressWrap"><div id="progressBar"></div></div>
-      <h2 id="question" style="margin-top:18px;"></h2>
-      <div id="choicesArea"></div>
-      <div id="hint" class="muted"></div>
-    </div>
-
-    <div id="result" style="display:none;">
-      <h2 id="resultTitle"></h2>
-      <div id="resultBody"></div>
-      <div style="margin-top:12px;">
-        <button onclick="backToMenu()">Ana Menüye Dön</button>
-        <button onclick="restart()">Tekrar Oyna</button>
-      </div>
-    </div>
-  </div>
+<div id="result" style="display:none;">
+  <h2 id="title"></h2>
+  <p id="scoreText"></p>
+  <button onclick="restart()">Tekrar Oyna</button>
+  <button onclick="menu()">Ana Menü</button>
+</div>
+</div>
 
 <script>
-/* Tek dosya, sağlam event bağlama, 6 sahne uzatıldı, hata gösterimi, progress, best score */
-
-let scenes = {
-  deprem: [
-    { q: "Deprem başladı! Ne yaparsın?", o:["Pencerelere koşarım","Çök-Kapan-Tutun yaparım","Hiçbir şey yapmam"], c:2 },
-    { q: "Dolap devriliyor! Ne yaparsın?", o:["Dolabı tutarım","Başımı korurum","Pencereye koşarım"], c:2 },
-    { q: "Sarsıntı azalıyor, ne yaparsın?", o:["Evin içinde kalırım","Dışarı çıkarım","Elektrikleri kontrol ederim"], c:1 },
-    { q: "Binadan çıkıyorsun, ne yaparsın?", o:["Asansöre binerim","Merdivenle kontrollü çıkarım","Hızlıca koşarım"], c:2 },
-    { q: "Toplanma alanındasın, ne yaparsın?", o:["Telefonda gezinirim","Yetkililere yardım ederim","Eve geri dönerim"], c:2 },
-    { q: "Artçı sarsıntı hissediyorsun, ne yaparsın?", o:["Koşarım","Çök-Kapan-Tutun yaparım","Bir yere yaslanırım"], c:2 }
-  ],
-  yangin: [
-    { q: "Evde yangın çıktı! İlk ne yaparsın?", o:["Su dökerim (küçükse)","Derhal çıkış yolunu bulurum","Pencereye bakarım"], c:2 },
-    { q: "Duman yükseliyor, ne yaparsın?", o:["Ayakta ilerlerim","Eğilerek/zemine yakın ilerlerim","Koşarım"], c:2 },
-    { q: "Kapıya geldin, ne yaparsın?", o:["Kapıyı açarım","Kapının sıcaklığını kontrol ederim","Geri dönerim"], c:2 },
-    { q: "Kapı sıcaksa ne yaparsın?", o:["Zorla açarım","Başka çıkış ararım/geri dönmem","Bekleyip yardım beklerim"], c:2 },
-    { q: "Dışarı çıktın, ne yaparsın?", o:["Eve geri girerim","112'yi ararım ve toplanma yerine giderim","Yangını izlerim"], c:2 },
-    { q: "Yanık yaralısı gördün, ne yaparsın?", o:["Soğuk su uygularım ve yardım çağırırım","Kendi ilaçlarımı veririm","Ateşi söndürmeye çalışırım"], c:1 }
-  ]
+const data={
+ deprem:[
+  {q:"Deprem başladı, ne yaparsın?",o:["Cam kenarına koşarım","Çök-Kapan-Tutun yaparım","Dışarı fırlarım"],c:2},
+  {q:"Dolap devriliyor!",o:["Dolabı tutarım","Başımı korurum","Kaçarım"],c:2},
+  {q:"Sarsıntı bitti, ne yaparsın?",o:["Evde kalırım","Kontrollü çıkarım","Asansöre binerim"],c:2},
+  {q:"Toplanma alanında ne yaparsın?",o:["Yetkililere yardım ederim","Eve dönerim","Telefona bakarım"],c:1},
+  {q:"Artçı hissediyorsun!",o:["Panik yaparım","Çök-Kapan-Tutun yaparım","Koşarım"],c:2},
+  {q:"Eve dönmeden önce ne yaparsın?",o:["Hasar kontrolü yaparım","Direk girerim","Beklerim"],c:1}
+ ],
+ yangin:[
+  {q:"Yangın çıktı, ne yaparsın?",o:["Derhal çıkışa yönelirim","Pencereyi açarım","Eşyaları toplarım"],c:1},
+  {q:"Duman var, nasıl ilerlersin?",o:["Eğilerek ilerlerim","Ayakta yürürüm","Koşarım"],c:1},
+  {q:"Kapıdayken ne yaparsın?",o:["Kapının sıcaklığını kontrol ederim","Açarım","Geri dönerim"],c:1},
+  {q:"Kapı sıcak, ne yaparsın?",o:["Başka çıkış ararım","Zorla açarım","Beklerim"],c:1},
+  {q:"Dışarı çıktın, ne yaparsın?",o:["112'yi ararım","İzlerim","Eve girerim"],c:1},
+  {q:"Yanık yaralı var, ne yaparsın?",o:["Soğuk su uygularım","Krem sürerim","Dokunmam"],c:1}
+ ]
 };
 
-let type = "";        // 'deprem' veya 'yangin'
-let index = 0;        // 0-based sahne index
-let score = 0;
-let mistakes = [];    // {q, selected, correct}
-let locked = false;   // çift basmayı engelleme
+let type="",i=0,puan=0;
 
 function start(t){
-  type = t;
-  index = 0;
-  score = 0;
-  mistakes = [];
-  locked = false;
-  document.getElementById('menu').style.display = 'none';
-  document.getElementById('result').style.display = 'none';
-  document.getElementById('game').style.display = 'block';
-  updateBestScoresDisplay();
-  renderScene();
+ type=t;i=0;puan=0;
+ document.getElementById("menu").style.display="none";
+ document.getElementById("result").style.display="none";
+ document.getElementById("game").style.display="block";
+ show();
 }
 
-function renderScene(){
-  const data = scenes[type];
-  if(!data) return;
-  if(index >= data.length) return showResult();
-
-  const scene = data[index];
-  document.getElementById('question').innerText = Soru ${index+1}/${data.length}: ${scene.q};
-  const choicesArea = document.getElementById('choicesArea');
-  choicesArea.innerHTML = '';
-  document.getElementById('hint').innerText = '';
-
-  // progress
-  const pct = Math.round(((index) / data.length) * 100);
-  document.getElementById('progressBar').style.width = pct + '%';
-
-  scene.o.forEach((opt, i) => {
-    const b = document.createElement('button');
-    b.textContent = opt;
-    // kesin çalışan single-click handler
-    b.addEventListener('click', function onClick(){
-      if(locked) return;
-      locked = true;
-      // kısa gecikme UI için
-      setTimeout(()=> locked = false, 200);
-      handleAnswer(i+1, scene.c, scene.q, opt, scene.o[scene.c-1]);
-    });
-    choicesArea.appendChild(b);
-  });
+function show(){
+ const s=data[type];
+ if(i>=s.length){end();return;}
+ document.getElementById("q").innerText=s[i].q;
+ document.getElementById("opts").innerHTML="";
+ document.getElementById("bar").style.width=(i/s.length*100)+"%";
+ s[i].o.forEach((x,n)=>{
+   const b=document.createElement("button");
+   b.textContent=x;
+   b.onclick=()=>ans(n+1);
+   document.getElementById("opts").appendChild(b);
+ });
+ document.getElementById("msg").textContent="";
 }
 
-function handleAnswer(choice, correct, qText, selectedText, correctText){
-  if(choice === correct){
-    score++;
-    document.getElementById('hint').innerText = 'Doğru seçim ✔';
-  } else {
-    mistakes.push({question:qText, selected:selectedText, correct:correctText});
-    document.getElementById('hint').innerText = 'Yanlış seçim ✖ (sonuçta gösterilecek)';
-  }
-  index++;
-  // küçük gecikmeyle bir sonraki sahne
-  setTimeout(()=> {
-    if(index >= scenes[type].length) showResult();
-    else renderScene();
-  }, 250);
+function ans(n){
+ const s=data[type][i];
+ if(n===s.c){puan++;document.getElementById("msg").textContent="Doğru ✔";}
+ else{document.getElementById("msg").textContent="Yanlış ✖";}
+ i++;
+ setTimeout(show,400);
 }
 
-function showResult(){
-  const total = scenes[type].length;
-  const pct = Math.round((score/total)*100);
-  const level = pct >= 80 ? 'Uzman' : pct >= 50 ? 'Orta' : 'Acemi';
-  // kaydet best score
-  saveBestScore(type, pct);
-
-  const best = getBestScore(type);
-
-  document.getElementById('resultTitle').innerText = ${capitalize(type)} Senaryosu Bitti! — ${level};
-  const mistakesHtml = mistakes.length ? mistakes.map(m => <li><b>Soru:</b> ${m.question}<br><b>Senin:</b> <span style="color:red">${m.selected}</span><br><b>Doğru:</b> <span style="color:green">${m.correct}</span></li>).join('') : '<li>Hiç hata yok — mükemmelsin!</li>';
-  document.getElementById('resultBody').innerHTML = `
-    <p class="small"><b>Puan:</b> %${pct} (${score}/${total}) <span class="best">| En iyi: %${best}</span></p>
-    <h3>Yanlış Davranışlar (${mistakes.length}):</h3>
-    <ul>${mistakesHtml}</ul>
-  `;
-  // progress dolu
-  document.getElementById('progressBar').style.width = '100%';
-  // görünürlük
-  document.getElementById('game').style.display = 'none';
-  document.getElementById('result').style.display = 'block';
+function end(){
+ document.getElementById("game").style.display="none";
+ document.getElementById("result").style.display="block";
+ const toplam=data[type].length;
+ const y=Math.round(puan/toplam*100);
+ document.getElementById("title").innerText=type.toUpperCase()+" TAMAMLANDI";
+ document.getElementById("scoreText").innerText=${puan}/${toplam} doğru (%${y});
 }
 
-function backToMenu(){
-  document.getElementById('result').style.display = 'none';
-  document.getElementById('game').style.display = 'none';
-  document.getElementById('menu').style.display = 'block';
-  document.getElementById('title').innerText = 'Afet Bilinci Oyunu';
-  updateBestScoresDisplay();
+function restart(){start(type);}
+function menu(){
+ document.getElementById("menu").style.display="block";
+ document.getElementById("result").style.display="none";
 }
-
-function restart(){
-  start(type);
-}
-
-function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-
-/* localStorage best score */
-function saveBestScore(t, pct){
-  try {
-    const key = 'best_'+t;
-    const prev = parseInt(localStorage.getItem(key) || '0', 10);
-    if(pct > prev) localStorage.setItem(key, String(pct));
-  } catch(e){}
-}
-function getBestScore(t){
-  try { return parseInt(localStorage.getItem('best_'+t) || '0', 10); } catch(e){ return 0; }
-}
-function updateBestScoresDisplay(){
-  const d = getBestScore('deprem') || 0;
-  const y = getBestScore('yangin') || 0;
-  document.getElementById('bestScores').innerHTML = En iyi skorlar — Deprem: <span class="best">%${d}</span> | Yangın: <span class="best">%${y}</span>;
-}
-
-// sayfa açıldığında bestleri göster
-updateBestScoresDisplay();
 </script>
 
 </body>
