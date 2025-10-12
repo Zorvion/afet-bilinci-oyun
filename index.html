@@ -1,111 +1,137 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Afet Bilinci Oyunu</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {font-family: Arial; text-align:center; background:#eef3f7; margin:0; padding:20px;}
-#card {max-width:700px; margin:auto; background:white; padding:20px; border-radius:12px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
-button {margin:8px; padding:10px 20px; border:none; border-radius:8px; background:#007bff; color:white; cursor:pointer;}
-button:hover {background:#0056b3;}
-#progress {height:10px; background:#e6eefc; border-radius:6px; overflow:hidden; margin:10px 0;}
-#bar {height:100%; width:0; background:#4caf50;}
-</style>
+  <meta charset="UTF-8">
+  <title>Afet Bilinci Oyunu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom right, #e0f7fa, #bbdefb);
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #222;
+      margin-top: 50px;
+    }
+    #container {
+      background: white;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    button {
+      margin: 10px;
+      padding: 10px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+    p { font-size: 18px; }
+  </style>
 </head>
 <body>
 
-<div id="card">
-<h1>Afet Bilinci Oyunu</h1>
-<div id="menu">
-  <p>Bir senaryo seç:</p>
-  <button onclick="start('deprem')">🌋 Deprem</button>
-  <button onclick="start('yangin')">🔥 Yangın</button>
-</div>
+  <div id="container">
+    <h1 id="title">Afet Bilinci Oyunu</h1>
+    <div id="choices">
+      <button id="depremBtn">🌋 Deprem Senaryosu</button>
+      <button id="yanginBtn">🔥 Yangın Senaryosu</button>
+    </div>
+  </div>
 
-<div id="game" style="display:none;">
-  <div id="progress"><div id="bar"></div></div>
-  <h2 id="q"></h2>
-  <div id="opts"></div>
-  <p id="msg" style="color:#555;"></p>
-</div>
+  <script>
+    let score = 0;
+    let step = 0;
+    let type = "";
+    let mistakes = [];
+    let maxScorePerGame = 0;
 
-<div id="result" style="display:none;">
-  <h2 id="title"></h2>
-  <p id="scoreText"></p>
-  <button onclick="restart()">Tekrar Oyna</button>
-  <button onclick="menu()">Ana Menü</button>
-</div>
-</div>
+    const scenes = {
+      deprem: [
+        { q: "Deprem başladı! Ne yaparsın?", o: ["Kaç", "Çök, Kapan, Tutun", "Camdan bak"], c: 2 },
+        { q: "Dolap devriliyor, ne yaparsın?", o: ["Dolabı tut", "Kafanı koru", "Pencereye koş"], c: 2 },
+        { q: "Sarsıntı azalıyor, ne yaparsın?", o: ["Evin içinde kal", "Dışarı çık", "Elektrikleri kontrol et"], c: 2 },
+        { q: "Artçı sarsıntılar geliyor, ne yaparsın?", o: ["Korkup kaç", "Yine güvenli pozisyona geç", "Camdan dışarı bak"], c: 2 },
+        { q: "Binadan çıkarken neye dikkat edersin?", o: ["Asansör kullanmam", "Asansöre binerim", "Hızlı koşarım"], c: 1 },
+        { q: "Toplanma alanında ne yaparsın?", o: ["Telefonla arama yaparım", "Acil durum bilgisi paylaşırım", "Eve dönerim"], c: 2 }
+      ],
+      yangin: [
+        { q: "Evde yangın çıktı! Ne yaparsın?", o: ["Su dök", "Kaçış yolunu bul ve çık", "Pencereye bak"], c: 2 },
+        { q: "Duman yayılıyor, ne yaparsın?", o: ["Koş", "Eğilerek ilerle", "Camı aç"], c: 2 },
+        { q: "Kapıya ulaştın, ne yaparsın?", o: ["Kapıyı aç", "Sıcaklığı kontrol et", "Geri dön"], c: 2 },
+        { q: "Kapı sıcak, ne yaparsın?", o: ["Açarım", "Islak bezle kapatırım", "Beklerim"], c: 2 },
+        { q: "Yangından çıktın, ne yaparsın?", o: ["İçeri dönüp eşyaları alırım", "112'yi ararım", "Yangını izlerim"], c: 2 },
+        { q: "Sonrasında ne yaparsın?", o: ["Olayı bildiririm", "Eve girerim", "Hiçbir şey yapmam"], c: 1 }
+      ]
+    };
 
-<script>
-const data={
- deprem:[
-  {q:"Deprem başladı, ne yaparsın?",o:["Cam kenarına koşarım","Çök-Kapan-Tutun yaparım","Dışarı fırlarım"],c:2},
-  {q:"Dolap devriliyor!",o:["Dolabı tutarım","Başımı korurum","Kaçarım"],c:2},
-  {q:"Sarsıntı bitti, ne yaparsın?",o:["Evde kalırım","Kontrollü çıkarım","Asansöre binerim"],c:2},
-  {q:"Toplanma alanında ne yaparsın?",o:["Yetkililere yardım ederim","Eve dönerim","Telefona bakarım"],c:1},
-  {q:"Artçı hissediyorsun!",o:["Panik yaparım","Çök-Kapan-Tutun yaparım","Koşarım"],c:2},
-  {q:"Eve dönmeden önce ne yaparsın?",o:["Hasar kontrolü yaparım","Direk girerim","Beklerim"],c:1}
- ],
- yangin:[
-  {q:"Yangın çıktı, ne yaparsın?",o:["Derhal çıkışa yönelirim","Pencereyi açarım","Eşyaları toplarım"],c:1},
-  {q:"Duman var, nasıl ilerlersin?",o:["Eğilerek ilerlerim","Ayakta yürürüm","Koşarım"],c:1},
-  {q:"Kapıdayken ne yaparsın?",o:["Kapının sıcaklığını kontrol ederim","Açarım","Geri dönerim"],c:1},
-  {q:"Kapı sıcak, ne yaparsın?",o:["Başka çıkış ararım","Zorla açarım","Beklerim"],c:1},
-  {q:"Dışarı çıktın, ne yaparsın?",o:["112'yi ararım","İzlerim","Eve girerim"],c:1},
-  {q:"Yanık yaralı var, ne yaparsın?",o:["Soğuk su uygularım","Krem sürerim","Dokunmam"],c:1}
- ]
-};
+    // İlk butonları bağla
+    document.getElementById('depremBtn').addEventListener('click', function() {
+      start('deprem');
+    });
+    
+    document.getElementById('yanginBtn').addEventListener('click', function() {
+      start('yangin');
+    });
 
-let type="",i=0,puan=0;
+    function start(t) {
+      type = t;
+      score = 0;
+      step = 0;
+      mistakes = [];
+      maxScorePerGame = scenes[type].length;
+      showScene();
+    }
 
-function start(t){
- type=t;i=0;puan=0;
- document.getElementById("menu").style.display="none";
- document.getElementById("result").style.display="none";
- document.getElementById("game").style.display="block";
- show();
-}
+    function showScene() {
+      const data = scenes[type];
+      const title = document.getElementById("title");
+      const choices = document.getElementById("choices");
 
-function show(){
- const s=data[type];
- if(i>=s.length){end();return;}
- document.getElementById("q").innerText=s[i].q;
- document.getElementById("opts").innerHTML="";
- document.getElementById("bar").style.width=(i/s.length*100)+"%";
- s[i].o.forEach((x,n)=>{
-   const b=document.createElement("button");
-   b.textContent=x;
-   b.onclick=()=>ans(n+1);
-   document.getElementById("opts").appendChild(b);
- });
- document.getElementById("msg").textContent="";
-}
+      if (step >= data.length) return showResult();
 
-function ans(n){
- const s=data[type][i];
- if(n===s.c){puan++;document.getElementById("msg").textContent="Doğru ✔";}
- else{document.getElementById("msg").textContent="Yanlış ✖";}
- i++;
- setTimeout(show,400);
-}
+      const scene = data[step];
+      title.innerText = scene.q;
+      choices.innerHTML = "";
 
-function end(){
- document.getElementById("game").style.display="none";
- document.getElementById("result").style.display="block";
- const toplam=data[type].length;
- const y=Math.round(puan/toplam*100);
- document.getElementById("title").innerText=type.toUpperCase()+" TAMAMLANDI";
- document.getElementById("scoreText").innerText=${puan}/${toplam} doğru (%${y});
-}
+      scene.o.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => handleAnswer(i + 1, scene.c);
+        choices.appendChild(btn);
+      });
+    }
 
-function restart(){start(type);}
-function menu(){
- document.getElementById("menu").style.display="block";
- document.getElementById("result").style.display="none";
-}
-</script>
+    function handleAnswer(choice, correct) {
+      if (choice === correct) score++;
+      else mistakes.push(step + 1);
+      step++;
+      showScene();
+    }
+
+    function showResult() {
+      const pct = Math.round((score / maxScorePerGame) * 100);
+      const title = document.getElementById("title");
+      const choices = document.getElementById("choices");
+      let errorText = mistakes.length ? Yanlış cevap verdiğin sahneler: ${mistakes.join(", ")} : "Tüm sahneleri doğru bildin!";
+      title.innerText = "Oyun Bitti!";
+      choices.innerHTML = `<p>Bilinç puanın: <b>${pct}%</b></p>
+      <p>${errorText}</p>
+      <button onclick="window.location.reload()">Ana Menüye Dön</button>`;
+    }
+  </script>
 
 </body>
 </html>
