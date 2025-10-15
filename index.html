@@ -3,53 +3,45 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Genişletilmiş Afet Bilinci Oyunu</title>
+<title>Afet Bilinci Oyunu</title>
 <style>
   body{font-family:Arial,Helvetica,sans-serif;text-align:center;
     background:linear-gradient(135deg,#e8f5e9,#e3f2fd);margin:0;padding:20px;min-height:100vh}
-  #card{max-width:850px;margin:30px auto;background:#fff;padding:22px;border-radius:14px;
+  #card{max-width:760px;margin:30px auto;background:#fff;padding:22px;border-radius:14px;
     box-shadow:0 10px 30px rgba(10,30,60,0.08)}
   h1{color:#0d47a1;margin:6px 0 8px}
   h2{color:#0d47a1;margin:12px 0}
   p.small{color:#555;font-size:14px;margin:6px 0}
-  #choices button, #choicesArea button, #result button{
-    margin:10px;padding:12px 24px;font-size:16px;border-radius:10px;border:none;
-    background:#1976d2;color:#fff;cursor:pointer;transition:all .15s;display:block;width:100%;
-    text-align:center;box-sizing:border-box;max-width:500px;margin-left:auto;margin-right:auto;
-  }
-  #choices button:hover, #choicesArea button:hover, #result button:hover{background:#0d47a1;transform:translateY(-2px)}
-  #choices button:active, #choicesArea button:active, #result button:active{transform:translateY(0)}
+  #choices button,#choicesArea button,#result button{margin:10px;padding:10px 22px;font-size:15px;border-radius:10px;border:none;
+    background:#1976d2;color:#fff;cursor:pointer;transition:all .15s}
+  #choices button:hover,#choicesArea button:hover,#result button:hover{background:#0d47a1;transform:translateY(-2px)}
+  #choices button:active,#choicesArea button:active,#result button:active{transform:translateY(0)}
   #progressWrap{height:12px;background:#e6eefc;border-radius:10px;overflow:hidden;margin:12px 0}
   #progress{height:100%;width:0;background:linear-gradient(90deg,#4caf50,#1976d2);transition:width 0.3s}
-  ul{max-width:760px;margin:12px auto;text-align:left;padding-left:18px}
+  ul{max-width:720px;margin:12px auto;text-align:left;padding-left:18px}
   li{margin-bottom:10px}
   .muted{color:#666;font-size:13px}
   .explain{color:#2e7d32;font-weight:600}
   .wrong{color:#c62828;font-weight:600}
   .menuNote{font-size:14px;color:#37474f;margin-top:8px}
-  .correct-feedback{background-color:#4CAF50 !important; color:#fff;}
-  .wrong-feedback{background-color:#F44336 !important; color:#fff;}
-  @media(max-width:520px){
-    #card{padding:16px}
-    #choices button, #choicesArea button, #result button{padding:10px 12px;margin:8px auto;font-size:15px;max-width:none;}
-  }
+  @media(max-width:520px){#card{padding:16px}#choices button,#choicesArea button,#result button{padding:10px 12px;margin:8px}}
 </style>
 </head>
 <body>
   <div id="card">
-    <h1 id="title">Genişletilmiş Afet Bilinci Platformu</h1>
+    <h1 id="title">Afet Bilinci Platformu</h1>
     <p class="small" id="subtitle">Bir senaryo seç — ilerledikçe yanlış yaptığın sahneleri toplayacak, en sonda neden yanlış olduğunu göreceksin. </p>
 
     <div id="menu">
       <div id="choices"></div>
-      <p class="menuNote">Hata yaptığında neden yanlış olduğu, sonuç ekranında ayrıntılı açıklanacak.</p>
+      <p class="menuNote">hata yaptığında neden yanlış olduğu son ekranda açıklanacak.</p>
     </div>
 
     <div id="game" style="display:none">
       <div id="progressWrap"><div id="progress"></div></div>
       <h2 id="q" style="min-height:48px;margin:8px 0"></h2>
       <div id="choicesArea"></div>
-      <p class="muted" id="hint" style="height:20px;margin-top:8px;font-weight:bold;"></p>
+      <p class="muted" id="hint" style="height:20px;margin-top:8px"></p>
     </div>
 
     <div id="result" style="display:none">
@@ -64,19 +56,18 @@
 let locked=false;
 let type="", index=0;
 let mistakes=[];
-const progressEl = function(){ return document.getElementById('progress'); };
+const progressEl = ()=>document.getElementById('progress');
 
-function playTone(freq,dur,vol){
-  if(typeof vol === 'undefined') vol = 0.05;
+function playTone(freq,dur,vol=0.05){
   try{
     const ctx = new (window.AudioContext||window.webkitAudioContext)();
     const o = ctx.createOscillator();
     const g = ctx.createGain();
-    type='sine'; o.frequency.value = freq;
+    o.type='sine'; o.frequency.value = freq;
     g.gain.value = vol;
     o.connect(g); g.connect(ctx.destination);
     o.start();
-    setTimeout(function(){ o.stop(); ctx.close(); }, dur);
+    setTimeout(()=>{ o.stop(); ctx.close(); }, dur);
   }catch(e){}
 }
 
@@ -85,87 +76,98 @@ function wrongSound(){ playTone(220,220,0.04); }
 
 const scenes = {
   deprem: [
-    { q:"Deprem başladı! İlk tepkin ne olmalı?", o:["Panikle dışarı koşmak","Çök–Kapan–Tutun (güvenli pozisyon)","Camdan izlemek"], c:2, e:["Binalar ve camlar tehlikelidir. Dışarı koşmak daha tehlikeli olabilir.","Doğru: vücut korunur, yaralanma riski azalır.","Cam kırılabilir, tehlikeli."] },
-    { q:"Güvende olmak için en güvenli yer neresidir?", o:["Kapı eşiği","Dayanıklı masa/çalışma masası altı","Pencere kenarı"], c:2, e:["Kapı eşiği eskiden önerilirdi ama güncel tavsiye masa altı.","Doğru: ağır nesnelerden korur.","Pencere kenarı cam tehlikesi nedeniyle yanlış."] },
-    { q:"Dolap devrilmek üzereyken ne yapmalısın?", o:["Dolabı tutmayı denemek","Başını korumak (kask/ellerle)","Dolaptan uzaklaşıp pencereye koşmak"], c:2, e:["Dolabı tutmaya çalışmak yaralanmaya neden olabilir.","Doğru: baş ve boyun korunmalı.","Pencereye koşmak tehlikeli."] },
-    { q:"Deprem bittiğinde ilk yapılacaklardan biri?", o:["Toplanma alanına gitmek","Eve geri dönmek","Elektrikleri açmak"], c:1, e:["Doğru: planlı toplanma güvenlidir.","Eve dönmek hasarlıysa tehlikeli.","Elektrikleri açmadan yetkililerin talimatı beklenir."] },
-    { q:"Artçı sallantı hissedersen ne yapmalısın?", o:["Panikleyip koşmak","Tekrar çök–kapan–tutun","Binaya yaklaşmak"], c:2, e:["Kaçış sırasında düşme riski var.","Doğru davranış tekrardır.","Binalara yaklaşmak tehlikelidir (artçı çökme)."] },
-    { q:"Asansörle mi yoksa merdivenle mi çıkmalısın?", o:["Asansör","Merdiven","Hiçbiri, binada kal"], c:2, e:["Asansörde mahsur kalma riski var.","Merdiven güvenlidir (hızlı ve kontrollü çıkış).","Binada kalmak bazen gerekebilir ama genelde toplanma alanına çıkış önerilir."] },
-    { q:"Toplanma alanında ne yapmalısın?", o:["Acil durum talimatlarını dinlemek","Kendi kendine ayrıntılı arama yapmak","Sadece telefonla sosyal medyada paylaşmak"], c:1, e:["Doğru: yetkililerin talimatları önemlidir.","Aynı zamanda güvenlik riski oluşturabilir.","Yardım çağırmak iyidir ama yetkilileri takip et."] },
-    { q:"Deprem sonrası yapman gereken doğru davranış nedir?", o:["Hasarı kontrol eder eve girerim","Yetkililere durumu bildiririm ve yardım ederim","Hiçbir şey yapmam"], c:2, e:["Eve girmek tehlikeli olabilir; yetkili izin gerekli.","Doğru: bilgi ve yardım önemlidir.","Hiçbir şey yapmamak yanlış."] }
+    { q:"Deprem başladı! İlk tepkin ne olmalı?", o:["Panikle dışarı koşmak","Çök–Kapan–Tutun (güvenli pozisyon)","Camdan izlemek"], c:2,
+      e:["Binalar ve camlar tehlikelidir. Dışarı koşmak daha tehlikeli olabilir.","Doğru: vücut korunur, yaralanma riski azalır.","Cam kırılabilir, tehlikeli."] },
+    { q:"Güvende olmak için en güvenli yer neresidir?", o:["Kapı eşiği","Dayanıklı masa/çalışma masası altı","Pencere kenarı"], c:2,
+      e:["Kapı eşiği eskiden önerilirdi ama güncel tavsiye masa altı.","Doğru: ağır nesnelerden korur.","Pencere kenarı cam tehlikesi nedeniyle yanlış."] },
+    { q:"Dolap devrilmek üzereyken ne yapmalısın?", o:["Dolabı tutmayı denemek","Başını korumak (kask/ellerle)","Dolaptan uzaklaşıp pencereye koşmak"], c:2,
+      e:["Dolabı tutmaya çalışmak yaralanmaya neden olabilir.","Doğru: baş ve boyun korunmalı.","Pencereye koşmak tehlikeli."] },
+    { q:"Deprem bittiğinde ilk yapılacaklardan biri?", o:["Toplanma alanına gitmek","Eve geri dönmek","Elektrikleri açmak"], c:1,
+      e:["Doğru: planlı toplanma güvenlidir.","Eve dönmek hasarlıysa tehlikeli.","Elektrikleri açmadan yetkililerin talimatı beklenir."] },
+    { q:"Artçı sallantı hissedersen ne yapmalısın?", o:["Panikleyip koşmak","Tekrar çök–kapan–tutun","Binaya yaklaşmak"], c:2,
+      e:["Kaçış sırasında düşme riski var.","Doğru davranış tekrardır.","Binalara yaklaşmak tehlikelidir (artçı çökme)."] },
+    { q:"Asansörle mi yoksa merdivenle mi çıkmalısın?", o:["Asansör","Merdiven","Hiçbiri, binada kal"], c:2,
+      e:["Asansörde mahsur kalma riski var.","Merdiven güvenlidir (hızlı ve kontrollü çıkış).","Binada kalmak bazen gerekebilir ama genelde toplanma alanına çıkış önerilir."] },
+    { q:"Toplanma alanında ne yapmalısın?", o:["Acil durum talimatlarını dinlemek","Kendi kendine ayrıntılı arama yapmak","Sadece telefonla sosyal medyada paylaşmak"], c:1,
+      e:["Doğru: yetkililerin talimatları önemlidir.","Aynı zamanda güvenlik riski oluşturabilir.","Yardım çağırmak iyidir ama yetkilileri takip et."] },
+    { q:"Deprem sonrası yapman gereken doğru davranış nedir?", o:["Hasarı kontrol eder eve girerim","Yetkililere durumu bildiririm ve yardım ederim","Hiçbir şey yapmam"], c:2,
+      e:["Eve girmek tehlikeli olabilir; yetkili izin gerekli.","Doğru: bilgi ve yardım önemlidir.","Hiçbir şey yapmamak yanlış."] }
   ],
   yangin: [
-    { q:"Yangın anında ilk olarak ne yapılmalı?", o:["Yangını söndürmeye çalışmak (büyükse riskli)","Derhal kaçış yolunu kullanmak","Pencereye çıkıp izlemek"], c:2, e:["Küçük ve kontrol edilebiliyorsa söndürülür ama riskliyse öncelik kaçıştır.","Doğru: can güvenliği öncelikli.","İzlemek tehlikeli ve yanlış."] },
-    { q:"Kapıdan önce kontrol etmen gereken nedir?", o:["Kapının hemen açılması","Kapının sıcaklığı (el/önkol ile)","Pencereyi açmak"], c:2, e:["Açmak alev veya dumanla karşılaşmana neden olur.","Doğru: sıcaklık kontrolü güvenlik sağlar.","Pencereyi açmak dumanı çekebilir, genelde önerilmez."] },
-    { q:"Duman yoğun ise nasıl ilerlemelisin?", o:["Ayakta yürümek","Eğilerek/zemine yakın yürümek","Koşmak"], c:2, e:["Ayakta duman solunmasını artırır.","Doğru: temiz hava düşük seviyededir.","Koşmak düşme ve boğulma riskini artırır."] },
-    { q:"Ateş hızla yayılıyorsa ne yapmalısın?", o:["Panikle pencereden atlamak","Panik yapmadan çıkışa yönelmek","Dolaba saklanmak"], c:2, e:["Atlamak ağır yaralanma riski taşır.","Doğru: kontrollü kaçış en güvenli.","Dolap saklanmak ölümcül olabilir."] },
-    { q:"Kapının arkasında duman varsa, ne yapmalısın?", o:["Zorla açmak","Islak bezle kapıyı kapatıp alternatif yol aramak","Orada beklemek"], c:2, e:["Zorla açmak alevi hızla içeri alır.","Doğru: ıslak örtü duman girişini azaltır ve alternatif arama gerekir.","Beklemek tehlikelidir."] },
-    { q:"Dışarıdayken ne yapmalısın?", o:["Yangını çekim amaçlı izlemek","112/110'u arayıp bilgi vermek","Eve geri dönüp eşya almak"], c:2, e:["Paylaşmak tehlikeli ve yardım geciktirir.","Doğru: acil servisi bilgilendir.","Eşyaları almak hayat riski oluşturur."] },
-    { q:"Yanık yaralısı gördün, ilk yardım ne olmalı?", o:["Yanığı soğuk suyla yıkamak ve yardım çağırmak","Yanığa krem sürüp beklemek","Hemen üzerini açıp ovmak"], c:1, e:["Doğru: soğuk su yanık tedavisinin ilk adımıdır.","Kremler profesyonel kontrol sonrası.","Ovmak enfeksiyon riskini artırır."] },
-    { q:"Yangın söndüğünde yapılacak ilk şey nedir?", o:["Yetkililerin talimatına uymak","Hemen eve geri dönmek","Olay yerinin fotoğrafını çekip paylaşmak"], c:1, e:["Doğru: yetkililerin yönlendirmesi hayati.","Eve dönmek tehlikeli olabilir.","Paylaşmak yanlış bilgiler yayabilir."] }
+    { q:"Yangın anında ilk olarak ne yapılmalı?", o:["Yangını söndürmeye çalışmak (büyükse riskli)","Derhal kaçış yolunu kullanmak","Pencereye çıkıp izlemek"], c:2,
+      e:["Küçük ve kontrol edilebiliyorsa söndürülür ama riskliyse öncelik kaçıştır.","Doğru: can güvenliği öncelikli.","İzlemek tehlikeli ve yanlış."] },
+    { q:"Kapıdan önce kontrol etmen gereken nedir?", o:["Kapının hemen açılması","Kapının sıcaklığı (el/önkol ile)","Pencereyi açmak"], c:2,
+      e:["Açmak alev veya dumanla karşılaşmana neden olur.","Doğru: sıcaklık kontrolü güvenlik sağlar.","Pencereyi açmak dumanı çekebilir, genelde önerilmez."] },
+    { q:"Duman yoğun ise nasıl ilerlemelisin?", o:["Ayakta yürümek","Eğilerek/zemine yakın yürümek","Koşmak"], c:2,
+      e:["Ayakta duman solunmasını artırır.","Doğru: temiz hava düşük seviyededir.","Koşmak düşme ve boğulma riskini artırır."] },
+    { q:"Ateş hızla yayılıyorsa ne yapmalısın?", o:["Panikle pencereden atlamak","Panik yapmadan çıkışa yönelmek","Dolaba saklanmak"], c:2,
+      e:["Atlamak ağır yaralanma riski taşır.","Doğru: kontrollü kaçış en güvenli.","Dolap saklanmak ölümcül olabilir."] },
+    { q:"Kapının arkasında duman varsa, ne yapmalısın?", o:["Zorla açmak","Islak bezle kapıyı kapatıp alternatif yol aramak","Orada beklemek"], c:2,
+      e:["Zorla açmak alevi hızla içeri alır.","Doğru: ıslak örtü duman girişini azaltır ve alternatif arama gerekir.","Beklemek tehlikelidir."] },
+    { q:"Dışarıdayken ne yapmalısın?", o:["Yangını çekim amaçlı izlemek","112/110'u arayıp bilgi vermek","Eve geri dönüp eşya almak"], c:2,
+      e:["Paylaşmak tehlikeli ve yardım geciktirir.","Doğru: acil servisi bilgilendir.","Eşyaları almak hayat riski oluşturur."] },
+    { q:"Yanık yaralısı gördün, ilk yardım ne olmalı?", o:["Yanığı soğuk suyla yıkamak ve yardım çağırmak","Yanığa krem sürüp beklemek","Hemen üzerini açıp ovmak"], c:1,
+      e:["Doğru: soğuk su yanık tedavisinin ilk adımıdır.","Kremler profesyonel kontrol sonrası.","Ovmak enfeksiyon riskini artırır."] },
+    { q:"Yangın söndüğünde yapılacak ilk şey nedir?", o:["Yetkililerin talimatına uymak","Hemen eve geri dönmek","Olay yerinin fotoğrafını çekip paylaşmak"], c:1,
+      e:["Doğru: yetkililerin yönlendirmesi hayati.","Eve dönmek tehlikeli olabilir.","Paylaşmak yanlış bilgiler yayabilir."] }
   ],
   sel: [
-    { q:"Ani yağışta su yükseliyorsa ilk tepkin ne olur?", o:["Arabadayım, beklerim","Yüksek yere/katlara çıkarım","Suyu fotoğraflarım"], c:2, e:["Arabada su yükselince sıkışma riski yüksek.","Doğru: yükseğe ve güvenli bölgeye çık.","Fotoğraf çekmek yardım etmez."] },
-    { q:"Dere kenarında su yükseliyorsa ne yapmalısın?", o:["Dereye yaklaşırım","Hemen uzaklaşırım","Suya girip kurtarmaya çalışırım"], c:2, e:["Yaklaşmak sürüklenme riskini artırır.","Doğru: uzaklaş ve yetkilileri uyar.","Suya girmek profesyonel ekip işi."] },
-    { q:"Sel alarmı verildiyse eve mi kalmalısın?", o:["Eve kalırım ve yüksek kata çıkarım","Pencereden izlerim","Evi terk edip açık alana çıkarım"], c:1, e:["Eğer içerideysen yüksek kata çıkmak daha güvenli olabilir.","İzlemek risk oluşturur.","Açık alana geçme kriterlere göre değişir."] },
-    { q:"Araç içinde su yükseliyorsa ne yapılmalı?", o:["Motora güvenip beklerim","Aracı terk edip yükseğe çıkarım","Arabada kalırım çünkü güvenli"], c:2, e:["Motor güvende değil; su yükseldikçe tehlike artar.","Doğru: araç terk edilip güvenli yere.","Arabada kalmak boğulma riski taşır."] },
-    { q:"Sel sonrası temiz suya nasıl erişmelisin?", o:["Kirli suyu içebilirim","Yetkililerin sağladığı dağıtımı beklerim","Her çeşme güvenlidir"], c:2, e:["Kirli su sağlık riski taşır.","Doğru: yetkililerin yönlendirmesi ve dağıtımı bekle.","Her çeşme kontaminasyona açık olabilir."] },
-    { q:"Sel bölgesinde elektrik riski varsa ne yapmalısın?", o:["Elektriği açarım","Elektrik kaynaklarından uzak dururum","Suya metal eşyalar atarım"], c:2, e:["Elektriği açmak tehlikeli olabilir.","Doğru: elektrik kaynaklarından uzak dur.","Metal atmak tehlikeli."] },
-    { q:"Sel bölgesinde yardım gerekiyorsa ne yaparsın?", o:["Kendi başıma tehlikeli arama yaparım","Yetkilileri bilgilendiririm ve güvenli davranırım","Televizyona bağlanırım"], c:2, e:["Kendi arama tehlikeli olabilir.","Doğru: yetkilileri bilgilendir ve güvenli kal.","Medya öncelikli değil."] },
-    { q:"Sel sonrası hangi eşyaları ilk kontrol etmelisin?", o:["Gıda ve su kaynaklarını","Sadece eşyaları","Elektrikli cihazları hemen kullanırım"], c:1, e:["Doğru: gıda-su öncelikli, güvenlik kritik.","Sadece eşyalar yanlış öncelik.","Elektrikli cihazlar kontrol edilmeden tehlikeli olabilir."] }
+    { q:"Ani yağışta su yükseliyorsa ilk tepkin ne olur?", o:["Arabadayım, beklerim","Yüksek yere/katlara çıkarım","Suyu fotoğraflarım"], c:2,
+      e:["Arabada su yükselince sıkışma riski yüksek.","Doğru: yükseğe ve güvenli bölgeye çık.","Fotoğraf çekmek yardım etmez."] },
+    { q:"Dere kenarında su yükseliyorsa ne yapmalısın?", o:["Dereye yaklaşırım","Hemen uzaklaşırım","Suya girip kurtarmaya çalışırım"], c:2,
+      e:["Yaklaşmak sürüklenme riskini artırır.","Doğru: uzaklaş ve yetkilileri uyar.","Suya girmek profesyonel ekip işi."] },
+    { q:"Sel alarmı verildiyse evde mi kalmalısın?", o:["Evde kalırım ve yüksek kata çıkarım","Pencereden izlerim","Evi terk edip açık alana çıkarım"], c:1,
+      e:["Eğer içerideysen yüksek kata çıkmak daha güvenli olabilir.","İzlemek risk oluşturur.","Açık alana geçme kriterlere göre değişir."] },
+    { q:"Araç içinde su yükseliyorsa ne yapılmalı?", o:["Motora güvenip beklerim","Aracı terk edip yükseğe çıkarım","Arabada kalırım çünkü güvenli"], c:2,
+      e:["Motor güvende değil; su yükseldikçe tehlike artar.","Doğru: araç terk edilip güvenli yere.","Arabada kalmak boğulma riski taşır."] },
+    { q:"Sel sonrası temiz suya nasıl erişmelisin?", o:["Kirli suyu içebilirim","Yetkililerin sağladığı dağıtımı beklerim","Her çeşme güvenlidir"], c:2,
+      e:["Kirli su sağlık riski taşır.","Doğru: yetkililerin yönlendirmesi ve dağıtımı bekle.","Her çeşme kontaminasyona açık olabilir."] },
+    { q:"Sel bölgesinde elektrik riski varsa ne yapmalısın?", o:["Elektriği açarım","Elektrik kaynaklarından uzak dururum","Suya metal eşyalar atarım"], c:2,
+      e:["Elektriği açmak tehlikeli olabilir.","Doğru: elektrik kaynaklarından uzak dur.","Metal atmak tehlikeli."] },
+    { q:"Sel bölgesinde yardım gerekiyorsa ne yaparsın?", o:["Kendi başıma tehlikeli arama yaparım","Yetkilileri bilgilendiririm ve güvenli davranırım","Televizyona bağlanırım"], c:2,
+      e:["Kendi arama tehlikeli olabilir.","Doğru: yetkilileri bilgilendir ve güvenli kal.","Medya öncelikli değil."] },
+    { q:"Sel sonrası hangi eşyaları ilk kontrol etmelisin?", o:["Gıda ve su kaynaklarını","Sadece eşyaları","Elektrikli cihazları hemen kullanırım"], c:1,
+      e:["Doğru: gıda-su öncelikli, güvenlik kritik.","Sadece eşyalar yanlış öncelik.","Elektrikli cihazlar kontrol edilmeden tehlikeli olabilir."] }
   ],
   heyelan: [
-    { q:"Şiddetli yağmurda toprak hareketi hissedersen ne yaparsın?", o:["Aşağıya doğru koşarım","Yukarı ve içeri doğru hareket ederim","Durup beklerim"], c:2, e:["Aşağıya koşmak heyelana yaklaştırır.","Doğru: yüksek, sağlam bölgeye gitmek gerek.","Beklemek toplanma riskini artırır."] },
-    { q:"Ev yakınında çatlaklar görürsen ne yapmalısın?", o:["Durumu görmezden gelirim","Yetkililere bildiririm ve güvenli bölgeye geçerim","Eşyaları toplamaya başlarım"], c:2, e:["Görmezden gelmek risklidir.","Doğru: erken bildirim can kurtarır.","Eşyaları almak tehlikeli olabilir."] },
-    { q:"Yamaçtan sesler geliyorsa ne yapmalısın?", o:["Ağır eşya ile alanı kontrol ederim","Hemen uzaklaşırım","Fotoğraf çekip paylaşırım"], c:2, e:["Eşya ile müdahale tehlikeli.","Doğru: hızlı uzaklaşma hayati.","Fotoğraf yardım etmez, zaman kaybettirir."] },
-    { q:"Heyelan bölgesinde araçla hareket ediyorsan?", o:["Hızlı geçerim","Yavaşça ve dikkatle uzaklaşırım","Araçla durur beklerim"], c:2, e:["Hızlı geçiş kayma riskini artırır.","Doğru: kontrollü uzaklaşma gerekir.","Araçta beklemek tehlikelidir."] },
-    { q:"Ev heyelan riski altındaysa ne yapmalısın?", o:["Acil durum planı uygularım","Eşyaları toplamaya çalışırım","Hiçbir şey yapmam"], c:1, e:["Doğru: plan ve hızlı hareket hayati.","Eşyaları almak zaman kaybettirir.","Hiçbir şey yapmak tehlikelidir."] },
-    { q:"Toprak kayması sonrası ne yapmalısın?", o:["Hasarı kendi başıma temizlerim","Yetkililerin iznini ve yardımını beklerim","Derhal eve girerim"], c:2, e:["Kendi başına temizleme tehlikeli olabilir.","Doğru: yetkililer ve ekipler gerekli.","Eve girmek çökme riskini artırabilir."] },
-    { q:"Yağış devam ediyorsa nerede kalmalısın?", o:["Alçakta, vadide","Yüksekte ve sağlam zeminde","Sel yataklarında"], c:2, e:["Alçak yerler su toplar, tehlikelidir.","Doğru: yüksek ve sağlam yer güvenlidir.","Sel yatakları tehlikeli."] },
-    { q:"Heyelan anında en güvenli hareket nedir?", o:["Yükseğe ve yan tarafa doğru hızlıca kaçmak","Duvarda saklanmak","Yere yatmak"], c:1, e:["Doğru: yamaçtan uzaklaşıp yüksek noktaya gitmek.","Duvarda saklanmak göçük riski taşır.","Yere yatmak etkilidir mi belirsiz ve risklidir."] }
+    { q:"Şiddetli yağmurda toprak hareketi hissedersen ne yaparsın?", o:["Aşağıya doğru koşarım","Yukarı ve içeri doğru hareket ederim","Durup beklerim"], c:2,
+      e:["Aşağıya koşmak heyelana yaklaştırır.","Doğru: yüksek, sağlam bölgeye gitmek gerek.","Beklemek toplanma riskini artırır."] },
+    { q:"Ev yakınında çatlaklar görürsen ne yapmalısın?", o:["Durumu görmezden gelirim","Yetkililere bildiririm ve güvenli bölgeye geçerim","Eşyaları toplamaya başlarım"], c:2,
+      e:["Görmezden gelmek risklidir.","Doğru: erken bildirim can kurtarır.","Eşyaları almak tehlikeli olabilir."] },
+    { q:"Yamaçtan sesler geliyorsa ne yapmalısın?", o:["Ağır eşya ile alanı kontrol ederim","Hemen uzaklaşırım","Fotoğraf çekip paylaşırım"], c:2,
+      e:["Eşya ile müdahale tehlikeli.","Doğru: hızlı uzaklaşma hayati.","Fotoğraf yardım etmez, zaman kaybettirir."] },
+    { q:"Heyelan bölgesinde araçla hareket ediyorsan?", o:["Hızlı geçerim","Yavaşça ve dikkatle uzaklaşırım","Araçla durur beklerim"], c:2,
+      e:["Hızlı geçiş kayma riskini artırır.","Doğru: kontrollü uzaklaşma gerekir.","Araçta beklemek tehlikelidir."] },
+    { q:"Ev heyelan riski altındaysa ne yapmalısın?", o:["Acil durum planı uygularım","Eşyaları toplamaya çalışırım","Hiçbir şey yapmam"], c:1,
+      e:["Doğru: plan ve hızlı hareket hayati.","Eşyaları almak zaman kaybettirir.","Hiçbir şey yapmak tehlikelidir."] },
+    { q:"Toprak kayması sonrası ne yapmalısın?", o:["Hasarı kendi başıma temizlerim","Yetkililerin iznini ve yardımını beklerim","Derhal eve girerim"], c:2,
+      e:["Kendi başına temizleme tehlikeli olabilir.","Doğru: yetkililer ve ekipler gerekli.","Eve girmek çökme riskini artırabilir."] },
+    { q:"Yağış devam ediyorsa nerede kalmalısın?", o:["Alçakta, vadide","Yüksekte ve sağlam zeminde","Sel yataklarında"], c:2,
+      e:["Alçak yerler su toplar, tehlikelidir.","Doğru: yüksek ve sağlam yer güvenlidir.","Sel yatakları tehlikeli."] },
+    { q:"Heyelan anında en güvenli hareket nedir?", o:["Yükseğe ve yan tarafa doğru hızlıca kaçmak","Duvarda saklanmak","Yere yatmak"], c:1,
+      e:["Doğru: yamaçtan uzaklaşıp yüksek noktaya gitmek.","Duvarda saklanmak göçük riski taşır.","Yere yatmak etkilidir mi belirsiz ve risklidir."] }
   ],
   firtina: [
-    { q:"Fırtına anında ilk korunma olarak ne yapmalısın?", o:["Açık alanda kalırım","Sağlam kapalı bir binaya girerim","Ağaç altına saklanırım"], c:2, e:["Açık alan risklidir (yıldırım, uçan nesneler).","Doğru: sağlam kapalı alan güvenlidir.","Ağaç altı devrilme/yıldırım risklidir."] },
-    { q:"Deniz kenarında fırtına varsa ne yapmalısın?", o:["Denize açılırım","Kıyıdan uzaklaşıp güvenli yüksek yere çıkarım","Deniz kıyısında beklerim"], c:2, e:["Denize çıkmak ölümcül risk taşır.","Doğru: kıyıdan uzaklaş ve yüksel.","Kıyıda kalmak tehlikelidir."] },
-    { q:"Rüzgâr çok kuvvetliyse araç kullanırken?", o:["Hızlanırım ve geçerim","Yavaşlar kenara çekilirim","Araçta sabit dururum"], c:2, e:["Hızlanma kontrol kaybı yaratır.","Doğru: yavaşlayıp güvenli yerde bekle.","Araçta kalmak bazen gerekli ama kenara çekilmek daha güvenli."] },
-    { q:"Fırtına sırasında cam uçağı vb nesneler için ne yapmalısın?", o:["Pencereleri kapatır, perdeleri kapatırım","Pencereleri açık bırakırım","Camın önünde dururum"], c:1, e:["Doğru: cam koruma ve içeride güvenlik sağlar.","Açık bırakmak tehlikeli.","Cam önünde durmak tehlikelidir."] },
-    { q:"Yıldırım çarpması riskinde ne yapmalısın?", o:["Metalik eşyaları yere bırakırım ve içeri girerim","Açıkta kalıp gökyüzünü izlerim","Yüksek yere çıkıp beklerim"], c:1, e:["Doğru: metalden uzaklaş ve içeri gir.","Açıkta kalmak ölümcül risktir.","Yükseğe çıkmak riski artırır."] },
-    { q:"Fırtına sonrası evde kontrol etmen gereken ilk şey?", o:["Elektrik hatları ve gaz kaçaklarını kontrol etmek","Hemen televizyonu açmak","Eşyaları karıştırmak"], c:1, e:["Doğru: güvenlik riski önceliklidir.","Televizyon veya eğlence öncelik olmamalı.","Rastgele eşyaları karıştırmak tehlike doğurur."] },
-    { q:"Güçlü rüzgâr sırasında dışarıdayken nereye sığınmalısın?", o:["Açık garaja/garaj önü","Küçük kafe tente altı","Sağlam iç mekâna"], c:3, e:["Açık garage uçuşan cisimlere açıktır.","Tente altı uçuşan parçalara açık olabilir.","Doğru: sağlam iç mekan korur."] },
-    { q:"Fırtına uyarısı varken en iyi hazırlık nedir?", o:["Dışarda eşyaları sabitlemek ve acil çanta hazırlamak","Hiçbir hazırlık yapmamak","Denize gitmek"], c:1, e:["Doğru: hazırlık riskleri azaltır.","Hazırlık yapmamak tehlikelidir.","Denize gitmek ölümcül risktir."] }
-  ],
-  cig: [
-    { q:"Kışın dağlık bir bölgede iseniz ve çığ uyarısı varsa ne yapmalısınız?", o:["Uyarıları göz ardı ederek kayak yapmaya devam ederim","Belirlenen güvenli bölgelerde kalırım","Yüksek ses çıkararak karı test ederim"], c:2, e:["Uyarıları göz ardı etmek hayati tehlikeye yol açar.","Doğru: yetkililerin ve çığ uzmanlarının belirlediği güvenli alanlarda kalın.","Yüksek ses, titreşim oluşturarak çığ riskini artırabilir."] },
-    { q:"Yürüyüş sırasında çığ sesi duyarsanız ilk tepkiniz ne olmalıdır?", o:["Kaçmaya çalışmak (aşağı doğru)","Hemen sırt çantanızı çıkarıp yere yatmak","En yakın sağlam cisme tutunmaya çalışmak"], c:3, e:["Aşağı doğru kaçmak, çığın hızlanma riskini artırır.","Sırt çantasını çıkarmak bazen önerilir ama öncelik sağlam bir yere tutunmaktır.","Doğru: bir ağaç, kaya gibi sağlam bir cisme tutunarak sürüklenmeyi önleyin."] },
-    { q:"Çığ altında kalırsanız ne yapmalısınız?", o:["Panikleyerek enerjiyi hızlıca tüketmek","Kar durmadan önce ellerle yüz çevresinde bir hava boşluğu oluşturmaya çalışmak","Bağırmaya başlamak"], c:2, e:["Panik oksijen tüketimini hızlandırır.","Doğru: kar durmadan önce etrafınızdaki karı iterek ağız ve burun çevrenizde bir hava cebi oluşturun.","Kar sesi havayı iletmez, bağırmak enerjiyi tüketir."] },
-    { q:"Çığ altında kaldıktan sonra kar durduğunda yönünüzü nasıl belirlersiniz?", o:["Tahmini bir yön seçerek kazmaya başlamak","Tükürerek yerçekimi yönünü (aşağı) bulmak","Karın en yumuşak olduğu yöne doğru kazmak"], c:2, e:["Tahminler yanıltıcı olabilir.","Doğru: ağzınıza tükürerek veya salya bırakarak yerçekiminin hangi yönde olduğunu (aşağıyı) tespit edin ve tam tersi yöne kazın.","Karın yumuşaklığı yönü göstermez."] },
-    { q:"Yamaçta hareket eden bir çığ gördüğünüzde ne yapmalısınız?", o:["Fotoğraf çekmek için yaklaşmak","Çığ hattından yatay ve hızlıca uzaklaşmak","Kar motoru ile çığın önünden kaçmaya çalışmak"], c:2, e:["Fotoğraf çekmek zaman kaybettirir ve risklidir.","Doğru: çığ yolu üzerinden yatay bir açıyla hızlıca kaçarak güvenli bölgeye geçin.","Kar motoru tehlikelidir ve çığın önünden kaçılamayabilir."] },
-    { q:"Çığ tehlikesi olan bir bölgeye girerken yanınıza ne almalısınız?", o:["Sadece yiyecek ve içecek","Çığ cihazı (transceiver), kürek, prob (sonda)","Radyo ve battaniye"], c:2, e:["Yiyecekler önemlidir ama hayati değildir.","Doğru: çığ üçlüsü (cihaz, kürek, prob) kurtarma için zorunludur.","Bunlar gerekli ama çığ kurtarma araçları kadar öncelikli değil."] },
-    { q:"Çığdan kurtulduktan sonra birini ararken hangi kurtarma yöntemini kullanmalısınız?", o:["Gözle rastgele arama","Sadece bağırarak çağırmak","Çığ cihazını (transceiver) kullanarak sinyal takibi yapmak"], c:3, e:["Gözle arama yeterli değildir.","Bağırmak önemlidir ama cihaz olmadan nokta atışı yapamazsınız.","Doğru: çığ cihazı, gömülü kişinin yerini hassas bir şekilde belirlemek için temel araçtır."] },
-    { q:"Çığ anında bir arabanın içindeyseniz en güvenli davranış nedir?", o:["Arabadan inip karın üstüne çıkmaya çalışmak","Aracı terk etmeden motoru kapatıp emniyet kemerini çözmek","Hızla geri geri giderek çığdan uzaklaşmak"], c:2, e:["Arabadan inmek daha çok riske atar.","Doğru: Motoru kapatıp zehirlenmeyi önleyin ve kemeri çözerek kar durduğunda hareket serbestliği kazanın.","Hızla uzaklaşmak karda zor ve tehlikelidir."] }
-  ],
-  kbrn: [
-    { q:"Kimyasal bir sızıntı alarmı duyarsanız ilk olarak ne yapmalısınız?", o:["Hemen maske takıp dışarı çıkmak","Pencere ve kapıları kapatıp 'İçeride Kal' (Shelter in Place) kuralını uygulamak","Sızıntı kaynağını bulmaya çalışmak"], c:2, e:["Kimyasal sızıntı varsa dışarıdaki hava kapalı alandan daha tehlikelidir.","Doğru: Sızdırmazlık sağlayarak içeride kalmak, havayla temas eden kimyasallardan korunmanın en hızlı yoludur.","Kaynak aramak yetkililerin işidir, kendi güvenliğiniz öncelikli."] },
-    { q:"Radyolojik bir tehlike uyarısı varsa nerede korunmak en güvenlidir?", o:["Binanın en üst katı","Binanın orta katları veya bodrum katı","Açık bir otopark"], c:2, e:["Üst katlar radyasyona karşı daha az korunaklıdır.","Doğru: Kalın duvarlar ve katlar radyasyona karşı koruma sağlar. Bodrum en güvenli yerdir.","Açık alanlar tehlikelidir."] },
-    { q:"Biyolojik tehlike (örn. salgın) ilan edilirse en temel kişisel koruma önlemi nedir?", o:["Sürekli antiseptik sprey kullanmak","Maske takmak, el hijyenine dikkat etmek ve sosyal mesafeyi korumak","Vitamin takviyesi almak"], c:2, e:["Sürekli sprey tehlikelidir.","Doğru: Bulaşma riskini en aza indiren en etkili yöntemlerdir.","Vitaminler destekler ama bulaşmayı engellemez."] },
-    { q:"Nükleer bir patlama sonrası dışarıdaysanız ne yapmalısınız?", o:["Derhal kapalı ve sağlam bir yere sığınmak","Hemen eve dönüp banyo yapmak","Uzun süre dışarıda kalarak durumu gözlemlemek"], c:1, e:["Eve dönüp banyo yapmak doğrudur ancak öncelik derhal korunmaktır.","Doğru: Radyoaktif serpintiden korunmak için en kısa sürede sağlam bir sığınağa girilmelidir.","Dışarıda kalmak serpintiye maruziyeti artırır."] },
-    { q:"Kıyafetlerinize kimyasal madde bulaştığından şüpheleniyorsanız ne yapmalısınız?", o:["Kıyafetleri ovuşturarak temizlemeye çalışmak","Kıyafetleri çıkarıp plastik bir torbaya koymak ve cildi bol suyla yıkamak","Kıyafetlerle birlikte evin içine girmek"], c:2, e:["Ovmak kimyasalın daha çok yayılmasına neden olur.","Doğru: Kirlenmiş giysiler hemen çıkarılmalı ve plastik bir torbada izole edilmeli, ardından vücut temizlenmelidir.","İçeri girmek kontaminasyonu yayar."] },
-    { q:"KBRN olayında acil yardım ekiplerini ararken hangi bilgiyi kesinlikle vermelisiniz?", o:["Sadece kendi adımı ve adresimi","Tehlikenin türü (kimyasal, biyolojik vs.) ve tam konumu","Sosyal medyada gördüğüm bilgileri"], c:2, e:["Adres önemlidir ama tehlike türü öncelikli.","Doğru: Ekiplerin doğru koruyucu ekipmanla gelmesi ve doğru prosedürü uygulaması için bilgi çok önemlidir.","Sosyal medya bilgileri yanıltıcı olabilir."] },
-    { q:"Toplu taşımadayken şüpheli bir paket/nesne görürseniz ne yapmalısınız?", o:["Paketi açıp kontrol etmek","Yetkililere (polis/güvenlik) durumu bildirmek ve alanı terk etmek","Sadece yanındakilere söylemek"], c:2, e:["Paketi açmak tehlikelidir.","Doğru: Güvenlik birimlerini uyarın ve paketle aranıza mesafe koyun.","Yetkili mercilere bildirim zorunludur."] },
-    { q:"KBRN olayında en önemli iletişim kuralı nedir?", o:["Sürekli telefonla konuşarak hattı meşgul etmek","Kısa mesaj veya internet tabanlı uygulamaları kullanmak","Haberleri sürekli yüksek sesle takip etmek"], c:2, e:["Telefon hatları acil durumlar için serbest bırakılmalıdır.","Doğru: SMS ve veri tabanlı iletişim, sesli görüşmeye göre daha az bant genişliği kullanır.","Haberleri takip etmek önemlidir ama iletişim önceliği farklıdır."] }
-  ],
-  ilkyardim: [
-    { q:"Bilinci kapalı bir yaralı gördüğünüzde ilk olarak ne yapmalısınız?", o:["Hemen hastaneye götürmeye çalışmak","Önce kendi güvenliğinizi sağlamak ve 112'yi aramak","Yaralıyı sallayarak uyandırmaya çalışmak"], c:2, e:["Yardım çağrılmadan taşımak yaralanmayı artırabilir.","Doğru: Önce olay yeri güvenliği, sonra yardım çağrısı.","Sarsmak boyun ve omurilik hasarını artırabilir."] },
-    { q:"Ciddi bir dış kanama varsa ilk yardım nasıl olmalıdır?", o:["Kanayan bölgeyi kalpten aşağıda tutmak","Temiz bir bezle baskı uygulamak ve bölgeyi yukarı kaldırmak","Yarayı sabunlu suyla yıkamak"], c:2, e:["Kanayan bölgeyi aşağıda tutmak kanamayı artırır.","Doğru: Baskı ve yükseltme, kanamayı kontrol altına almada temel adımlardır.","Yıkama, kanama kontrol altına alındıktan sonra düşünülür."] },
-    { q:"Yetişkin birine kalp masajı yaparken göğüs kemiği ne kadar çöktürülmelidir?", o:["1-2 cm","5-6 cm","10 cm"], c:2, e:["1-2 cm yetersizdir.","Doğru: Kalbin etkili bir şekilde sıkıştırılması için 5-6 cm çökme gerekir.","10 cm çok fazladır ve kaburga kırılmasına yol açabilir."] },
-    { q:"Bir bebekte (0-1 yaş) tıkanma varsa yabancı cismi nasıl çıkarmaya çalışırsınız?", o:["Karın bölgesine Heimlich manevrası uygulamak","Sırtına 5 kez süpürür tarzda vurmak ve 5 kez göğüs basısı yapmak","Sadece su içirmeye çalışmak"], c:2, e:["Heimlich manevrası bebekler için uygun değildir.","Doğru: Süpürür tarzda sırt vuruşu ve göğüs basısı bebeklerde temel tıkanma giderme yöntemidir.","Su içirmek durumu daha kötü yapabilir."] },
-    { q:"Yanığa ilk müdahale nasıl olmalıdır?", o:["Yanığa yoğurt/diş macunu sürmek","Yanığı 15-20 dakika soğuk (buzlu değil) su altında tutmak","Kıyafetleri zorla çıkartmak"], c:2, e:["Yoğurt/macun enfeksiyon riskini artırır.","Doğru: Soğuk su, yanığın ilerlemesini durdurur ve acıyı hafifletir.","Kıyafet yapıştıysa zorla çıkartılmamalıdır."] },
-    { q:"Kırık şüphesi olan bir uzvu nasıl sabitlemelisiniz?", o:["Kırık bölgeyi düzeltmeye çalışmak","Yaralı bölgeyi hareketsiz bırakıp iki yanındaki eklemi de içerecek şekilde desteklemek","Sadece ağrı kesici vermek"], c:2, e:["Kırığı düzeltmek daha büyük hasara yol açar.","Doğru: Sabitleme (atel), kırık olan bölgenin ve komşu eklemlerin hareketini önler.","Ağrı kesici, tedavinin bir parçasıdır ama sabitleme önceliklidir."] },
-    { q:"Şok belirtileri (solgunluk, soğuk terleme, hızlı nabız) gösteren birine ne yapılmalıdır?", o:["Oturur pozisyonda tutmak","Ayaklarını 30 cm kadar yükseltmek ve üzerini örtmek","Sıcak içecekler vermek"], c:2, e:["Oturur pozisyon beyin kanlanmasını azaltabilir.","Doğru: Ayakları yükseltmek beyne kan akışını artırır. Üstünü örtmek vücut ısısını korur.","Sıvı/yiyecek verilmemelidir."] },
-    { q:"Yaralıya ilk yardım yapmadan önce neye dikkat etmelisiniz?", o:["Elbiselerinin markasına","Yaralının tüm hikâyesini dinlemeye","Eldiven takmak ve hijyene dikkat etmek"], c:3, e:["Elbise markası önemsizdir.","Hikâye önemlidir ama öncelik kendi güvenliğinizdir.","Doğru: Eldiven ve hijyen, hem kendinizi hem de yaralıyı enfeksiyondan korur."] }
+    { q:"Fırtına anında ilk korunma olarak ne yapmalısın?", o:["Açık alanda kalırım","Sağlam kapalı bir binaya girerim","Ağaç altına saklanırım"], c:2,
+      e:["Açık alan risklidir (yıldırım, uçan nesneler).","Doğru: sağlam kapalı alan güvenlidir.","Ağaç altı devrilme/yıldırım risklidir."] },
+    { q:"Deniz kenarında fırtına varsa ne yapmalısın?", o:["Denize açılırım","Kıyıdan uzaklaşıp güvenli yüksek yere çıkarım","Deniz kıyısında beklerim"], c:2,
+      e:["Denize çıkmak ölümcül risk taşır.","Doğru: kıyıdan uzaklaş ve yüksel.","Kıyıda kalmak tehlikelidir."] },
+    { q:"Rüzgâr çok kuvvetliyse araç kullanırken?", o:["Hızlanırım ve geçerim","Yavaşlar kenara çekilirim","Araçta sabit dururum"], c:2,
+      e:["Hızlanma kontrol kaybı yaratır.","Doğru: yavaşlayıp güvenli yerde bekle.","Araçta kalmak bazen gerekli ama kenara çekilmek daha güvenli."] },
+    { q:"Fırtına sırasında cam uçağı vb nesneler için ne yapmalısın?", o:["Pencereleri kapatır, perdeleri kapatırım","Pencereleri açık bırakırım","Camın önünde dururum"], c:1,
+      e:["Doğru: cam koruma ve içeride güvenlik sağlar.","Açık bırakmak tehlikeli.","Cam önünde durmak tehlikelidir."] },
+    { q:"Yıldırım çarpması riskinde ne yapmalısın?", o:["Metalik eşyaları yere bırakırım ve içeri girerim","Açıkta kalıp gökyüzünü izlerim","Yüksek yere çıkıp beklerim"], c:1,
+      e:["Doğru: metalden uzaklaş ve içeri gir.","Açıkta kalmak ölümcül risktir.","Yükseğe çıkmak riski artırır."] },
+    { q:"Fırtına sonrası evde kontrol etmen gereken ilk şey?", o:["Elektrik hatları ve gaz kaçaklarını kontrol etmek","Hemen televizyonu açmak","Eşyaları karıştırmak"], c:1,
+      e:["Doğru: güvenlik riski önceliklidir.","Televizyon veya eğlence öncelik olmamalı.","Rastgele eşyaları karıştırmak tehlike doğurur."] },
+    { q:"Güçlü rüzgâr sırasında dışarıdayken nereye sığınmalısın?", o:["Açık garaja/garaj önü","Küçük kafe tente altı","Sağlam iç mekâna"], c:3,
+      e:["Açık garage uçuşan cisimlere açıktır.","Tente altı uçuşan parçalara açık olabilir.","Doğru: sağlam iç mekan korur."] },
+    { q:"Fırtına uyarısı varken en iyi hazırlık nedir?", o:["Dışarda eşyaları sabitlemek ve acil çanta hazırlamak","Hiçbir hazırlık yapmamak","Denize gitmek"], c:1,
+      e:["Doğru: hazırlık riskleri azaltır.","Hazırlık yapmamak tehlikelidir.","Denize gitmek ölümcül risktir."] }
   ]
 };
-  function start(t){
+
+function start(t){
   type=t; index=0; mistakes=[]; locked=false;
   document.getElementById('menu').style.display='none';
   document.getElementById('result').style.display='none';
@@ -189,32 +191,14 @@ function renderScene(){
   const choicesArea = document.getElementById('choicesArea');
   choicesArea.innerHTML = '';
   document.getElementById('hint').innerText = '';
-  
-  const currentSceneIndex = index;
-  
   s.o.forEach(function(opt,i){
     const b = document.createElement('button');
     b.textContent = opt;
-    b.setAttribute('data-index', i + 1);
     b.addEventListener('click', function(){
-      if(locked || currentSceneIndex !== index) return;
+      if(locked) return;
       locked=true;
-      
-      const isCorrect = (i + 1 === s.c);
-      const allButtons = choicesArea.querySelectorAll('button');
-
-      allButtons.forEach(function(btn){
-          const btnIndex = parseInt(btn.getAttribute('data-index'));
-          btn.disabled = true;
-          
-          if(btnIndex === s.c){
-              btn.classList.add('correct-feedback');
-          } else if (btnIndex === (i + 1)){
-              btn.classList.add('wrong-feedback');
-          }
-      });
-      
-      if(isCorrect){
+      setTimeout(function(){ locked=false; },220);
+      if(i+1 === s.c){
         correctSound();
         document.getElementById('hint').innerText = 'Doğru ✔';
       } else {
@@ -223,13 +207,9 @@ function renderScene(){
         mistakes.push({sceneIndex:index+1, question:s.q, selected:opt, correct:s.o[s.c-1], why:why});
         document.getElementById('hint').innerText = 'Yanlış ✖ (açıklama sonuçta)';
       }
-      
       index++;
       updateProgress();
-      setTimeout(function(){ 
-          locked=false;
-          renderScene(); 
-      }, 1200);
+      setTimeout(function(){ renderScene(); }, 300);
     });
     choicesArea.appendChild(b);
   });
@@ -240,15 +220,11 @@ function showResults(){
   document.getElementById('game').style.display='none';
   document.getElementById('result').style.display='block';
   document.getElementById('resultTitle').innerText = capitalize(type) + ' Senaryosu Tamamlandı';
-  
-  const totalQuestions = scenes[type].length;
-  const correctCount = totalQuestions - mistakes.length;
-  
   let body = '';
   if(mistakes.length === 0){
-    body = '<p class="explain">Tebrikler — tüm sahnelerde doğru davrandın! (' + totalQuestions + '/' + totalQuestions + ') Bilgilerin yerinde!</p>';
+    body = '<p class="explain">Tebrikler — tüm sahnelerde doğru davrandın. Bilgilerin yerinde!</p>';
   } else {
-    body = '<p class="wrong">Tebrikler! ' + correctCount + ' / ' + totalQuestions + ' soruyu doğru bildin. Yanlış yaptığın sahneler (' + mistakes.length + '):</p><ul>';
+    body = '<p class="muted">Yanlış yaptığın sahneler (' + mistakes.length + '):</p><ul>';
     mistakes.forEach(function(m){
       body += '<li><b>Sahne ' + m.sceneIndex + ':</b> ' + escapeHtml(m.question) + '<br>' +
         '<span class="wrong">Senin seçimin:</span> ' + escapeHtml(m.selected) + '<br>' +
@@ -271,34 +247,24 @@ function showResults(){
   progressEl().style.width = '100%';
 }
 
-function capitalize(s){ 
-  return s.charAt(0).toUpperCase()+s.slice(1); 
-}
-
-function escapeHtml(s){ 
-  return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); 
-}
-
+function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+function escapeHtml(s){ return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function backToMenu(){
   document.getElementById('result').style.display='none';
   document.getElementById('game').style.display='none';
   document.getElementById('menu').style.display='block';
-  document.getElementById('title').innerText = 'Genişletilmiş Afet Bilinci Platformu';
+  document.getElementById('title').innerText = 'Afet Bilinci Platformu';
   document.getElementById('subtitle').innerText = "Bir senaryo seç — ilerledikçe yanlış yaptığın sahneleri toplayacak, en sonda neden yanlış olduğunu göreceksin.";
   progressEl().style.width = '0%';
 }
-
-function restart(){ 
-  start(type); 
-}
+function restart(){ start(type); }
 
 function showMainMenu(){
   const choices = document.getElementById('choices');
   choices.innerHTML = '';
-  const scenarios = ['deprem','yangin','sel','heyelan','firtina', 'cig', 'kbrn', 'ilkyardim'];
-  const icons = ['🌋','🔥','🌊','🗻','🌪️', '🏔️', '☢️', '🩹'];
-  const names = ['Deprem','Yangın','Sel','Heyelan','Fırtına', 'Çığ', 'KBRN', 'Temel İlkyardım'];
-  
+  const scenarios = ['deprem','yangin','sel','heyelan','firtina'];
+  const icons = ['🌋','🔥','🌊','🗻','🌪️'];
+  const names = ['Deprem','Yangın','Sel','Heyelan','Fırtına'];
   scenarios.forEach(function(sc,idx){
     const btn = document.createElement('button');
     btn.textContent = icons[idx] + ' ' + names[idx];
