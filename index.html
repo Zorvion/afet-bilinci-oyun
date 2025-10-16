@@ -3,22 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Afet Bilinci Simülasyonu</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Afet Bilinci Simülasyonu | Dinamik Sürüm</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --primary-color: #007bff; /* Mavi */
-    --secondary-color: #6c757d; /* Gri */
-    --success-color: #28a745; /* Yeşil */
-    --danger-color: #dc3545; /* Kırmızı */
-    --bg-light: #f8f9fa; /* Açık Arka Plan */
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --main-bg-color: #f0f4f8; /* Açık Mavi-Gri */
+    --primary-blue: #1e88e5; /* Canlı Mavi */
+    --primary-dark: #263238; /* Koyu Metin */
+    --success-green: #4caf50; /* Doğru Yeşil */
+    --danger-red: #e53935; /* Yanlış Kırmızı */
+    --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-button: 0 4px 15px rgba(30, 136, 229, 0.4);
   }
 
   body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     text-align: center;
-    background: linear-gradient(135deg, var(--bg-light), #e9ecef);
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb); /* Daha Canlı Gradient */
     margin: 0;
     padding: 30px 15px;
     min-height: 100vh;
@@ -27,156 +28,184 @@
     justify-content: center;
   }
   #card {
-    max-width: 900px;
+    max-width: 1000px;
     width: 100%;
-    margin: auto;
     background: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: var(--card-shadow);
-    transition: all 0.3s ease-in-out;
+    padding: 40px;
+    border-radius: 20px; /* Yumuşak ve büyük köşeler */
+    box-shadow: var(--shadow-deep);
+    transition: transform 0.3s ease;
   }
   h1 {
-    color: var(--primary-color);
-    font-weight: 700;
+    color: var(--primary-dark);
+    font-weight: 800; /* Daha kalın başlık */
+    font-size: 2.2rem;
     margin-bottom: 5px;
   }
   h2 {
-    color: #343a40;
-    margin: 20px 0;
-    font-weight: 600;
+    color: var(--primary-dark);
+    margin: 25px 0 15px;
+    font-weight: 700;
+    font-size: 1.5rem;
   }
   p.small {
-    color: var(--secondary-color);
-    font-size: 15px;
-    margin-bottom: 25px;
+    color: #607d8b;
+    font-size: 16px;
+    margin-bottom: 30px;
   }
-  
-  /* BUTON GENEL STİLİ */
-  .action-button {
-    padding: 12px 25px;
+
+  /* BUTON GENEL STİLİ (Aksiyon Butonları) */
+  .action-button, #resultButtons button {
+    padding: 14px 30px;
     font-size: 16px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
-    background: var(--primary-color);
+    background: var(--primary-blue);
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
-    margin: 8px; /* Buton aralıklarını biraz daralttık */
+    transition: all 0.25s cubic-bezier(0.17, 0.84, 0.44, 1);
+    box-shadow: var(--shadow-button);
   }
-  .action-button:hover:not(:disabled) {
-    background: #0056b3;
-    transform: translateY(-1px);
+  .action-button:hover:not(:disabled), #resultButtons button:hover:not(:disabled) {
+    background: #1565c0;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(30, 136, 229, 0.6);
   }
-  .action-button:active:not(:disabled) {
+  .action-button:active:not(:disabled), #resultButtons button:active:not(:disabled) {
     transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
   }
   .action-button:disabled {
-    opacity: 0.7;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 
-  /* MENÜ BUTONLARI (GRID DÜZENİ) */
+  /* MENÜ BUTONLARI (KART EFEKTLİ) */
   #choices {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-top: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
   }
   #choices button {
-    height: 100px; /* Butonlara sabit yükseklik verdik */
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    color: var(--primary-dark);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    height: 120px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.3s;
+  }
+  #choices button:hover {
+    background: #e3f2fd;
+    border-color: var(--primary-blue);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(30, 136, 229, 0.3);
+  }
+
+  /* İKON STİLİ */
+  #choices button span.icon {
+    font-size: 2.5em;
+    margin-bottom: 5px;
   }
 
   /* SORU SEÇENEKLERİ */
-  #choicesArea {
-    margin-top: 20px;
-  }
   #choicesArea button {
-    display: block;
+    background: var(--main-bg-color);
+    color: var(--primary-dark);
+    border: 1px solid #cfd8dc;
+    box-shadow: none;
     width: 100%;
-    max-width: 600px;
-    margin: 10px auto;
-    text-align: left; /* Seçenekleri sola yasladık */
+    max-width: 650px;
+    margin: 12px auto;
+    text-align: left;
   }
-  #q {
-    min-height: 60px; /* Soru alanı için minimum yükseklik */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  #choicesArea button:hover:not(:disabled) {
+    background: #d0e0f0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   /* İLERLEME ÇUBUĞU */
   #progressWrap {
-    height: 8px;
-    background: var(--bg-light);
-    border-radius: 4px;
-    margin: 15px 0;
+    height: 10px;
+    background: #cfd8dc;
+    border-radius: 5px;
+    margin: 20px 0;
   }
   #progress {
     height: 100%;
     width: 0;
-    background: var(--success-color);
-    border-radius: 4px;
-    transition: width 0.3s ease-out;
+    background: linear-gradient(90deg, #42a5f5, var(--success-green)); /* Gradientli ilerleme */
+    border-radius: 5px;
+    transition: width 0.4s ease-out;
   }
 
   /* GERİ BİLDİRİM & SONUÇ STİLLERİ */
   #choicesArea button.correct-feedback {
-    background-color: var(--success-color) !important;
+    background-color: var(--success-green) !important;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.5);
     transition: none;
   }
   #choicesArea button.wrong-feedback {
-    background-color: var(--danger-color) !important;
+    background-color: var(--danger-red) !important;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(229, 57, 53, 0.5);
     transition: none;
   }
   #hint {
-    font-size: 16px;
-    color: #343a40;
-    margin-bottom: 20px;
-    font-weight: 600;
-    height: auto !important; /* Yüksekliği otomatik ayarla */
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    margin-top: 15px;
+    font-weight: 700;
+    min-height: 25px;
   }
-  .explain { color: var(--success-color); font-weight: 600; }
-  .wrong { color: var(--danger-color); font-weight: 600; }
-  .muted { color: var(--secondary-color); font-size: 13px; margin-top: 5px; }
+  .explain { color: var(--success-green); font-weight: 700; }
+  .wrong { color: var(--danger-red); font-weight: 700; }
+  .muted { color: #78909c; font-size: 14px; margin-top: 5px; }
 
   /* SONUÇ LİSTESİ */
   #resultBody ul {
     padding: 0;
     list-style: none;
-    max-width: 700px;
-    margin: 20px auto;
+    max-width: 800px;
+    margin: 25px auto;
     text-align: left;
   }
   #resultBody li {
-    background: var(--bg-light);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    border-left: 5px solid var(--danger-color);
+    background: #fff;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border-left: 6px solid var(--danger-red); /* Vurgulu sol çizgi */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
 
   @media(max-width: 768px) {
-    body { padding: 15px; }
-    #card { padding: 20px; }
-    #choices { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-    #choices button { height: 80px; font-size: 14px; padding: 8px; }
+    #card { padding: 25px; border-radius: 15px; }
+    h1 { font-size: 1.8rem; }
+    #choices { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+    #choices button { height: 90px; font-size: 14px; padding: 8px; border-radius: 10px; }
+    #choices button span.icon { font-size: 2em; }
   }
 </style>
 </head>
 <body>
   <div id="card">
     <h1 id="title">Afet Bilinci Simülasyonu</h1>
-    <p class="small" id="subtitle">Kritik senaryolar arasından seçimini yap. Verdiğin yanlış cevapların neden yanlış olduğunu en sonda öğreneceksin.</p>
+    <p class="small" id="subtitle">Canlı senaryolarla afet bilincini geliştir. Yanlış cevaplarının detaylı analizini sonuç ekranında gör.</p>
 
     <div id="menu">
       <div id="choices"></div>
-      <p class="menuNote muted" style="margin-top:20px; font-size:13px;">Hata yaptığında anında geri bildirim alacak, tüm açıklamaları sonuç ekranında göreceksin.</p>
+      <p class="menuNote muted" style="margin-top:30px;">Başlamadan önce bir senaryo seç ve bilgini test et.</p>
     </div>
 
     <div id="game" style="display:none">
@@ -189,9 +218,9 @@
     <div id="result" style="display:none">
       <h2 id="resultTitle"></h2>
       <div id="resultBody"></div>
-      <div id="resultButtons" style="margin-top:20px">
-        <button class="action-button" id="menuBtn">Ana Menü</button>
-        <button class="action-button" id="restartBtn">Tekrar Oyna</button>
+      <div id="resultButtons" style="margin-top:30px">
+        <button class="action-button" id="menuBtn">Ana Menüye Dön</button>
+        <button class="action-button" id="restartBtn">Tekrar Çöz</button>
       </div>
     </div>
   </div>
@@ -202,7 +231,7 @@ let type="", index=0;
 let mistakes=[];
 const progressEl = ()=>document.getElementById('progress');
 
-// --- Ton Fonksiyonları (Sesler aynı kaldı) ---
+// --- Ton Fonksiyonları (Sesler) ---
 function playTone(freq,dur,vol=0.05){
   try{
     const ctx = new (window.AudioContext||window.webkitAudioContext)();
@@ -302,6 +331,7 @@ const scenes = {
   ]
 };
 
+
 // --- FONKSİYONLAR ---
 
 function start(t){
@@ -324,7 +354,7 @@ function renderScene(){
   const total = scenes[type].length;
   if(index >= total) return showResults();
   const s = scenes[type][index];
-  document.getElementById('q').innerHTML = <strong>${index + 1}/${total}:</strong> ${s.q};
+  document.getElementById('q').innerHTML = <strong>Soru ${index + 1}/${total}:</strong> ${s.q};
   const choicesArea = document.getElementById('choicesArea');
   choicesArea.innerHTML = '';
   document.getElementById('hint').innerText = '';
@@ -357,20 +387,21 @@ function renderScene(){
       
       if(isCorrect){
         correctSound();
-        document.getElementById('hint').innerText = 'Doğru Cevap! ✔';
+        document.getElementById('hint').innerText = 'Doğru Cevap! ✔ Mükemmel!';
       } else {
         wrongSound();
         const why = s.e && s.e[i] ? s.e[i] : 'Bu seçenek doğru değil.';
         mistakes.push({sceneIndex:index+1, question:s.q, selected:opt, correct:s.o[s.c-1], why:why});
-        document.getElementById('hint').innerText = 'Yanlış Cevap. Açıklama sonuçta.';
+        document.getElementById('hint').innerText = 'Yanlış Cevap. Açıklaması sonuçta.';
       }
       
       index++;
       updateProgress();
       setTimeout(function(){ 
+          // 1.5 saniye bekleme süresi
           locked=false;
           renderScene(); 
-      }, 1500); // 1.5 saniye bekleme süresi korunuyor
+      }, 1500); 
     });
     choicesArea.appendChild(b);
   });
@@ -388,16 +419,16 @@ function showResults(){
   
   let body = '';
   if(mistakes.length === 0){
-    body = <p class="explain" style="font-size:1.2rem;">Harika! Tüm soruları doğru bildin. Bilgilerin mükemmel!</p>;
+    body = <p class="explain" style="font-size:1.4rem;">Tebrikler! Tüm soruları doğru bildin. Bir Afet Kahramanısın! 🌟</p>;
   } else {
-    body = <p style="font-size:1.1rem; color:#343a40;">Başarı Oranı: <strong>%${Math.round((correctCount/totalQuestions)*100)}</strong> (${correctCount} / ${totalQuestions} doğru)</p> +
-           <p class="muted">Aşağıda yanlış yaptığın durumlar ve nedenleri açıklanmıştır:</p><ul>;
+    body = <p style="font-size:1.2rem; color:var(--primary-dark); font-weight:600;">Başarı Oranı: %${Math.round((correctCount/totalQuestions)*100)} (${correctCount}/${totalQuestions} Doğru)</p> +
+           <p class="muted">Yanlış yaptığın ${mistakes.length} sahnenin detaylı analizi aşağıdadır:</p><ul>;
            
     mistakes.forEach(function(m){
       body += '<li><p style="margin:0"><b>Sahne ' + m.sceneIndex + ':</b> ' + escapeHtml(m.question) + '</p>' +
         '<p class="wrong" style="margin:3px 0;">Seçimin: ' + escapeHtml(m.selected) + '</p>' +
         '<p class="explain" style="margin:3px 0;">Doğrusu: ' + escapeHtml(m.correct) + '</p>' +
-        '<p class="muted" style="margin:3px 0;">Neden yanlış: ' + escapeHtml(m.why) + '</p></li>';
+        '<p class="muted" style="margin:3px 0;">Öğrenilmesi Gereken: ' + escapeHtml(m.why) + '</p></li>';
     });
     body += '</ul>';
   }
@@ -417,7 +448,7 @@ function backToMenu(){
   document.getElementById('game').style.display='none';
   document.getElementById('menu').style.display='block';
   document.getElementById('title').innerText = 'Afet Bilinci Simülasyonu';
-  document.getElementById('subtitle').innerText = "Kritik senaryolar arasından seçimini yap. Verdiğin yanlış cevapların neden yanlış olduğunu en sonda öğreneceksin.";
+  document.getElementById('subtitle').innerText = "Canlı senaryolarla afet bilincini geliştir. Yanlış cevaplarının detaylı analizini sonuç ekranında gör.";
   progressEl().style.width = '0%';
 }
 function restart(){ start(type); }
@@ -431,8 +462,7 @@ function showMainMenu(){
   
   scenarios.forEach(function(sc,idx){
     const btn = document.createElement('button');
-    btn.classList.add('action-button');
-    btn.innerHTML = <span style="font-size:1.8em">${icons[idx]}</span><br>${names[idx]};
+    btn.innerHTML = <span class="icon">${icons[idx]}</span>${names[idx]};
     btn.onclick = function(){ start(sc); };
     choices.appendChild(btn);
   });
