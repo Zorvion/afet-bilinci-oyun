@@ -3,225 +3,63 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Afet Bilinci Simülasyonu | Dinamik Sürüm</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>Genişletilmiş Afet Bilinci Oyunu</title>
 <style>
-  :root {
-    --main-bg-color: #f0f4f8; /* Açık Mavi-Gri */
-    --primary-blue: #1e88e5; /* Canlı Mavi */
-    --primary-dark: #263238; /* Koyu Metin */
-    --success-green: #4caf50; /* Doğru Yeşil */
-    --danger-red: #e53935; /* Yanlış Kırmızı */
-    --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.1);
-    --shadow-button: 0 4px 15px rgba(30, 136, 229, 0.4);
+  body{font-family:Arial,Helvetica,sans-serif;text-align:center;
+    background:linear-gradient(135deg,#e8f5e9,#e3f2fd);margin:0;padding:20px;min-height:100vh}
+  #card{max-width:850px;margin:30px auto;background:#fff;padding:22px;border-radius:14px;
+    box-shadow:0 10px 30px rgba(10,30,60,0.08)}
+  h1{color:#0d47a1;margin:6px 0 8px}
+  h2{color:#0d47a1;margin:12px 0}
+  p.small{color:#555;font-size:14px;margin:6px 0}
+  #choices button, #choicesArea button, #result button{
+    margin:10px;padding:12px 24px;font-size:16px;border-radius:10px;border:none;
+    background:#1976d2;color:#fff;cursor:pointer;transition:all .15s;display:block;width:100%;
+    text-align:center;box-sizing:border-box;max-width:500px;margin-left:auto;margin-right:auto;
   }
+  #choices button:hover, #choicesArea button:hover, #result button:hover{background:#0d47a1;transform:translateY(-2px)}
+  #choices button:active, #choicesArea button:active, #result button:active{transform:translateY(0)}
+  #progressWrap{height:12px;background:#e6eefc;border-radius:10px;overflow:hidden;margin:12px 0}
+  #progress{height:100%;width:0;background:linear-gradient(90deg,#4caf50,#1976d2);transition:width 0.3s}
+  ul{max-width:760px;margin:12px auto;text-align:left;padding-left:18px}
+  li{margin-bottom:10px}
+  .muted{color:#666;font-size:13px}
+  .explain{color:#2e7d32;font-weight:600}
+  .wrong{color:#c62828;font-weight:600}
+  .menuNote{font-size:14px;color:#37474f;margin-top:8px}
+    
+  /* ANINDA GERİ BİLDİRİM STİLLERİ */
+  #choicesArea button.correct-feedback{background-color:#4CAF50 !important; color:#fff; transition: none;} /* Geçişi kaldırdık */
+  #choicesArea button.wrong-feedback{background-color:#F44336 !important; color:#fff; transition: none;} /* Geçişi kaldırdık */
 
-  body {
-    font-family: 'Inter', sans-serif;
-    text-align: center;
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb); /* Daha Canlı Gradient */
-    margin: 0;
-    padding: 30px 15px;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #card {
-    max-width: 1000px;
-    width: 100%;
-    background: #fff;
-    padding: 40px;
-    border-radius: 20px; /* Yumuşak ve büyük köşeler */
-    box-shadow: var(--shadow-deep);
-    transition: transform 0.3s ease;
-  }
-  h1 {
-    color: var(--primary-dark);
-    font-weight: 800; /* Daha kalın başlık */
-    font-size: 2.2rem;
-    margin-bottom: 5px;
-  }
-  h2 {
-    color: var(--primary-dark);
-    margin: 25px 0 15px;
-    font-weight: 700;
-    font-size: 1.5rem;
-  }
-  p.small {
-    color: #607d8b;
-    font-size: 16px;
-    margin-bottom: 30px;
-  }
-
-  /* BUTON GENEL STİLİ (Aksiyon Butonları) */
-  .action-button, #resultButtons button {
-    padding: 14px 30px;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 10px;
-    border: none;
-    background: var(--primary-blue);
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.17, 0.84, 0.44, 1);
-    box-shadow: var(--shadow-button);
-  }
-  .action-button:hover:not(:disabled), #resultButtons button:hover:not(:disabled) {
-    background: #1565c0;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(30, 136, 229, 0.6);
-  }
-  .action-button:active:not(:disabled), #resultButtons button:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
-  }
-  .action-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* MENÜ BUTONLARI (KART EFEKTLİ) */
-  #choices {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
-  }
-  #choices button {
-    background: #ffffff;
-    border: 2px solid #e0e0e0;
-    color: var(--primary-dark);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    height: 120px;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 700;
-    transition: all 0.3s;
-  }
-  #choices button:hover {
-    background: #e3f2fd;
-    border-color: var(--primary-blue);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(30, 136, 229, 0.3);
-  }
-
-  /* İKON STİLİ */
-  #choices button span.icon {
-    font-size: 2.5em;
-    margin-bottom: 5px;
-  }
-
-  /* SORU SEÇENEKLERİ */
-  #choicesArea button {
-    background: var(--main-bg-color);
-    color: var(--primary-dark);
-    border: 1px solid #cfd8dc;
-    box-shadow: none;
-    width: 100%;
-    max-width: 650px;
-    margin: 12px auto;
-    text-align: left;
-  }
-  #choicesArea button:hover:not(:disabled) {
-    background: #d0e0f0;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  /* İLERLEME ÇUBUĞU */
-  #progressWrap {
-    height: 10px;
-    background: #cfd8dc;
-    border-radius: 5px;
-    margin: 20px 0;
-  }
-  #progress {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, #42a5f5, var(--success-green)); /* Gradientli ilerleme */
-    border-radius: 5px;
-    transition: width 0.4s ease-out;
-  }
-
-  /* GERİ BİLDİRİM & SONUÇ STİLLERİ */
-  #choicesArea button.correct-feedback {
-    background-color: var(--success-green) !important;
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.5);
-    transition: none;
-  }
-  #choicesArea button.wrong-feedback {
-    background-color: var(--danger-red) !important;
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(229, 57, 53, 0.5);
-    transition: none;
-  }
-  #hint {
-    font-size: 1.1rem;
-    color: var(--primary-dark);
-    margin-top: 15px;
-    font-weight: 700;
-    min-height: 25px;
-  }
-  .explain { color: var(--success-green); font-weight: 700; }
-  .wrong { color: var(--danger-red); font-weight: 700; }
-  .muted { color: #78909c; font-size: 14px; margin-top: 5px; }
-
-  /* SONUÇ LİSTESİ */
-  #resultBody ul {
-    padding: 0;
-    list-style: none;
-    max-width: 800px;
-    margin: 25px auto;
-    text-align: left;
-  }
-  #resultBody li {
-    background: #fff;
-    padding: 18px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    border-left: 6px solid var(--danger-red); /* Vurgulu sol çizgi */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  }
-
-  @media(max-width: 768px) {
-    #card { padding: 25px; border-radius: 15px; }
-    h1 { font-size: 1.8rem; }
-    #choices { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-    #choices button { height: 90px; font-size: 14px; padding: 8px; border-radius: 10px; }
-    #choices button span.icon { font-size: 2em; }
+  @media(max-width:520px){
+    #card{padding:16px}
+    #choices button, #choicesArea button, #result button{padding:10px 12px;margin:8px auto;font-size:15px;max-width:none;}
   }
 </style>
 </head>
 <body>
   <div id="card">
-    <h1 id="title">Afet Bilinci Simülasyonu</h1>
-    <p class="small" id="subtitle">Canlı senaryolarla afet bilincini geliştir. Yanlış cevaplarının detaylı analizini sonuç ekranında gör.</p>
+    <h1 id="title">Genişletilmiş Afet Bilinci Platformu</h1>
+    <p class="small" id="subtitle">Bir senaryo seç — ilerledikçe yanlış yaptığın sahneleri toplayacak, en sonda neden yanlış olduğunu göreceksin. </p>
 
     <div id="menu">
       <div id="choices"></div>
-      <p class="menuNote muted" style="margin-top:30px;">Başlamadan önce bir senaryo seç ve bilgini test et.</p>
+      <p class="menuNote">Hata yaptığında neden yanlış olduğu, sonuç ekranında ayrıntılı açıklanacak.</p>
     </div>
 
     <div id="game" style="display:none">
       <div id="progressWrap"><div id="progress"></div></div>
-      <h2 id="q"></h2>
+      <h2 id="q" style="min-height:48px;margin:8px 0"></h2>
       <div id="choicesArea"></div>
-      <p id="hint"></p>
+      <p class="muted" id="hint" style="height:20px;margin-top:8px;font-weight:bold;"></p>
     </div>
 
     <div id="result" style="display:none">
       <h2 id="resultTitle"></h2>
       <div id="resultBody"></div>
-      <div id="resultButtons" style="margin-top:30px">
-        <button class="action-button" id="menuBtn">Ana Menüye Dön</button>
-        <button class="action-button" id="restartBtn">Tekrar Çöz</button>
-      </div>
+      <div id="resultButtons" style="margin-top:12px"></div>
+      <p class="muted" style="margin-top:10px">Not: Bu oyunda puan gösterilmiyor; amaç doğru davranışları öğrenmek.</p>
     </div>
   </div>
 
@@ -231,7 +69,6 @@ let type="", index=0;
 let mistakes=[];
 const progressEl = ()=>document.getElementById('progress');
 
-// --- Ton Fonksiyonları (Sesler) ---
 function playTone(freq,dur,vol=0.05){
   try{
     const ctx = new (window.AudioContext||window.webkitAudioContext)();
@@ -244,10 +81,11 @@ function playTone(freq,dur,vol=0.05){
     setTimeout(()=>{ o.stop(); ctx.close(); }, dur);
   }catch(e){}
 }
+
 function correctSound(){ playTone(880,120,0.03); }
 function wrongSound(){ playTone(220,220,0.04); }
 
-// --- SENARYO VERİLERİ (Aynı kaldı) ---
+// --- GÜNCEL VE YENİ EKLENEN SENARYOLAR ---
 const scenes = {
   deprem: [
     { q:"Deprem başladı! İlk tepkin ne olmalı?", o:["Panikle dışarı koşmak","Çök–Kapan–Tutun (güvenli pozisyon)","Camdan izlemek"], c:2, e:["Binalar ve camlar tehlikelidir. Dışarı koşmak daha tehlikeli olabilir.","Doğru: vücut korunur, yaralanma riski azalır.","Cam kırılabilir, tehlikeli."] },
@@ -299,7 +137,7 @@ const scenes = {
     { q:"Güçlü rüzgâr sırasında dışarıdayken nereye sığınmalısın?", o:["Açık garaja/garaj önü","Küçük kafe tente altı","Sağlam iç mekâna"], c:3, e:["Açık garage uçuşan cisimlere açıktır.","Tente altı uçuşan parçalara açık olabilir.","Doğru: sağlam iç mekan korur."] },
     { q:"Fırtına uyarısı varken en iyi hazırlık nedir?", o:["Dışarda eşyaları sabitlemek ve acil çanta hazırlamak","Hiçbir hazırlık yapmamak","Denize gitmek"], c:1, e:["Doğru: hazırlık riskleri azaltır.","Hazırlık yapmamak tehlikelidir.","Denize gitmek ölümcül risktir."] }
   ],
-  cig: [ 
+  cig: [ // YENİ SENARYO 1: ÇIĞ (8 Soru)
     { q:"Kışın dağlık bir bölgede iseniz ve çığ uyarısı varsa ne yapmalısınız?", o:["Uyarıları göz ardı ederek kayak yapmaya devam ederim","Belirlenen güvenli bölgelerde kalırım","Yüksek ses çıkararak karı test ederim"], c:2, e:["Uyarıları göz ardı etmek hayati tehlikeye yol açar.","Doğru: yetkililerin ve çığ uzmanlarının belirlediği güvenli alanlarda kalın.","Yüksek ses, titreşim oluşturarak çığ riskini artırabilir."] },
     { q:"Yürüyüş sırasında çığ sesi duyarsanız ilk tepkiniz ne olmalıdır?", o:["Kaçmaya çalışmak (aşağı doğru)","Hemen sırt çantanızı çıkarıp yere yatmak","En yakın sağlam cisme tutunmaya çalışmak"], c:3, e:["Aşağı doğru kaçmak, çığın hızlanma riskini artırır.","Sırt çantasını çıkarmak bazen önerilir ama öncelik sağlam bir yere tutunmaktır.","Doğru: bir ağaç, kaya gibi sağlam bir cisme tutunarak sürüklenmeyi önleyin."] },
     { q:"Çığ altında kalırsanız ne yapmalısınız?", o:["Panikleyerek enerjiyi hızlıca tüketmek","Kar durmadan önce ellerle yüz çevresinde bir hava boşluğu oluşturmaya çalışmak","Bağırmaya başlamak"], c:2, e:["Panik oksijen tüketimini hızlandırır.","Doğru: kar durmadan önce etrafınızdaki karı iterek ağız ve burun çevrenizde bir hava cebi oluşturun.","Kar sesi havayı iletmez, bağırmak enerjiyi tüketir."] },
@@ -309,7 +147,7 @@ const scenes = {
     { q:"Çığdan kurtulduktan sonra birini ararken hangi kurtarma yöntemini kullanmalısınız?", o:["Gözle rastgele arama","Sadece bağırarak çağırmak","Çığ cihazını (transceiver) kullanarak sinyal takibi yapmak"], c:3, e:["Gözle arama yeterli değildir.","Bağırmak önemlidir ama cihaz olmadan nokta atışı yapamazsınız.","Doğru: çığ cihazı, gömülü kişinin yerini hassas bir şekilde belirlemek için temel araçtır."] },
     { q:"Çığ anında bir arabanın içindeyseniz en güvenli davranış nedir?", o:["Arabadan inip karın üstüne çıkmaya çalışmak","Aracı terk etmeden motoru kapatıp emniyet kemerini çözmek","Hızla geri geri giderek çığdan uzaklaşmak"], c:2, e:["Arabadan inmek daha çok riske atar.","Doğru: Motoru kapatıp zehirlenmeyi önleyin ve kemeri çözerek kar durduğunda hareket serbestliği kazanın.","Hızla uzaklaşmak karda zor ve tehlikelidir."] }
   ],
-  kbrn: [ 
+  kbrn: [ // YENİ SENARYO 2: KBRN (Kimyasal, Biyolojik, Radyolojik, Nükleer) Tehlikeler (8 Soru)
     { q:"Kimyasal bir sızıntı alarmı duyarsanız ilk olarak ne yapmalısınız?", o:["Hemen maske takıp dışarı çıkmak","Pencere ve kapıları kapatıp 'İçeride Kal' (Shelter in Place) kuralını uygulamak","Sızıntı kaynağını bulmaya çalışmak"], c:2, e:["Kimyasal sızıntı varsa dışarıdaki hava kapalı alandan daha tehlikelidir.","Doğru: Sızdırmazlık sağlayarak içeride kalmak, havayla temas eden kimyasallardan korunmanın en hızlı yoludur.","Kaynak aramak yetkililerin işidir, kendi güvenliğiniz öncelikli."] },
     { q:"Radyolojik bir tehlike uyarısı varsa nerede korunmak en güvenlidir?", o:["Binanın en üst katı","Binanın orta katları veya bodrum katı","Açık bir otopark"], c:2, e:["Üst katlar radyasyona karşı daha az korunaklıdır.","Doğru: Kalın duvarlar ve katlar radyasyona karşı koruma sağlar. Bodrums en güvenli yerdir.","Açık alanlar tehlikelidir."] },
     { q:"Biyolojik tehlike (örn. salgın) ilan edilirse en temel kişisel koruma önlemi nedir?", o:["Sürekli antiseptik sprey kullanmak","Maske takmak, el hijyenine dikkat etmek ve sosyal mesafeyi korumak","Vitamin takviyesi almak"], c:2, e:["Sürekli sprey tehlikelidir.","Doğru: Bulaşma riskini en aza indiren en etkili yöntemlerdir.","Vitaminler destekler ama bulaşmayı engellemez."] },
@@ -319,7 +157,7 @@ const scenes = {
     { q:"Toplu taşımadayken şüpheli bir paket/nesne görürseniz ne yapmalısınız?", o:["Paketi açıp kontrol etmek","Yetkililere (polis/güvenlik) durumu bildirmek ve alanı terk etmek","Sadece yanındakilere söylemek"], c:2, e:["Paketi açmak tehlikelidir.","Doğru: Güvenlik birimlerini uyarın ve paketle aranıza mesafe koyun.","Yetkili mercilere bildirim zorunludur."] },
     { q:"KBRN olayında en önemli iletişim kuralı nedir?", o:["Sürekli telefonla konuşarak hattı meşgul etmek","Kısa mesaj veya internet tabanlı uygulamaları kullanmak","Haberleri sürekli yüksek sesle takip etmek"], c:2, e:["Telefon hatları acil durumlar için serbest bırakılmalıdır.","Doğru: SMS ve veri tabanlı iletişim, sesli görüşmeye göre daha az bant genişliği kullanır.","Haberleri takip etmek önemlidir ama iletişim önceliği farklıdır."] }
   ],
-  ilkyardim: [ 
+  ilkyardim: [ // YENİ SENARYO 3: TEMEL İLKYARDIM (8 Soru)
     { q:"Bilinci kapalı bir yaralı gördüğünüzde ilk olarak ne yapmalısınız?", o:["Hemen hastaneye götürmeye çalışmak","Önce kendi güvenliğinizi sağlamak ve 112'yi aramak","Yaralıyı sallayarak uyandırmaya çalışmak"], c:2, e:["Yardım çağrılmadan taşımak yaralanmayı artırabilir.","Doğru: Önce olay yeri güvenliği, sonra yardım çağrısı.","Sarsmak boyun ve omurilik hasarını artırabilir."] },
     { q:"Ciddi bir dış kanama varsa ilk yardım nasıl olmalıdır?", o:["Kanayan bölgeyi kalpten aşağıda tutmak","Temiz bir bezle baskı uygulamak ve bölgeyi yukarı kaldırmak","Yarayı sabunlu suyla yıkamak"], c:2, e:["Kanayan bölgeyi aşağıda tutmak kanamayı artırır.","Doğru: Baskı ve yükseltme, kanamayı kontrol altına almada temel adımlardır.","Yıkama, kanama kontrol altına alındıktan sonra düşünülür."] },
     { q:"Yetişkin birine kalp masajı yaparken göğüs kemiği ne kadar çöktürülmelidir?", o:["1-2 cm","5-6 cm","10 cm"], c:2, e:["1-2 cm yetersizdir.","Doğru: Kalbin etkili bir şekilde sıkıştırılması için $5-6$ cm çökme gerekir.","10 cm çok fazladır ve kaburga kırılmasına yol açabilir."] },
@@ -330,9 +168,7 @@ const scenes = {
     { q:"Yaralıya ilk yardım yapmadan önce neye dikkat etmelisiniz?", o:["Elbiselerinin markasına","Yaralının tüm hikâyesini dinlemeye","Eldiven takmak ve hijyene dikkat etmek"], c:3, e:["Elbise markası önemsizdir.","Hikâye önemlidir ama öncelik kendi güvenliğinizdir.","Doğru: Eldiven ve hijyen, hem kendinizi hem de yaralıyı enfeksiyondan korur."] }
   ]
 };
-
-
-// --- FONKSİYONLAR ---
+// --- SENARYOLAR BİTİŞİ ---
 
 function start(t){
   type=t; index=0; mistakes=[]; locked=false;
@@ -354,7 +190,7 @@ function renderScene(){
   const total = scenes[type].length;
   if(index >= total) return showResults();
   const s = scenes[type][index];
-  document.getElementById('q').innerHTML = <strong>Soru ${index + 1}/${total}:</strong> ${s.q};
+  document.getElementById('q').innerText = 'Soru ' + (index+1) + '/' + total + ': ' + s.q;
   const choicesArea = document.getElementById('choicesArea');
   choicesArea.innerHTML = '';
   document.getElementById('hint').innerText = '';
@@ -363,7 +199,6 @@ function renderScene(){
   
   s.o.forEach(function(opt,i){
     const b = document.createElement('button');
-    b.classList.add('action-button');
     b.textContent = opt;
     b.setAttribute('data-index', i + 1);
     b.addEventListener('click', function(){
@@ -373,7 +208,7 @@ function renderScene(){
       const isCorrect = (i + 1 === s.c);
       const allButtons = choicesArea.querySelectorAll('button');
 
-      // Butonları renklendirme ve devre dışı bırakma
+      // Butonları renklendirme
       allButtons.forEach(btn => {
           const btnIndex = parseInt(btn.getAttribute('data-index'));
           btn.disabled = true;
@@ -387,21 +222,20 @@ function renderScene(){
       
       if(isCorrect){
         correctSound();
-        document.getElementById('hint').innerText = 'Doğru Cevap! ✔ Mükemmel!';
+        document.getElementById('hint').innerText = 'Doğru ✔';
       } else {
         wrongSound();
         const why = s.e && s.e[i] ? s.e[i] : 'Bu seçenek doğru değil.';
         mistakes.push({sceneIndex:index+1, question:s.q, selected:opt, correct:s.o[s.c-1], why:why});
-        document.getElementById('hint').innerText = 'Yanlış Cevap. Açıklaması sonuçta.';
+        document.getElementById('hint').innerText = 'Yanlış ✖ (açıklama sonuçta)';
       }
       
       index++;
       updateProgress();
       setTimeout(function(){ 
-          // 1.5 saniye bekleme süresi
           locked=false;
           renderScene(); 
-      }, 1500); 
+      }, 1500); // * 1500ms (1.5 saniye) olarak ayarlandı *
     });
     choicesArea.appendChild(b);
   });
@@ -412,32 +246,35 @@ function renderScene(){
 function showResults(){
   document.getElementById('game').style.display='none';
   document.getElementById('result').style.display='block';
-  document.getElementById('resultTitle').innerText = capitalize(type) + ' Senaryosu Tamamlandı!';
+  document.getElementById('resultTitle').innerText = capitalize(type) + ' Senaryosu Tamamlandı';
   
   const totalQuestions = scenes[type].length;
   const correctCount = totalQuestions - mistakes.length;
   
   let body = '';
   if(mistakes.length === 0){
-    body = <p class="explain" style="font-size:1.4rem;">Tebrikler! Tüm soruları doğru bildin. Bir Afet Kahramanısın! 🌟</p>;
+    body = <p class="explain">Tebrikler — tüm sahnelerde doğru davrandın! (${totalQuestions}/${totalQuestions}) Bilgilerin yerinde!</p>;
   } else {
-    body = <p style="font-size:1.2rem; color:var(--primary-dark); font-weight:600;">Başarı Oranı: %${Math.round((correctCount/totalQuestions)*100)} (${correctCount}/${totalQuestions} Doğru)</p> +
-           <p class="muted">Yanlış yaptığın ${mistakes.length} sahnenin detaylı analizi aşağıdadır:</p><ul>;
-           
+    body = <p class="wrong">Tebrikler! ${correctCount} / ${totalQuestions} soruyu doğru bildin. Yanlış yaptığın sahneler (${mistakes.length}):</p><ul>;
     mistakes.forEach(function(m){
-      body += '<li><p style="margin:0"><b>Sahne ' + m.sceneIndex + ':</b> ' + escapeHtml(m.question) + '</p>' +
-        '<p class="wrong" style="margin:3px 0;">Seçimin: ' + escapeHtml(m.selected) + '</p>' +
-        '<p class="explain" style="margin:3px 0;">Doğrusu: ' + escapeHtml(m.correct) + '</p>' +
-        '<p class="muted" style="margin:3px 0;">Öğrenilmesi Gereken: ' + escapeHtml(m.why) + '</p></li>';
+      body += '<li><b>Sahne ' + m.sceneIndex + ':</b> ' + escapeHtml(m.question) + '<br>' +
+        '<span class="wrong">Senin seçimin:</span> ' + escapeHtml(m.selected) + '<br>' +
+        '<span class="explain">Doğru olan:</span> ' + escapeHtml(m.correct) + '<br>' +
+        '<span class="muted">Neden yanlış:</span> ' + escapeHtml(m.why) + '</li>';
     });
     body += '</ul>';
   }
   document.getElementById('resultBody').innerHTML = body;
-  
-  // Buton eventleri yeniden tanımlanıyor
-  document.getElementById('menuBtn').onclick = backToMenu;
-  document.getElementById('restartBtn').onclick = restart;
-  
+  const btns = document.getElementById('resultButtons');
+  btns.innerHTML = '';
+  const menuBtn = document.createElement('button');
+  menuBtn.textContent = 'Ana Menü';
+  menuBtn.onclick = backToMenu;
+  btns.appendChild(menuBtn);
+  const restartBtn = document.createElement('button');
+  restartBtn.textContent = 'Tekrar Oyna';
+  restartBtn.onclick = restart;
+  btns.appendChild(restartBtn);
   progressEl().style.width = '100%';
 }
 
@@ -447,8 +284,8 @@ function backToMenu(){
   document.getElementById('result').style.display='none';
   document.getElementById('game').style.display='none';
   document.getElementById('menu').style.display='block';
-  document.getElementById('title').innerText = 'Afet Bilinci Simülasyonu';
-  document.getElementById('subtitle').innerText = "Canlı senaryolarla afet bilincini geliştir. Yanlış cevaplarının detaylı analizini sonuç ekranında gör.";
+  document.getElementById('title').innerText = 'Genişletilmiş Afet Bilinci Platformu';
+  document.getElementById('subtitle').innerText = "Bir senaryo seç — ilerledikçe yanlış yaptığın sahneleri toplayacak, en sonda neden yanlış olduğunu göreceksin.";
   progressEl().style.width = '0%';
 }
 function restart(){ start(type); }
@@ -458,11 +295,11 @@ function showMainMenu(){
   choices.innerHTML = '';
   const scenarios = ['deprem','yangin','sel','heyelan','firtina', 'cig', 'kbrn', 'ilkyardim'];
   const icons = ['🌋','🔥','🌊','🗻','🌪️', '🏔️', '☢️', '🩹'];
-  const names = ['Deprem','Yangın','Sel','Heyelan','Fırtına', 'Çığ', 'KBRN','Temel İlkyardım'];
+  const names = ['Deprem','Yangın','Sel','Heyelan','Fırtına', 'Çığ', 'KBRN', 'Temel İlkyardım'];
   
   scenarios.forEach(function(sc,idx){
     const btn = document.createElement('button');
-    btn.innerHTML = <span class="icon">${icons[idx]}</span>${names[idx]};
+    btn.textContent = icons[idx] + ' ' + names[idx];
     btn.onclick = function(){ start(sc); };
     choices.appendChild(btn);
   });
