@@ -59,8 +59,7 @@
 
   <h1>Afet Bilinci Oyunu</h1>
   <div class="game-box" id="gameBox">
-    <div class="question" id="question">Hazırsan başlayalım! Başlamak için "Sonraki"ye bas.</div>
-    <button class="btn" onclick="nextScene()">Sonraki</button>
+    <div class="question" id="question"></div>
   </div>
 
   <button class="back-btn btn" onclick="window.location.href='index.html'">🏠 Ana Menüye Dön</button>
@@ -112,6 +111,10 @@
     let disasterIndex = 0;
     let sceneIndex = 0;
 
+    window.onload = function() {
+      nextScene(); // Sayfa açılır açılmaz direkt oyuna geçsin
+    };
+
     function nextScene() {
       const gameBox = document.getElementById("gameBox");
       const q = document.getElementById("question");
@@ -125,7 +128,7 @@
           gameBox.innerHTML = <div class='question'>${q.textContent}</div>;
           return;
         }
-        q.textContent = "Şimdi sıradaki afet geliyor!";
+        nextScene(); // direkt sıradaki afete geç
         return;
       }
 
