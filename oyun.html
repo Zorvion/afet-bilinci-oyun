@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[19:03, 07.11.2025] Mehmet Bugrahan Şaşmaz: <!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
@@ -149,6 +149,158 @@
       setTimeout(() => document.body.classList.remove("flash"), 1000);
       sceneIndex++;
       setTimeout(nextScene, 1200);
+    }
+  </script>
+
+</body>
+</html>
+[19:20, 07.11.2025] Mehmet Bugrahan Şaşmaz: <!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afet Bilinci Oyunu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #1b5e20;
+      margin-top: 30px;
+    }
+    .game-box {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .btn {
+      background-color: #43a047;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+    .back-btn {
+      background-color: #007bff;
+      margin-top: 20px;
+    }
+    .flash {
+      animation: flash 0.5s ease-in-out 3;
+    }
+    @keyframes flash {
+      0% { background-color: inherit; }
+      50% { background-color: var(--flash-color); }
+      100% { background-color: inherit; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Afet Bilinci Oyunu</h1>
+  <div class="game-box" id="gameBox">
+    <div id="question">
+      <h2>Oynamak istediğin afet türünü seç:</h2>
+      <button class="btn" onclick="startGame('deprem')">🌋 Deprem</button>
+      <button class="btn" onclick="startGame('yangin')">🔥 Yangın</button>
+      <button class="btn" onclick="startGame('sel')">🌊 Sel</button>
+      <button class="btn" onclick="startGame('heyelan')">⛰️ Heyelan</button>
+      <button class="btn" onclick="startGame('firtina')">🌪️ Fırtına</button>
+    </div>
+  </div>
+
+  <button class="back-btn btn" onclick="window.location.href='index.html'">🏠 Ana Menüye Dön</button>
+
+  <script>
+    const scenes = {
+      deprem: [
+        {q:"Deprem sırasında cam kenarına gitmek güvenlidir.", correct:false},
+        {q:"Sarsıntı sırasında çök, kapan, tutun kuralını uygulamalısın.", correct:true},
+        {q:"Depremde asansör kullanılabilir.", correct:false},
+        {q:"Deprem sırasında sakin kalmak en önemli şeydir.", correct:true},
+        {q:"Depremden sonra gaz vanalarını kontrol etmek gerekir.", correct:true}
+      ],
+      yangin: [
+        {q:"Yangında kapı sıcaksa açmamalısın.", correct:true},
+        {q:"Duman varken ayakta yürümek daha güvenlidir.", correct:false},
+        {q:"Yangında ağzını ıslak bezle kapatmak faydalıdır.", correct:true},
+        {q:"Yangın sonrası 112'yi aramalısın.", correct:true},
+        {q:"Yangında pencereden atlamak güvenli bir çözümdür.", correct:false}
+      ],
+      sel: [
+        {q:"Sel sırasında yüksek yerlere çıkmak gerekir.", correct:true},
+        {q:"Sel sularına girmek güvenlidir.", correct:false},
+        {q:"Elektrikli cihazlara dokunmamak gerekir.", correct:true},
+        {q:"Araçla su dolu yollardan geçmek güvenlidir.", correct:false},
+        {q:"Sel sonrası içme suyunu kontrol etmek gerekir.", correct:true}
+      ],
+      heyelan: [
+        {q:"Heyelan genellikle yağıştan sonra oluşur.", correct:true},
+        {q:"Toprak kayması riski olan bölgelerden uzak durmalısın.", correct:true},
+        {q:"Heyelan sırasında dışarı çıkmak güvenlidir.", correct:false},
+        {q:"Heyelan sonrası yetkililere haber vermek gerekir.", correct:true},
+        {q:"Heyelan sonrası bölgeye hemen dönmek güvenlidir.", correct:false}
+      ],
+      firtina: [
+        {q:"Fırtına sırasında dışarıda kalmak güvenlidir.", correct:false},
+        {q:"Fırtına esnasında camlardan uzak durmak gerekir.", correct:true},
+        {q:"Elektrikli aletleri prizden çıkarmak önemlidir.", correct:true},
+        {q:"Açık alanda metal eşyalardan uzak durmalısın.", correct:true},
+        {q:"Fırtına bittiğinde dışarı çıkmadan önce çevreyi kontrol etmelisin.", correct:true}
+      ]
+    };
+
+    let currentType = "";
+    let sceneIndex = 0;
+
+    function startGame(type) {
+      currentType = type;
+      sceneIndex = 0;
+      showScene();
+    }
+
+    function showScene() {
+      const gameBox = document.getElementById("gameBox");
+      const current = scenes[currentType][sceneIndex];
+
+      if (!current) {
+        gameBox.innerHTML = `
+          <div class='question'>
+            <h2>${currentType.toUpperCase()} senaryosunu tamamladın! 🎉</h2>
+            <button class='btn' onclick='location.reload()'>↩️ Başka Afet Seç</button>
+          </div>`;
+        return;
+      }
+
+      gameBox.innerHTML = `
+        <div class='question'>${current.q}</div>
+        <button class='btn' onclick='checkAnswer(true)'>Doğru</button>
+        <button class='btn' onclick='checkAnswer(false)'>Yanlış</button>
+      `;
+    }
+
+    function checkAnswer(ans) {
+      const correct = scenes[currentType][sceneIndex].correct;
+      const color = ans === correct ? "limegreen" : "red";
+      document.body.style.setProperty("--flash-color", color);
+      document.body.classList.add("flash");
+      setTimeout(() => document.body.classList.remove("flash"), 1000);
+      sceneIndex++;
+      setTimeout(showScene, 1200);
     }
   </script>
 
