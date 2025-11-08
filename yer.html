@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yer Kaynaklı Afetler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #222, #444);
+      color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #b30000;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px #000;
+    }
+    #game {
+      margin-top: 40px;
+      padding: 20px;
+    }
+    .scene {
+      display: none;
+      animation: fadeIn 0.8s ease;
+    }
+    .scene.active {
+      display: block;
+    }
+    button {
+      background: #333;
+      border: 2px solid #fff;
+      color: white;
+      padding: 10px 25px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 17px;
+      transition: 0.3s;
+    }
+    button:hover { background: #555; }
+    #result {
+      font-size: 20px;
+      margin-top: 25px;
+      font-weight: bold;
+    }
+    .correct {
+      background: #00ff00 !important;
+      color: #000;
+      animation: flashGreen 0.6s;
+    }
+    .wrong {
+      background: #ff0000 !important;
+      color: #fff;
+      animation: flashRed 0.6s;
+    }
+    @keyframes flashGreen {
+      0%, 100% { background: #333; }
+      50% { background: #00ff00; }
+    }
+    @keyframes flashRed {
+      0%, 100% { background: #333; }
+      50% { background: #ff0000; }
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+
+  <header>🌍 Yer Kaynaklı Afetler Oyunu</header>
+
+  <div id="game">
+    <div id="scene1" class="scene active">
+      <h2>1️⃣ Deprem sırasında yapılması gereken ilk şey nedir?</h2>
+      <button onclick="answer(this, true)">Sabit ve güvenli bir yere sığınmak</button>
+      <button onclick="answer(this, false)">Panikleyip dışarı koşmak</button>
+    </div>
+
+    <div id="scene2" class="scene">
+      <h2>2️⃣ Heyelan riski olan bölgede ev yapmak neden tehlikelidir?</h2>
+      <button onclick="answer(this, true)">Toprak kayması evi yıkabilir</button>
+      <button onclick="answer(this, false)">Sadece manzarası kötü olur</button>
+    </div>
+
+    <div id="scene3" class="scene">
+      <h2>3️⃣ Deprem anında asansör kullanmak neden yanlıştır?</h2>
+      <button onclick="answer(this, true)">Asansör arızalanabilir veya sıkışabilir</button>
+      <button onclick="answer(this, false)">Daha hızlı dışarı çıkılır</button>
+    </div>
+
+    <div id="scene4" class="scene">
+      <h2>4️⃣ Deprem sonrası yapılması gereken ilk şey nedir?</h2>
+      <button onclick="answer(this, true)">Gaz ve elektrik vanalarını kapatmak</button>
+      <button onclick="answer(this, false)">Eşyaları toplamaya başlamak</button>
+    </div>
+
+    <div id="scene5" class="scene">
+      <h2>5️⃣ Heyelan tehlikesi varsa ne yapılmalıdır?</h2>
+      <button onclick="answer(this, true)">Yetkililere haber verip güvenli bölgeye gitmek</button>
+      <button onclick="answer(this, false)">Fotoğraf çekip sosyal medyada paylaşmak</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    let currentScene = 1;
+    let score = 0;
+
+    function answer(btn, isCorrect) {
+      if (isCorrect) {
+        btn.classList.add("correct");
+        score++;
+      } else {
+        btn.classList.add("wrong");
+      }
+
+      setTimeout(() => {
+        document.getElementById("scene" + currentScene).classList.remove("active");
+        currentScene++;
+
+        if (currentScene <= 5) {
+          document.getElementById("scene" + currentScene).classList.add("active");
+        } else {
+          document.getElementById("result").innerHTML =
+            "🎯 Oyun Bitti! Toplam Puanın: " + score + "/5 <br><br><a href='index.html' style='color:white;text-decoration:underline;'>Ana Sayfaya Dön</a>";
+        }
+      }, 700);
+    }
+  </script>
+
+</body>
+</html>
