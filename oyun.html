@@ -6,229 +6,186 @@
   <title>Afet Bilinci Oyunu</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9);
+      font-family: "Segoe UI", sans-serif;
       text-align: center;
+      background: linear-gradient(to right, #e3f2fd, #bbdefb);
       margin: 0;
       padding: 0;
-      transition: background-color 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    body.correct-flash {
-      background-color: #4CAF50 !important;
-      background: #4CAF50 !important;
-    }
-    body.wrong-flash {
-      background-color: #F44336 !important;
-      background: #F44336 !important;
-    }
-    h1 {
-      color: #1b5e20;
-      margin-top: 30px;
-    }
-    .game-box {
+
+    #container {
       background: white;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.2);
+      padding: 30px;
+      width: 90%;
       max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
     }
-    .btn {
-      background-color: #43a047;
+
+    h1 {
+      margin-bottom: 20px;
+      color: #1a237e;
+    }
+
+    button {
+      background: #1976d2;
       color: white;
       border: none;
       padding: 10px 20px;
-      border-radius: 8px;
+      border-radius: 10px;
+      font-size: 16px;
       margin: 10px;
       cursor: pointer;
-      font-size: 16px;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
-    .btn:hover {
+
+    button:hover {
+      background: #0d47a1;
       transform: scale(1.05);
-      opacity: 0.9;
     }
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
+
+    button:active {
+      transform: scale(0.97);
     }
-    .back-btn {
-      background-color: #007bff;
-      margin-top: 20px;
+
+    .flash-green {
+      background-color: #00c853 !important;
+      animation: flashGreen 0.5s;
     }
-    .question {
-      font-size: 18px;
-      margin: 20px 0;
-      font-weight: bold;
-      color: #424242;
+
+    .flash-red {
+      background-color: #d32f2f !important;
+      animation: flashRed 0.5s;
     }
-    .progress-info {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 15px;
-      font-weight: normal;
+
+    @keyframes flashGreen {
+      0% { background-color: #00c853; }
+      100% { background-color: #1976d2; }
+    }
+
+    @keyframes flashRed {
+      0% { background-color: #d32f2f; }
+      100% { background-color: #1976d2; }
     }
   </style>
 </head>
 <body>
-
-  <h1>Afet Bilinci Oyunu</h1>
-  <div class="game-box" id="gameBox">
-    <div id="question">
-      <h2>Oynamak istediğin afet türünü seç:</h2>
-      <button class="btn" id="btn-deprem">🌋 Deprem</button>
-      <button class="btn" id="btn-yangin">🔥 Yangın</button>
-      <button class="btn" id="btn-sel">🌊 Sel</button>
-      <button class="btn" id="btn-heyelan">⛰️ Heyelan</button>
-      <button class="btn" id="btn-firtina">🌪️ Fırtına</button>
-    </div>
+  <div id="container">
+    <h1 id="title">Afet Bilinci Oyunu</h1>
+    <div id="choices"></div>
   </div>
 
-  <button class="back-btn btn" id="backBtn">🏠 Ana Menüye Dön</button>
-
   <script>
-    var scenes = {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type") || "deprem";
+    let step = 0;
+    let score = 0;
+    let mistakes = [];
+    let scenes = {};
+    let maxScore = 0;
+
+    const allScenes = {
       deprem: [
-        {q: "Deprem sırasında cam kenarına gitmek güvenlidir.", correct: false},
-        {q: "Sarsıntı sırasında çök, kapan, tutun kuralını uygulamalısın.", correct: true},
-        {q: "Depremde asansör kullanılabilir.", correct: false},
-        {q: "Deprem sırasında sakin kalmak en önemli şeydir.", correct: true},
-        {q: "Depremden sonra gaz vanalarını kontrol etmek gerekir.", correct: true}
+        { q: "Deprem başladı! Ne yaparsın?", o: ["Camdan dışarı bakarım", "Çök, kapan, tutun!", "Hemen dışarı kaçarım"], c: 2 },
+        { q: "Dolap devriliyor, ne yaparsın?", o: ["Dolabı tutarım", "Başımı korurum", "Koşarak uzaklaşırım"], c: 2 },
+        { q: "Artçı sarsıntı geldi, ne yaparsın?", o: ["Yine güvenli pozisyona geçerim", "Cam kenarına geçerim", "Balkona çıkarım"], c: 1 },
+        { q: "Binadan çıkarken ne yaparsın?", o: ["Asansör kullanmam", "Asansöre binerim", "Pencereden atlarım"], c: 1 },
+        { q: "Toplanma alanına vardın, ne yaparsın?", o: ["Telefonla arama yaparım", "Acil durum bilgisi paylaşırım", "Eve geri dönerim"], c: 2 }
       ],
       yangin: [
-        {q: "Yangında kapı sıcaksa açmamalısın.", correct: true},
-        {q: "Duman varken ayakta yürümek daha güvenlidir.", correct: false},
-        {q: "Yangında ağzını ıslak bezle kapatmak faydalıdır.", correct: true},
-        {q: "Yangın sonrası 112'yi aramalısın.", correct: true},
-        {q: "Yangında pencereden atlamak güvenli bir çözümdür.", correct: false}
+        { q: "Evde yangın çıktı! Ne yaparsın?", o: ["Su dökerim", "Kaçış yolunu bulurum", "Pencereye çıkarım"], c: 2 },
+        { q: "Duman yayılıyor, ne yaparsın?", o: ["Koşarım", "Eğilerek ilerlerim", "Pencereleri açarım"], c: 2 },
+        { q: "Kapıya ulaştın, ne yaparsın?", o: ["Kapıyı hemen açarım", "Elimle sıcaklığı kontrol ederim", "Beklerim"], c: 2 },
+        { q: "Kapı sıcaksa ne yaparsın?", o: ["Açarım", "Islak bezle kapatırım", "Pencereden çıkarım"], c: 2 },
+        { q: "Yangından çıktın, ne yaparsın?", o: ["112’yi ararım", "Eşyaları almak için geri dönerim", "Yangını izlerim"], c: 1 }
       ],
       sel: [
-        {q: "Sel sırasında yüksek yerlere çıkmak gerekir.", correct: true},
-        {q: "Sel sularına girmek güvenlidir.", correct: false},
-        {q: "Elektrikli cihazlara dokunmamak gerekir.", correct: true},
-        {q: "Araçla su dolu yollardan geçmek güvenlidir.", correct: false},
-        {q: "Sel sonrası içme suyunu kontrol etmek gerekir.", correct: true}
+        { q: "Sel başladı! Ne yaparsın?", o: ["Yüksek bir yere çıkarım", "Arabada beklerim", "Suya girerim"], c: 1 },
+        { q: "Evdeyken su seviyesi yükseliyor, ne yaparsın?", o: ["Çatıya çıkarım", "Eşyaları kurtarırım", "Pencereden bakarım"], c: 1 },
+        { q: "Yolda yürüyorsun ve su yükseliyor, ne yaparsın?", o: ["Yoldan uzaklaşırım", "Suya girerim", "Köprü altına sığınırım"], c: 1 },
+        { q: "Sel sonrası ne yaparsın?", o: ["Elektrikleri kontrol ederim", "Yetkililerin talimatını beklerim", "Evde kalırım"], c: 2 },
+        { q: "Su çekildi, ne yaparsın?", o: ["Eve girerim", "Temizlik yaparım", "Yetkililerden izin beklerim"], c: 3 }
       ],
       heyelan: [
-        {q: "Heyelan genellikle yağıştan sonra oluşur.", correct: true},
-        {q: "Toprak kayması riski olan bölgelerden uzak durmalısın.", correct: true},
-        {q: "Heyelan sırasında dışarı çıkmak güvenlidir.", correct: false},
-        {q: "Heyelan sonrası yetkililere haber vermek gerekir.", correct: true},
-        {q: "Heyelan sonrası bölgeye hemen dönmek güvenlidir.", correct: false}
+        { q: "Bölgen eğimli ve yağmur yağıyor, ne yaparsın?", o: ["Pencereye çıkarım", "Tehlikeli bölgede kalmam", "Beklerim"], c: 2 },
+        { q: "Toprak kayması başladı! Ne yaparsın?", o: ["Yüksek yere kaçarım", "Toprak yönüne koşarım", "Olduğum yerde kalırım"], c: 1 },
+        { q: "Evde çatırdama sesleri geliyor, ne yaparsın?", o: ["Yetkililere haber veririm", "Beklerim", "Uyurum"], c: 1 },
+        { q: "Heyelan bitti, ne yaparsın?", o: ["Alanı terk etmem", "Yetkililerin izin vermesini beklerim", "Fotoğraf çekerim"], c: 2 },
+        { q: "Güvende misin, ne yaparsın?", o: ["Acil durum hattını ararım", "Evin içine girerim", "Hiçbir şey yapmam"], c: 1 }
       ],
       firtina: [
-        {q: "Fırtına sırasında dışarıda kalmak güvenlidir.", correct: false},
-        {q: "Fırtına esnasında camlardan uzak durmak gerekir.", correct: true},
-        {q: "Elektrikli aletleri prizden çıkarmak önemlidir.", correct: true},
-        {q: "Açık alanda metal eşyalardan uzak durmalısın.", correct: true},
-        {q: "Fırtına bittiğinde dışarı çıkmadan önce çevreyi kontrol etmelisin.", correct: true}
+        { q: "Şiddetli fırtına uyarısı verildi, ne yaparsın?", o: ["Dışarı çıkarım", "Evde kalırım ve pencereleri kapatırım", "Arabayı dışarıda bırakırım"], c: 2 },
+        { q: "Fırtına sırasında dışarıdasın, ne yaparsın?", o: ["Yere eğilirim ve korunaklı bir yer bulurum", "Yola devam ederim", "Ağacın altına sığınırım"], c: 1 },
+        { q: "Pencereler sallanıyor, ne yaparsın?", o: ["Pencereden uzaklaşırım", "Yaklaşırım", "Kapatırım"], c: 1 },
+        { q: "Elektrik gitti, ne yaparsın?", o: ["Mum yakarım", "Fener kullanırım", "Camı açarım"], c: 2 },
+        { q: "Fırtına sonrası ne yaparsın?", o: ["Ağaçları kontrol ederim", "Yetkililerin duyurusunu dinlerim", "Dışarı çıkarım"], c: 2 }
       ]
     };
 
-    var currentType = "";
-    var sceneIndex = 0;
-    var isLocked = false;
+    function showScene() {
+      const data = scenes;
+      const title = document.getElementById("title");
+      const choices = document.getElementById("choices");
 
-    function startGame(type) {
-      currentType = type;
-      sceneIndex = 0;
-      isLocked = false;
+      if (step >= data.length) {
+        showResult();
+        return;
+      }
+
+      const scene = data[step];
+      title.innerText = scene.q;
+      choices.innerHTML = "";
+
+      scene.o.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = function() {
+          handleAnswer(btn, i + 1, scene.c);
+        };
+        choices.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(btn, choice, correct) {
+      if (choice === correct) {
+        score++;
+        btn.classList.add("flash-green");
+      } else {
+        mistakes.push(step + 1);
+        btn.classList.add("flash-red");
+      }
+      step++;
+      setTimeout(showScene, 700);
+    }
+
+    function showResult() {
+      const pct = Math.round((score / maxScore) * 100);
+      const title = document.getElementById("title");
+      const choices = document.getElementById("choices");
+      let mistakeText = mistakes.length
+        ? "Yanlış cevap verdiğin sahneler: " + mistakes.join(", ")
+        : "Tüm sahneleri doğru bildin!";
+
+      title.innerText = "Oyun Bitti!";
+      choices.innerHTML = `
+        <p>Bilinç puanın: <b>${pct}%</b></p>
+        <p>${mistakeText}</p>
+        <button onclick="window.location.href='index.html'">Ana Menüye Dön</button>
+      `;
+    }
+
+    function initGame() {
+      scenes = allScenes[type];
+      maxScore = scenes.length;
       showScene();
     }
 
-    function showScene() {
-      var gameBox = document.getElementById("gameBox");
-      var totalScenes = scenes[currentType].length;
-      var current = scenes[currentType][sceneIndex];
-
-      if (!current) {
-        var typeUpper = currentType.toUpperCase();
-        gameBox.innerHTML = '<div class="question"><h2>' + typeUpper + ' senaryosunu tamamladın! 🎉</h2><button class="btn" id="restartBtn">↩️ Başka Afet Seç</button></div>';
-        
-        document.getElementById('restartBtn').addEventListener('click', function() {
-          location.reload();
-        });
-        return;
-      }
-
-      var progressText = '<div class="progress-info">Soru ' + (sceneIndex + 1) + ' / ' + totalScenes + '</div>';
-      gameBox.innerHTML = progressText + '<div class="question">' + current.q + '</div><button class="btn" id="trueBtn">✓ Doğru</button><button class="btn" id="falseBtn">✗ Yanlış</button>';
-      
-      document.getElementById('trueBtn').addEventListener('click', function() {
-        if (!isLocked) {
-          checkAnswer(true);
-        }
-      });
-      
-      document.getElementById('falseBtn').addEventListener('click', function() {
-        if (!isLocked) {
-          checkAnswer(false);
-        }
-      });
-    }
-
-    function checkAnswer(ans) {
-      if (isLocked) {
-        return;
-      }
-      
-      isLocked = true;
-      
-      var trueBtn = document.getElementById('trueBtn');
-      var falseBtn = document.getElementById('falseBtn');
-      
-      if (trueBtn) trueBtn.disabled = true;
-      if (falseBtn) falseBtn.disabled = true;
-      
-      var correct = scenes[currentType][sceneIndex].correct;
-      var isCorrect = ans === correct;
-      
-      if (isCorrect) {
-        document.body.classList.add('correct-flash');
-      } else {
-        document.body.classList.add('wrong-flash');
-      }
-      
-      setTimeout(function() {
-        document.body.classList.remove('correct-flash');
-        document.body.classList.remove('wrong-flash');
-      }, 1000);
-      
-      sceneIndex++;
-      
-      setTimeout(function() {
-        isLocked = false;
-        showScene();
-      }, 1000);
-    }
-
-    window.addEventListener('load', function() {
-      document.getElementById('btn-deprem').addEventListener('click', function() {
-        startGame('deprem');
-      });
-      
-      document.getElementById('btn-yangin').addEventListener('click', function() {
-        startGame('yangin');
-      });
-      
-      document.getElementById('btn-sel').addEventListener('click', function() {
-        startGame('sel');
-      });
-      
-      document.getElementById('btn-heyelan').addEventListener('click', function() {
-        startGame('heyelan');
-      });
-      
-      document.getElementById('btn-firtina').addEventListener('click', function() {
-        startGame('firtina');
-      });
-      
-      document.getElementById('backBtn').addEventListener('click', function() {
-        window.location.href = 'index.html';
-      });
-    });
+    initGame();
   </script>
-
 </body>
 </html>
+
