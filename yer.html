@@ -1,259 +1,549 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Yer Afetleri - Afet Bilinci</title>
   <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg,#0f1724,#1f2937);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f1724 0%, #1f2937 50%, #0f1724 100%);
       color: #fff;
       margin: 0;
       padding: 0;
       min-height: 100vh;
+      transition: background 0.5s ease;
     }
+    
+    body.bg-correct {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    }
+    
+    body.bg-wrong {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    }
+    
     header {
-      background:#b91c1c;
-      padding:14px 18px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.4);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+      padding: 18px 24px;
+      box-shadow: 0 8px 32px rgba(185, 28, 28, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(255,255,255,0.1);
     }
-    header h1 { margin:0; font-size:20px; }
-    header .navbtn { background:#0b1220;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer; }
-    main { padding:28px; max-width:900px; margin:0 auto; }
+    header h1 { 
+      margin: 0; 
+      font-size: 24px; 
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .navbtn { 
+      background: rgba(11, 18, 32, 0.8);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .navbtn:hover {
+      background: rgba(11, 18, 32, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    
+    main { 
+      padding: 32px 24px; 
+      max-width: 1200px; 
+      margin: 0 auto; 
+    }
+    
+    .intro-text {
+      text-align: center;
+      font-size: 16px;
+      color: #94a3b8;
+      margin-bottom: 32px;
+      padding: 16px;
+      background: rgba(15, 23, 36, 0.6);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    
     .grid {
-      display:grid;
-      grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
-      gap:18px;
-      margin-bottom:22px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
     }
+    
     .tile {
-      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-      padding:16px;
-      border-radius:14px;
-      box-shadow:0 8px 24px rgba(0,0,0,0.45);
-      cursor:pointer;
-      transition:transform .18s, background .18s;
-      border:1px solid rgba(255,255,255,0.04);
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      border: 2px solid transparent;
+      position: relative;
     }
-    .tile:hover{ transform:translateY(-6px); background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); }
-    .tile h3{ margin:6px 0 8px; color:#ffdede; }
-    .tile p{ margin:0; color:#cbd5e1; font-size:14px; line-height:1.4; }
-    #detail { margin-top:18px; padding:16px; background:#071024; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.6); }
-    #detail h2{ margin-top:0; color:#ffefef; }
-    .small { color:#9aa5b1; font-size:13px; margin-top:8px; }
+    
+    .tile:hover {
+      transform: translateY(-12px) scale(1.02);
+      border-color: rgba(14, 165, 164, 0.5);
+      box-shadow: 0 20px 40px rgba(14, 165, 164, 0.3);
+    }
+    
+    .tile-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    .tile h3 { 
+      margin: 8px 0 12px; 
+      color: #ffdede; 
+      font-size: 22px;
+      font-weight: 700;
+    }
+    
+    .tile p { 
+      margin: 0; 
+      color: #cbd5e1; 
+      font-size: 14px; 
+      line-height: 1.6;
+    }
+    
+    .tile.selected {
+      border-color: #0ea5a4;
+      background: linear-gradient(145deg, rgba(14, 165, 164, 0.2), rgba(15, 23, 42, 0.9));
+      box-shadow: 0 20px 40px rgba(14, 165, 164, 0.4);
+    }
+    
+    #detail {
+      margin-top: 32px;
+      padding: 28px;
+      background: linear-gradient(145deg, rgba(7, 16, 36, 0.95), rgba(15, 23, 36, 0.95));
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 300px;
+    }
+    
+    #detail h2 { 
+      margin-top: 0; 
+      color: #ffefef; 
+      font-size: 28px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .info-card {
+      background: rgba(14, 165, 164, 0.1);
+      border-left: 4px solid #0ea5a4;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      color: #e0f2f1;
+      line-height: 1.7;
+    }
+    
     .btn {
-      display:inline-block;
-      margin:12px 8px 0 0;
-      background:#0ea5a4;
-      color:#042027;
-      border:none;
-      padding:10px 16px;
-      border-radius:10px;
-      cursor:pointer;
-      font-weight:700;
+      display: inline-block;
+      margin: 12px 12px 0 0;
+      background: linear-gradient(135deg, #0ea5a4 0%, #0891b2 100%);
+      color: #042027;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(14, 165, 164, 0.4);
     }
-    .btn.secondary { background:#1f6feb; color:#fff; }
-    .game-area { margin-top:18px; background:linear-gradient(180deg,#071126,#021024); padding:18px; border-radius:12px; }
-    .q { font-size:18px; margin-bottom:16px; color:#e6f7ff; }
-    .choice { display:block; width:100%; text-align:center; margin:8px 0; padding:10px; background:#09223a; color:#dbeafe; border-radius:10px; border:1px solid rgba(255,255,255,0.03); cursor:pointer; }
-    .choice:hover{ transform:translateY(-3px); }
-    .correct { animation:flashCorrect .6s; background:#22c55e !important; color:#042018 !important; }
-    .wrong { animation:flashWrong .6s; background:#ef4444 !important; color:#fff !important; }
-    @keyframes flashCorrect { 0%{background:#09223a} 50%{background:#22c55e} 100%{background:#09223a} }
-    @keyframes flashWrong { 0%{background:#09223a} 50%{background:#ef4444} 100%{background:#09223a} }
-    .result { font-size:18px; margin-top:12px; color:#f1f5f9; }
-    .backlink { margin-top:14px; display:inline-block; color:#bae6fd; text-decoration:underline; cursor:pointer; }
-    @media(max-width:520px){ header h1{font-size:16px} .tile h3{font-size:16px} .q{font-size:16px} }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(14, 165, 164, 0.6);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn.secondary { 
+      background: linear-gradient(135deg, #1f6feb 0%, #3b82f6 100%);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(31, 111, 235, 0.4);
+    }
+    
+    .game-area { 
+      margin-top: 24px; 
+      background: linear-gradient(145deg, rgba(7, 17, 38, 0.9), rgba(2, 16, 36, 0.9));
+      padding: 28px; 
+      border-radius: 16px;
+      border: 1px solid rgba(14, 165, 164, 0.3);
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5a4, #22c55e);
+      transition: width 0.5s ease;
+      box-shadow: 0 0 10px rgba(14, 165, 164, 0.8);
+    }
+    
+    .q { 
+      font-size: 20px; 
+      margin-bottom: 24px; 
+      color: #e6f7ff; 
+      font-weight: 600;
+      line-height: 1.6;
+      padding: 16px;
+      background: rgba(14, 165, 164, 0.05);
+      border-radius: 12px;
+      border-left: 4px solid #0ea5a4;
+    }
+    
+    .choice { 
+      display: block; 
+      width: 100%; 
+      text-align: left; 
+      margin: 12px 0; 
+      padding: 16px 20px; 
+      background: linear-gradient(135deg, rgba(9, 34, 58, 0.8), rgba(7, 25, 45, 0.8));
+      color: #dbeafe; 
+      border-radius: 12px; 
+      border: 2px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .choice:hover { 
+      transform: translateX(8px);
+      background: linear-gradient(135deg, rgba(14, 165, 164, 0.2), rgba(9, 34, 58, 0.9));
+      border-color: rgba(14, 165, 164, 0.5);
+    }
+    
+    .choice:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .result { 
+      font-size: 18px; 
+      margin-top: 20px; 
+      color: #f1f5f9;
+      line-height: 1.8;
+    }
+    
+    .result ul {
+      background: rgba(0,0,0,0.3);
+      padding: 20px 20px 20px 40px;
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+    
+    .result li {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .score-display {
+      display: inline-block;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 16px 0;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+    }
+    
+    .congrats {
+      font-size: 48px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    @media(max-width: 768px) {
+      header h1 { font-size: 18px; }
+      .tile h3 { font-size: 18px; }
+      .q { font-size: 18px; }
+      main { padding: 20px 16px; }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>🌍 Yer Afetleri</h1>
-    <div>
-      <button class="navbtn" onclick="window.location.href='index.html'">🏠 Ana Sayfa</button>
-      <button class="navbtn" onclick="window.location.href='hakkinda.html'">ℹ️ Hakkında</button>
+    <h1>🌍 Yer Afetleri - Yeni Nesil Eğitim</h1>
+    <div class="nav-buttons">
+      <button class="navbtn" id="homeBtn">🏠 Ana Sayfa</button>
+      <button class="navbtn" id="aboutBtn">ℹ️ Hakkında</button>
     </div>
   </header>
 
   <main>
-    <p class="small">Aşağıdan bir afet seç: bilgi kartını oku veya "Oyna" tuşuyla doğrudan o afetin 5 sahneli oyununu başlat.</p>
+    <div class="intro-text">
+      🎯 <strong>Aşağıdan bir afet türü seç:</strong> Bilgi kartını okuyarak öğren veya "Oyna" butonuyla 5 soruluk interaktif testi başlat!
+    </div>
 
     <div class="grid" id="tiles">
-      <div class="tile" onclick="select('deprem')">
-        <h3>🌋 Deprem</h3>
-        <p>Kısıtlı sarsıntılar, bina güvenliği, çök-kapan-tutun gibi temel davranışları içerir.</p>
+      <div class="tile" id="tile-deprem">
+        <span class="tile-icon">🌋</span>
+        <h3>Deprem</h3>
+        <p>Kısa sarsıntılar, bina güvenliği, çök-kapan-tutun gibi temel davranışları içerir.</p>
       </div>
 
-      <div class="tile" onclick="select('heyelan')">
-        <h3>🏞️ Heyelan</h3>
-        <p>Yağış sonrası toprak hareketleri, zemin çatlakları ve hızlı tahliye kararları ile ilgili senaryolar.</p>
+      <div class="tile" id="tile-heyelan">
+        <span class="tile-icon">🏞️</span>
+        <h3>Heyelan</h3>
+        <p>Yağış sonrası toprak hareketleri, zemin çatlakları ve hızlı tahliye kararları.</p>
       </div>
 
-      <div class="tile" onclick="select('volkan')">
-        <h3>🌋 Volkan</h3>
-        <p>Volkanik kül, gaz ve tahliye önlemlerine dair bilgi ve kısa uygulamalı senaryolar.</p>
+      <div class="tile" id="tile-volkan">
+        <span class="tile-icon">🌋</span>
+        <h3>Volkan Patlaması</h3>
+        <p>Volkanik kül, gaz ve tahliye önlemlerine dair bilgi ve senaryolar.</p>
       </div>
     </div>
 
     <div id="detail">
-      <h2 id="detailTitle">Seçim bekleniyor</h2>
-      <p id="detailText" class="small">Bir afet seçerek bilgi kartını görüntüleyebilir veya hemen oynamaya başlayabilirsin.</p>
+      <h2 id="detailTitle">🎮 Bir Afet Türü Seçin</h2>
+      <p id="detailText" style="color:#94a3b8; font-size:16px;">Yukarıdaki kartlardan birini seçerek bilgi alabilir veya oyunu başlatabilirsiniz.</p>
 
-      <div id="detailButtons" style="margin-top:10px;"></div>
+      <div id="detailButtons"></div>
 
-      <!-- Oyun alanı (gizli, seçim yapıldığında gösterilecek) -->
       <div id="game" class="game-area" style="display:none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
         <div id="qbox"></div>
         <div id="choicesBox"></div>
         <div id="after" style="display:none;">
           <div class="result" id="resultText"></div>
-          <button class="btn secondary" onclick="backToSelection()">🔙 Geri Dön</button>
+          <button class="btn secondary" id="backBtn">🔙 Başka Afet Seç</button>
         </div>
       </div>
     </div>
   </main>
 
 <script>
-  // Sahne verileri (her afet 5 sahne, doğru=1 false=0 gibi)
-  const data = {
+  var data = {
     deprem: [
-      { q:"Deprem anında ilk yapılması gereken nedir?", opts:["Çök–Kapan–Tutun","Hemen dışarı koşmak"], a:0, explain:"Çök-Kapan-Tutun vücudu korur ve en güvenli ilk tepkidir." },
-      { q:"Sarsıntı sırasında asansör kullanmak güvenli mi?", opts:["Hayır, asansör tehlikelidir","Evet, hızlı çıkar"], a:0, explain:"Asansörlerde kalma riski vardır; merdiven tercih edilir." },
-      { q:"Dolap veya ağır eşyalardan uzak durmak neden önemli?", opts:["Düşebilir ve yaralanma oluşturur","Görüntü kötü olur sadece"], a:0, explain:"Devralan eşyalar ciddi yaralanmalara neden olabilir." },
-      { q:"Deprem sonrası evine girmeden önce ne yapılmalı?", opts:["Yapısal hasar kontrolü ve yetkili izin beklenmeli","Hemen eşyaları almak için girilmeli"], a:0, explain:"Hasarlı binalar risklidir; yetkililerin kontrolü gerekir." },
-      { q:"Acil durum çantasında ne bulunmalı?", opts:["Su, ilaç, fener ve kimlik","Sadece telefon ve para"], a:0, explain:"Temel malzemeler hayatta kalma ve iletişim için önemlidir." }
+      { q: "Deprem anında ilk yapılması gereken nedir?", opts: ["Çök–Kapan–Tutun", "Hemen dışarı koşmak", "Pencereye koşmak"], a: 0, explain: "Çök-Kapan-Tutun vücudu korur ve en güvenli ilk tepkidir." },
+      { q: "Sarsıntı sırasında asansör kullanmak güvenli midir?", opts: ["Hayır, asansör tehlikelidir", "Evet, hızlı çıkarır", "Fark etmez"], a: 0, explain: "Asansörlerde mahsur kalma riski vardır; merdiven tercih edilir." },
+      { q: "Dolap veya ağır eşyalardan uzak durmak neden önemlidir?", opts: ["Düşebilir ve yaralanma oluşturur", "Görüntü kötü olur", "Para kaybı olur"], a: 0, explain: "Devrilen eşyalar ciddi yaralanmalara neden olabilir." },
+      { q: "Deprem sonrası evine girmeden önce ne yapılmalı?", opts: ["Yapısal hasar kontrolü ve yetkili izin beklenmeli", "Hemen eşyaları almak için girilmeli", "Komşulara haber vermeli"], a: 0, explain: "Hasarlı binalar risklidir; yetkililerin kontrolü gerekir." },
+      { q: "Acil durum çantasında ne bulunmalıdır?", opts: ["Su, ilaç, fener ve kimlik", "Sadece telefon ve para", "Sadece yiyecek"], a: 0, explain: "Temel malzemeler hayatta kalma için kritik öneme sahiptir." }
     ],
     heyelan: [
-      { q:"Heyelan riski yaratan en önemli durum nedir?", opts:["Ağır yağış ve doygun toprak","Rüzgâr"], a:0, explain:"Uzun süreli yoğun yağış toprak doygunluğunu artırır." },
-      { q:"Zemin çatlakları görürsen ne yapmalısın?", opts:["Hemen güvenli bölgeye gitmelisin","Fotoğraf çekmelisin"], a:0, explain:"Çatlaklar bölgenin kararsız olduğuna işaret eder; uzaklaş." },
-      { q:"Heyelan anında aşağı inmeli mi yoksa çıkmalı mı?", opts:["Yukarı/yanlara güvenli şekilde kaçılmalı","Aşağı doğru hızla inilmeli"], a:0, explain:"Yamaçtan uzaklaşmak ve yüksek noktalara gitmek güvenlidir." },
-      { q:"Ev heyelan riskliyse hangi adım önemlidir?", opts:["Tahliye planı oluşturmak ve uygulamak","Eşyaları toplamayı beklemek"], a:0, explain:"Tahliye yaşamı kurtarır; eşyalar ikincildir." },
-      { q:"Heyelan sonrası bölgeye ne zaman yaklaşılmalı?", opts:["Yetkililerin izni ve güvenlik onayı sonrası","Hemen gidip kontrol edilmeli"], a:0, explain:"Profesyonel izin olmadan bölgeye yaklaşma." }
+      { q: "Heyelan riski yaratan en önemli durum nedir?", opts: ["Ağır yağış ve doygun toprak", "Rüzgâr", "Sıcak hava"], a: 0, explain: "Uzun süreli yoğun yağış toprak doygunluğunu artırır." },
+      { q: "Zemin çatlakları görürsen ne yapmalısın?", opts: ["Hemen güvenli bölgeye gitmelisin", "Fotoğraf çekmelisin", "Bekleyip izlemelisin"], a: 0, explain: "Çatlaklar bölgenin kararsız olduğuna işaret eder." },
+      { q: "Heyelan anında hangi yöne hareket etmelisin?", opts: ["Yukarı/yanlara güvenli şekilde kaçılmalı", "Aşağı doğru hızla inilmeli", "Yerinde durmalı"], a: 0, explain: "Yamaçtan uzaklaşmak ve yüksek noktalara gitmek güvenlidir." },
+      { q: "Ev heyelan riskliyse hangi adım önemlidir?", opts: ["Tahliye planı oluşturmak ve uygulamak", "Eşyaları toplamayı beklemek", "Yetkilileri aramayı beklemek"], a: 0, explain: "Tahliye yaşamı kurtarır; eşyalar ikincildir." },
+      { q: "Heyelan sonrası bölgeye ne zaman yaklaşılmalı?", opts: ["Yetkililerin izni ve güvenlik onayı sonrası", "Hemen gidip kontrol edilmeli", "1 saat sonra"], a: 0, explain: "Profesyonel izin olmadan bölgeye yaklaşmamalısın." }
     ],
     volkan: [
-      { q:"Volkanik kül neden tehlikelidir?", opts:["Solunum yollarını ve makineleri tıkar","Sadece kirlilik yapar"], a:0, explain:"Kül solunum problemleri ve makine arızalarına yol açar." },
-      { q:"Kül yağışı sırasında dışarı çıkmalı mısın?", opts:["Hayır, içerde kalıp pencereleri kapat","Evet, dışarıdan temizlemelisin"], a:0, explain:"İçeride kalmak ve filtre/maske kullanmak daha güvenlidir." },
-      { q:"Volkanik gazlara karşı ne yapılmalı?", opts:["Tahliye ve kapalı alanlara sığınma","Açıkta kalıp bekleme"], a:0, explain:"Zararlı gazlar ciddi sağlık riski yaratır; güvenli bölgeye git." },
-      { q:"Volkanik patlama sonrası su kaynakları neden kontrol edilmeli?", opts:["Kül ve mineraller suyu kirletebilir","Su aynen güvenlidir"], a:0, explain:"Kirlenme varsa içme suyu tehlikeli olabilir." },
-      { q:"Afet çantasında volkan için ekstra ne bulundurulmalı?", opts:["Maske, göz koruması, battaniye","Sadece telefon"], a:0, explain:"Maske ve göz koruması külün zararını azaltır." }
+      { q: "Volkanik kül neden tehlikelidir?", opts: ["Solunum yollarını ve makineleri tıkar", "Sadece kirlilik yapar", "Kötü kokar"], a: 0, explain: "Kül solunum problemleri ve makine arızalarına yol açar." },
+      { q: "Kül yağışı sırasında dışarı çıkmalı mısın?", opts: ["Hayır, içerde kalıp pencereleri kapat", "Evet, dışarıdan temizlemelisin", "Fark etmez"], a: 0, explain: "İçeride kalmak ve filtre/maske kullanmak daha güvenlidir." },
+      { q: "Volkanik gazlara karşı ne yapılmalı?", opts: ["Tahliye ve kapalı alanlara sığınma", "Açıkta kalıp bekleme", "Derin nefes almak"], a: 0, explain: "Zararlı gazlar ciddi sağlık riski yaratır." },
+      { q: "Volkanik patlama sonrası su kaynakları neden kontrol edilmeli?", opts: ["Kül ve mineraller suyu kirletebilir", "Su aynen güvenlidir", "Sadece koku kontrolü için"], a: 0, explain: "Kirlenme varsa içme suyu tehlikeli olabilir." },
+      { q: "Afet çantasında volkan için ekstra ne bulundurulmalı?", opts: ["Maske, göz koruması, battaniye", "Sadece telefon", "Sadece su"], a: 0, explain: "Maske ve göz koruması külün zararını azaltır." }
     ]
   };
 
-  // Durum
-  let current = null;
-  let sceneIndex = 0;
-  let score = 0;
-  let mistakes = [];
+  var currentType = null;
+  var sceneIndex = 0;
+  var score = 0;
+  var mistakes = [];
+  var isAnswering = false;
 
-  // Seçim göster
-  function select(key) {
-    current = key;
+  function selectDisaster(type) {
+    currentType = type;
     sceneIndex = 0;
     score = 0;
     mistakes = [];
-    // Detay bilgisi
-    const title = {deprem:"Deprem", heyelan:"Heyelan", volkan:"Volkan"}[key];
-    document.getElementById('detailTitle').innerText = title;
-    document.getElementById('detailText').innerText = "Kısa bilgi: " + (key === 'deprem'
-      ? "Deprem anında Çök–Kapan–Tutun uygulayın. Asansör kullanmayın; ağır eşya sabitleyin."
-      : key === 'heyelan'
-        ? "Heyelan riskinde zemin çatlaklarını gözleyin, yüksek ve güvenli alanlara çekilin."
-        : "Volkanik durumlarda kül solunumu ve gaz zararlarına dikkat; maske ve kapalı alan önemlidir.");
-    // Butonlar: bilgi oku ve oyna
-    const db = document.getElementById('detailButtons');
-    db.innerHTML = '';
-    const infoBtn = document.createElement('button');
-    infoBtn.className = 'btn secondary';
-    infoBtn.innerText = 'Bilgi Kartını Göster';
-    infoBtn.onclick = () => showInfoCard(key);
-    db.appendChild(infoBtn);
+    isAnswering = false;
 
-    const playBtn = document.createElement('button');
+    var tiles = document.querySelectorAll('.tile');
+    for (var i = 0; i < tiles.length; i++) {
+      tiles[i].classList.remove('selected');
+    }
+    document.getElementById('tile-' + type).classList.add('selected');
+
+    var titles = {
+      deprem: "🌋 Deprem",
+      heyelan: "🏞️ Heyelan",
+      volkan: "🌋 Volkan Patlaması"
+    };
+    
+    var infos = {
+      deprem: "Deprem anında <strong>Çök–Kapan–Tutun</strong> uygulayın. Asansör kullanmayın, ağır eşyaları sabitleyin.",
+      heyelan: "Heyelan riskinde <strong>zemin çatlaklarını</strong> gözleyin, yüksek ve güvenli alanlara çekilin.",
+      volkan: "Volkanik durumlarda <strong>kül solunumu ve gaz zararlarına</strong> dikkat edin. Maske kullanın."
+    };
+
+    document.getElementById('detailTitle').innerHTML = titles[type];
+    document.getElementById('detailText').innerHTML = '<div class="info-card">' + infos[type] + '</div>';
+
+    var db = document.getElementById('detailButtons');
+    db.innerHTML = '';
+    
+    var playBtn = document.createElement('button');
     playBtn.className = 'btn';
-    playBtn.innerText = 'Oyna ▶';
-    playBtn.onclick = () => startGame(key);
+    playBtn.innerHTML = '▶️ Oyunu Başlat';
+    playBtn.addEventListener('click', function() {
+      startGame(type);
+    });
     db.appendChild(playBtn);
 
-    // gizle oyun alanı
+    var infoBtn = document.createElement('button');
+    infoBtn.className = 'btn secondary';
+    infoBtn.innerHTML = '📋 Detaylı Bilgi';
+    infoBtn.addEventListener('click', function() {
+      showInfoCard(type);
+    });
+    db.appendChild(infoBtn);
+
     document.getElementById('game').style.display = 'none';
     document.getElementById('after').style.display = 'none';
   }
 
-  function showInfoCard(key) {
-    const infoMap = {
-      deprem: "Deprem: Çök-Kapan-Tutun uygulaması hayat kurtarır. Asansör kullanma, ağır nesneleri sabitle. Aile toplanma noktasını belirle.",
-      heyelan: "Heyelan: Yoğun yağış sonrası eğimli arazilerde toprak kayması olabilir. Zemin çatlaklarına dikkat et, güvenli alanlara çekil.",
-      volkan: "Volkan: Kül ve gaz tehlikesi vardır. Maskeyle solumayı koru, dışarı çıkma, su kaynaklarını koru."
+  function showInfoCard(type) {
+    var detailedInfo = {
+      deprem: "<h3 style='color:#0ea5a4;'>📚 Deprem Hakkında</h3><p>Yer kabuğundaki ani kırılma ve enerji boşalması sonucu oluşur.</p><ul style='text-align:left;'><li><strong>Öncesi:</strong> Acil durum çantası hazırlayın</li><li><strong>Sırasında:</strong> Çök-Kapan-Tutun, asansör kullanmayın</li><li><strong>Sonrası:</strong> Hasarlı binalara girmeyin</li></ul>",
+      heyelan: "<h3 style='color:#0ea5a4;'>📚 Heyelan Hakkında</h3><p>Yoğun yağış sonucu toprağın ve kayaların yamaçtan kaymasıdır.</p><ul style='text-align:left;'><li><strong>Risk:</strong> Zemin çatlakları, ağaç eğilmeleri</li><li><strong>Tehlike:</strong> Yamaca dik yönde kaçın</li><li><strong>Sonrası:</strong> Yetkili onayı bekleyin</li></ul>",
+      volkan: "<h3 style='color:#0ea5a4;'>📚 Volkan Hakkında</h3><p>Yeraltındaki magmanın yüzeye çıkması ve kül, gaz salınımıdır.</p><ul style='text-align:left;'><li><strong>Tehlike:</strong> Kül yağışı, zehirli gazlar</li><li><strong>Korunma:</strong> Maske kullanın, içeride kalın</li><li><strong>Tahliye:</strong> Yetkililerin talimatlarını bekleyin</li></ul>"
     };
-    document.getElementById('detailTitle').innerText += " — Bilgi Kartı";
-    document.getElementById('detailText').innerText = infoMap[key];
-    // show small backlink
-    const db = document.getElementById('detailButtons');
-    db.innerHTML = '<button class="btn secondary" onclick="startGame(\''+key+'\')">Oyna ▶</button> <button class="btn" onclick="select(\''+key+'\')">Geri</button>';
+    
+    document.getElementById('detailText').innerHTML = '<div class="info-card">' + detailedInfo[type] + '</div>';
   }
 
-  function startGame(key) {
-    current = key;
+  function startGame(type) {
+    currentType = type;
     sceneIndex = 0;
     score = 0;
     mistakes = [];
+    isAnswering = false;
+    
     document.getElementById('game').style.display = 'block';
     document.getElementById('after').style.display = 'none';
     renderScene();
   }
 
   function renderScene() {
-    const g = document.getElementById('game');
-    const qbox = document.getElementById('qbox');
-    const cb = document.getElementById('choicesBox');
-    const scenes = data[current];
+    var scenes = data[currentType];
     if (!scenes) return;
-    if (sceneIndex >= scenes.length) return finishGame();
-    const s = scenes[sceneIndex];
-    qbox.innerHTML = '<div class="q">'+(sceneIndex+1)+'. '+s.q+'</div>';
-    cb.innerHTML = '';
-    s.opts.forEach((opt, i) => {
-      const b = document.createElement('button');
-      b.className = 'choice';
-      b.innerText = opt;
-      b.onclick = () => choose(b, i === s.a, s);
-      cb.appendChild(b);
-    });
+    
+    if (sceneIndex >= scenes.length) {
+      return finishGame();
+    }
+
+    var scene = scenes[sceneIndex];
+    var progress = ((sceneIndex + 1) / scenes.length) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+
+    var qbox = document.getElementById('qbox');
+    qbox.innerHTML = '<div class="q">Soru ' + (sceneIndex + 1) + ' / ' + scenes.length + ': ' + scene.q + '</div>';
+
+    var choicesBox = document.getElementById('choicesBox');
+    choicesBox.innerHTML = '';
+
+    for (var i = 0; i < scene.opts.length; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = scene.opts[i];
+      btn.setAttribute('data-index', i);
+      btn.addEventListener('click', function() {
+        if (!isAnswering) {
+          var selectedIndex = parseInt(this.getAttribute('data-index'));
+          chooseAnswer(selectedIndex);
+        }
+      });
+      choicesBox.appendChild(btn);
+    }
   }
 
-  function choose(btn, correct, sceneObj) {
-    // disable further clicks quickly
-    Array.from(document.querySelectorAll('#choicesBox .choice')).forEach(x=>x.onclick=null);
-    if (correct) {
-      btn.classList.add('correct');
+  function chooseAnswer(selectedIndex) {
+    if (isAnswering) return;
+    isAnswering = true;
+
+    var scene = data[currentType][sceneIndex];
+    var isCorrect = (selectedIndex === scene.a);
+
+    var choices = document.querySelectorAll('.choice');
+    for (var i = 0; i < choices.length; i++) {
+      choices[i].disabled = true;
+    }
+
+    var body = document.body;
+    if (isCorrect) {
+      body.classList.add('bg-correct');
       score++;
     } else {
-      btn.classList.add('wrong');
-      mistakes.push({index:sceneIndex+1, q:sceneObj.q, selected:btn.innerText, correct:sceneObj.opts[sceneObj.a], why:sceneObj.explain});
+      body.classList.add('bg-wrong');
+      mistakes.push({
+        index: sceneIndex + 1,
+        q: scene.q,
+        selected: scene.opts[selectedIndex],
+        correct: scene.opts[scene.a],
+        why: scene.explain
+      });
     }
-    sceneIndex++;
-    setTimeout(renderScene, 700);
+
+    setTimeout(function() {
+      body.classList.remove('bg-correct', 'bg-wrong');
+      sceneIndex++;
+      isAnswering = false;
+      renderScene();
+    }, 1000);
   }
 
   function finishGame() {
     document.getElementById('game').style.display = 'block';
     document.getElementById('after').style.display = 'block';
-    const total = data[current].length;
-    const res = document.getElementById('resultText');
-    let txt = Oyun bitti — Doğru: ${score}/${total}.;
-    if (mistakes.length) {
-      txt += '<br><br><b>Yanlış yaptığın sahneler:</b><ul style="text-align:left;margin-top:8px;">';
-      mistakes.forEach(m=>{
-        txt += <li><b>Sahne ${m.index}:</b> ${m.q}<br><span style="color:#ffdede"><b>Senin:</b> ${m.selected}</span> — <span style="color:#bde7c6"><b>Doğru:</b> ${m.correct}</span><br><small style="color:#9aa5b1">${m.why}</small></li><br>;
-      });
-      txt += '</ul>';
+    document.getElementById('qbox').innerHTML = '';
+    document.getElementById('choicesBox').innerHTML = '';
+
+    var total = data[currentType].length;
+    var res = document.getElementById('resultText');
+    var txt = '';
+
+    if (mistakes.length === 0) {
+      txt = '<div class="congrats">🎉</div><div class="score-display">Mükemmel: ' + score + '/' + total + '</div><p>Tebrikler! Tüm sorular doğru!</p>';
     } else {
-      txt += '<br><br>Tebrikler! Tüm cevaplar doğru.';
+      txt = '<div class="score-display">Skor: ' + score + '/' + total + '</div>';
+      txt += '<p><strong>Yanlış yaptığın sorular:</strong></p><ul style="text-align:left;">';
+      for (var i = 0; i < mistakes.length; i++) {
+        var m = mistakes[i];
+        txt += '<li><b>Soru ' + m.index + ':</b> ' + m.q + '<br>';
+        txt += '<span style="color:#ff9999">❌ Senin cevabın: ' + m.selected + '</span><br>';
+        txt += '<span style="color:#99ff99">✅ Doğru cevap: ' + m.correct + '</span><br>';
+        txt += '<small style="color:#9aa5b1">💡 ' + m.why + '</small></li>';
+      }
+      txt += '</ul>';
     }
     res.innerHTML = txt;
   }
@@ -261,17 +551,43 @@
   function backToSelection() {
     document.getElementById('game').style.display = 'none';
     document.getElementById('after').style.display = 'none';
-    document.getElementById('detailTitle').innerText = 'Seçim bekleniyor';
-    document.getElementById('detailText').innerText = 'Bir afet seçerek bilgi kartını görüntüleyebilir veya hemen oynamaya başlayabilirsin.';
+    document.getElementById('detailTitle').innerHTML = '🎮 Bir Afet Türü Seçin';
+    document.getElementById('detailText').innerHTML = '<p style="color:#94a3b8; font-size:16px;">Yukarıdaki kartlardan birini seçerek bilgi alabilir veya oyunu başlatabilirsiniz.</p>';
     document.getElementById('detailButtons').innerHTML = '';
-    current = null;
+    
+    var tiles = document.querySelectorAll('.tile');
+    for (var i = 0; i < tiles.length; i++) {
+      tiles[i].classList.remove('selected');
+    }
+    
+    currentType = null;
     sceneIndex = 0;
     score = 0;
     mistakes = [];
+    isAnswering = false;
   }
 
-  // başta seçim ekranında hiçbir şey seçili değil
-  // (istersen default birini seçmek için select('deprem') çağır)
+  document.getElementById('tile-deprem').addEventListener('click', function() {
+    selectDisaster('deprem');
+  });
+
+  document.getElementById('tile-heyelan').addEventListener('click', function() {
+    selectDisaster('heyelan');
+  });
+
+  document.getElementById('tile-volkan').addEventListener('click', function() {
+    selectDisaster('volkan');
+  });
+
+  document.getElementById('homeBtn').addEventListener('click', function() {
+    window.location.href = 'index.html';
+  });
+
+  document.getElementById('aboutBtn').addEventListener('click', function() {
+    window.location.href = 'hakkinda.html';
+  });
+
+  document.getElementById('backBtn').addEventListener('click', backToSelection);
 </script>
 
 </body>
