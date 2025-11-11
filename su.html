@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Su Afetleri - Afet Bilinci</title>
+  <title>Yer Afetleri - Afet Bilinci</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -297,7 +297,7 @@
 <body>
 
   <header>
-    <h1>🌊 Su Afetleri - Yeni Nesil Eğitim</h1>
+    <h1>🌍 Yer Afetleri - Yeni Nesil Eğitim</h1>
     <div class="nav-buttons">
       <button class="navbtn" id="homeBtn">🏠 Ana Sayfa</button>
       <button class="navbtn" id="aboutBtn">ℹ️ Hakkında</button>
@@ -310,22 +310,22 @@
     </div>
 
     <div class="grid" id="tiles">
-      <div class="tile" id="tile-sel">
-        <span class="tile-icon">🌊</span>
-        <h3>Sel</h3>
-        <p>Sel felaketi, ani su baskınlarında yüksek yerlere çıkma ve güvenli bölgelere sığınma davranışlarını içerir.</p>
+      <div class="tile" id="tile-deprem">
+        <span class="tile-icon">🫨</span>
+        <h3>Deprem</h3>
+        <p>Kısa sarsıntılar, bina güvenliği, çök-kapan-tutun gibi temel davranışları içerir.</p>
       </div>
 
-      <div class="tile" id="tile-tsunami">
-        <span class="tile-icon">🌊</span>
-        <h3>Tsunami</h3>
-        <p>Tsunami, deniz çekilmesi sonrası gelen dev dalgalardan korunmak için yüksek ve güvenli bölgelere kaçma davranışlarını içerir.</p>
+      <div class="tile" id="tile-heyelan">
+        <span class="tile-icon">🏞️</span>
+        <h3>Heyelan</h3>
+        <p>Yağış sonrası toprak hareketleri, zemin çatlakları ve hızlı tahliye kararları.</p>
       </div>
 
-      <div class="tile" id="tile-baraj patlaması">
-        <span class="tile-icon">💧</span>
-        <h3>Baraj Patlaması</h3>
-        <p>Baraj patlaması, ani su taşkınlarında hızla yüksek ve güvenli bölgelere sığınma davranışlarını içerir.</p>
+      <div class="tile" id="tile-volkan">
+        <span class="tile-icon">🌋</span>
+        <h3>Volkan Patlaması</h3>
+        <p>Volkanik kül, gaz ve tahliye önlemlerine dair bilgi ve senaryolar.</p>
       </div>
     </div>
 
@@ -351,17 +351,17 @@
 
 <script>
   var data = {
-    sel: [
-      { q: "Yağmur şiddetleniyor, ne yaparsın?", opts: ["Yüksek bir yere çıkarım", "Evde kalırım", "Arabayla geçmeye çalışırım"], a: 0, explain: "Yüksek bir yere çıkarım su dan korur ve en güvenli ilk tepkidir." },
-      { q: "Sular sokakları bastı, dışarıdasın, ne yaparsın?", opts: ["Yüksek noktaya giderim", "Telefonla video çekerim", "Suya girerim"], a: 0, explain: "Yükdek yere çıkılmazsa hızlı akan suda boğulma riski vardır." },
-      { q: "Evde su yükseliyor, ne yaparsın?", opts: ["Elektrikleri kapatırım", "Beklerim", "Pencereyi açarım"], a: 0, explain: "Elektrikleri kapatmazsak suyüzünden elektrik çarpabilir." },
-      { q: "Sel sonrası evine döndün, ne yaparsın?", opts: ["Kirli suya dokunmam", "Eşyaları toplarım", "Elektriği hemen açarım"], a: 0, explain: "Eve girdiğimizde bieşeye dokunmamalıyız aksi takdirde zehirlene biliriz." },
-      { q: "Sel tehlikesini önceden öğrenmek için ne yaparsın?", opts: ["Meteoroloji uyarılarını takip ederim", "Komşudan duyarım", "Rastgele beklerim"], a: 0, explain: "Felaketi önceden öğrenmek için resmi kurumlara bakılmalı." }
+    deprem: [
+      { q: "Deprem anında ilk yapılması gereken nedir?", opts: ["Çök–Kapan–Tutun", "Hemen dışarı koşmak", "Pencereye koşmak"], a: 0, explain: "Çök-Kapan-Tutun vücudu korur ve en güvenli ilk tepkidir." },
+      { q: "Sarsıntı sırasında asansör kullanmak güvenli midir?", opts: ["Hayır, asansör tehlikelidir", "Evet, hızlı çıkarır", "Fark etmez"], a: 0, explain: "Asansörlerde mahsur kalma riski vardır; merdiven tercih edilir." },
+      { q: "Dolap veya ağır eşyalardan uzak durmak neden önemlidir?", opts: ["Düşebilir ve yaralanma oluşturur", "Görüntü kötü olur", "Para kaybı olur"], a: 0, explain: "Devrilen eşyalar ciddi yaralanmalara neden olabilir." },
+      { q: "Deprem sonrası evine girmeden önce ne yapılmalı?", opts: ["Yapısal hasar kontrolü ve yetkili izin beklenmeli", "Hemen eşyaları almak için girilmeli", "Komşulara haber vermeli"], a: 0, explain: "Hasarlı binalar risklidir; yetkililerin kontrolü gerekir." },
+      { q: "Acil durum çantasında ne bulunmalıdır?", opts: ["Su, ilaç, fener ve kimlik", "Sadece telefon ve para", "Sadece yiyecek"], a: 0, explain: "Temel malzemeler hayatta kalma için kritik öneme sahiptir." }
     ],
-    tsunami: [
-      { q: "Deniz aniden çekildi, ne yaparsın?", opts: ["Yüksek yere kaçarım ", "Deniz kabuğu toplarım", "Beklerim"], a: 0, explain: "Denizin çekilmesi çoğu zaman tsunami çağrısıdır." },
-      { q: "Tsunami uyarısı geldi, nereye gitmelisin?", opts: ["Yüksek yerlere", "Kıyıya", "Limana"], a: 0, explain: "Yüksek yerlere tsunami gelemez." },
-      { q: "Dalgalar uzaktan görünüyor, ne yaparsın?", opts: ["Yukarı/yanlara güvenli şekilde kaçılmalı", "Aşağı doğru hızla inilmeli", "Yerinde durmalı"], a: 0, explain: "Yamaçtan uzaklaşmak ve yüksek noktalara gitmek güvenlidir." },
+    heyelan: [
+      { q: "Heyelan riski yaratan en önemli durum nedir?", opts: ["Ağır yağış ve doygun toprak", "Rüzgâr", "Sıcak hava"], a: 0, explain: "Uzun süreli yoğun yağış toprak doygunluğunu artırır." },
+      { q: "Zemin çatlakları görürsen ne yapmalısın?", opts: ["Hemen güvenli bölgeye gitmelisin", "Fotoğraf çekmelisin", "Bekleyip izlemelisin"], a: 0, explain: "Çatlaklar bölgenin kararsız olduğuna işaret eder." },
+      { q: "Heyelan anında hangi yöne hareket etmelisin?", opts: ["Yukarı/yanlara güvenli şekilde kaçılmalı", "Aşağı doğru hızla inilmeli", "Yerinde durmalı"], a: 0, explain: "Yamaçtan uzaklaşmak ve yüksek noktalara gitmek güvenlidir." },
       { q: "Ev heyelan riskliyse hangi adım önemlidir?", opts: ["Tahliye planı oluşturmak ve uygulamak", "Eşyaları toplamayı beklemek", "Yetkilileri aramayı beklemek"], a: 0, explain: "Tahliye yaşamı kurtarır; eşyalar ikincildir." },
       { q: "Heyelan sonrası bölgeye ne zaman yaklaşılmalı?", opts: ["Yetkililerin izni ve güvenlik onayı sonrası", "Hemen gidip kontrol edilmeli", "1 saat sonra"], a: 0, explain: "Profesyonel izin olmadan bölgeye yaklaşmamalısın." }
     ],
