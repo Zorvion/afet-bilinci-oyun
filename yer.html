@@ -15,17 +15,17 @@
       min-height: 100vh;
       transition: background 0.5s ease;
     }
-    
+
     body.bg-correct {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     }
-    
+
     body.bg-wrong {
       background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
     }
-    
+
     header {
-      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
       padding: 18px 24px;
       box-shadow: 0 8px 32px rgba(185, 28, 28, 0.4);
       display: flex;
@@ -58,13 +58,13 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
-    
+
     main { 
       padding: 32px 24px; 
       max-width: 1200px; 
       margin: 0 auto; 
     }
-    
+
     .intro-text {
       text-align: center;
       font-size: 16px;
@@ -75,14 +75,14 @@
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.05);
     }
-    
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 24px;
       margin-bottom: 32px;
     }
-    
+
     .tile {
       background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
       padding: 24px;
@@ -93,39 +93,39 @@
       border: 2px solid transparent;
       position: relative;
     }
-    
+
     .tile:hover {
       transform: translateY(-12px) scale(1.02);
       border-color: rgba(14, 165, 164, 0.5);
       box-shadow: 0 20px 40px rgba(14, 165, 164, 0.3);
     }
-    
+
     .tile-icon {
       font-size: 48px;
       margin-bottom: 12px;
       display: block;
     }
-    
+
     .tile h3 { 
       margin: 8px 0 12px; 
       color: #ffdede; 
       font-size: 22px;
       font-weight: 700;
     }
-    
+
     .tile p { 
       margin: 0; 
       color: #cbd5e1; 
       font-size: 14px; 
       line-height: 1.6;
     }
-    
+
     .tile.selected {
       border-color: #0ea5a4;
       background: linear-gradient(145deg, rgba(14, 165, 164, 0.2), rgba(15, 23, 42, 0.9));
       box-shadow: 0 20px 40px rgba(14, 165, 164, 0.4);
     }
-    
+
     #detail {
       margin-top: 32px;
       padding: 28px;
@@ -135,14 +135,14 @@
       border: 1px solid rgba(255,255,255,0.08);
       min-height: 300px;
     }
-    
+
     #detail h2 { 
       margin-top: 0; 
       color: #ffefef; 
       font-size: 28px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
-    
+
     .info-card {
       background: rgba(14, 165, 164, 0.1);
       border-left: 4px solid #0ea5a4;
@@ -152,7 +152,7 @@
       color: #e0f2f1;
       line-height: 1.7;
     }
-    
+
     .btn {
       display: inline-block;
       margin: 12px 12px 0 0;
@@ -167,24 +167,24 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(14, 165, 164, 0.4);
     }
-    
+
     .btn:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(14, 165, 164, 0.6);
     }
-    
+
     .btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
     }
-    
+
     .btn.secondary { 
       background: linear-gradient(135deg, #1f6feb 0%, #3b82f6 100%);
       color: #fff;
       box-shadow: 0 4px 12px rgba(31, 111, 235, 0.4);
     }
-    
+
     .game-area { 
       margin-top: 24px; 
       background: linear-gradient(145deg, rgba(7, 17, 38, 0.9), rgba(2, 16, 36, 0.9));
@@ -192,7 +192,7 @@
       border-radius: 16px;
       border: 1px solid rgba(14, 165, 164, 0.3);
     }
-    
+
     .progress-bar {
       width: 100%;
       height: 8px;
@@ -201,14 +201,14 @@
       overflow: hidden;
       margin-bottom: 20px;
     }
-    
+
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #0ea5a4, #22c55e);
       transition: width 0.5s ease;
       box-shadow: 0 0 10px rgba(14, 165, 164, 0.8);
     }
-    
+
     .q { 
       font-size: 20px; 
       margin-bottom: 24px; 
@@ -220,7 +220,7 @@
       border-radius: 12px;
       border-left: 4px solid #0ea5a4;
     }
-    
+
     .choice { 
       display: block; 
       width: 100%; 
@@ -236,38 +236,38 @@
       font-size: 16px;
       font-weight: 500;
     }
-    
+
     .choice:hover { 
       transform: translateX(8px);
       background: linear-gradient(135deg, rgba(14, 165, 164, 0.2), rgba(9, 34, 58, 0.9));
       border-color: rgba(14, 165, 164, 0.5);
     }
-    
+
     .choice:disabled {
       cursor: not-allowed;
       opacity: 0.6;
     }
-    
+
     .result { 
       font-size: 18px; 
       margin-top: 20px; 
       color: #f1f5f9;
       line-height: 1.8;
     }
-    
+
     .result ul {
       background: rgba(0,0,0,0.3);
       padding: 20px 20px 20px 40px;
       border-radius: 12px;
       margin-top: 16px;
     }
-    
+
     .result li {
       margin-bottom: 16px;
       padding-bottom: 16px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
-    
+
     .score-display {
       display: inline-block;
       background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -279,13 +279,13 @@
       margin: 16px 0;
       box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
     }
-    
+
     .congrats {
       font-size: 48px;
       text-align: center;
       margin: 20px 0;
     }
-    
+
     @media(max-width: 768px) {
       header h1 { font-size: 18px; }
       .tile h3 { font-size: 18px; }
@@ -394,11 +394,11 @@
     document.getElementById('tile-' + type).classList.add('selected');
 
     var titles = {
-      deprem: "🌋 Deprem",
+      deprem: "🫨 Deprem",
       heyelan: "🏞️ Heyelan",
       volkan: "🌋 Volkan Patlaması"
     };
-    
+
     var infos = {
       deprem: "Deprem anında <strong>Çök–Kapan–Tutun</strong> uygulayın. Asansör kullanmayın, ağır eşyaları sabitleyin.",
       heyelan: "Heyelan riskinde <strong>zemin çatlaklarını</strong> gözleyin, yüksek ve güvenli alanlara çekilin.",
@@ -410,7 +410,7 @@
 
     var db = document.getElementById('detailButtons');
     db.innerHTML = '';
-    
+
     var playBtn = document.createElement('button');
     playBtn.className = 'btn';
     playBtn.innerHTML = '▶️ Oyunu Başlat';
@@ -437,7 +437,7 @@
       heyelan: "<h3 style='color:#0ea5a4;'>📚 Heyelan Hakkında</h3><p>Yoğun yağış sonucu toprağın ve kayaların yamaçtan kaymasıdır.</p><ul style='text-align:left;'><li><strong>Risk:</strong> Zemin çatlakları, ağaç eğilmeleri</li><li><strong>Tehlike:</strong> Yamaca dik yönde kaçın</li><li><strong>Sonrası:</strong> Yetkili onayı bekleyin</li></ul>",
       volkan: "<h3 style='color:#0ea5a4;'>📚 Volkan Hakkında</h3><p>Yeraltındaki magmanın yüzeye çıkması ve kül, gaz salınımıdır.</p><ul style='text-align:left;'><li><strong>Tehlike:</strong> Kül yağışı, zehirli gazlar</li><li><strong>Korunma:</strong> Maske kullanın, içeride kalın</li><li><strong>Tahliye:</strong> Yetkililerin talimatlarını bekleyin</li></ul>"
     };
-    
+
     document.getElementById('detailText').innerHTML = '<div class="info-card">' + detailedInfo[type] + '</div>';
   }
 
@@ -447,7 +447,7 @@
     score = 0;
     mistakes = [];
     isAnswering = false;
-    
+
     document.getElementById('game').style.display = 'block';
     document.getElementById('after').style.display = 'none';
     renderScene();
@@ -456,7 +456,7 @@
   function renderScene() {
     var scenes = data[currentType];
     if (!scenes) return;
-    
+
     if (sceneIndex >= scenes.length) {
       return finishGame();
     }
@@ -554,12 +554,12 @@
     document.getElementById('detailTitle').innerHTML = '🎮 Bir Afet Türü Seçin';
     document.getElementById('detailText').innerHTML = '<p style="color:#94a3b8; font-size:16px;">Yukarıdaki kartlardan birini seçerek bilgi alabilir veya oyunu başlatabilirsiniz.</p>';
     document.getElementById('detailButtons').innerHTML = '';
-    
+
     var tiles = document.querySelectorAll('.tile');
     for (var i = 0; i < tiles.length; i++) {
       tiles[i].classList.remove('selected');
     }
-    
+
     currentType = null;
     sceneIndex = 0;
     score = 0;
