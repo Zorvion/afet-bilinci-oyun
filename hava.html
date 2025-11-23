@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Yer Afetleri - Afet Bilinci</title>
+  <title>Hava Afetleri - Afet Bilinci</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -25,9 +25,9 @@
     }
 
     header {
-      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+      background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
       padding: 18px 24px;
-      box-shadow: 0 8px 32px rgba(185, 28, 28, 0.4);
+      box-shadow: 0 8px 32px rgba(14, 165, 233, 0.4);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -108,7 +108,7 @@
 
     .tile h3 { 
       margin: 8px 0 12px; 
-      color: #ffdede; 
+      color: #e0f2fe; 
       font-size: 22px;
       font-weight: 700;
     }
@@ -138,7 +138,7 @@
 
     #detail h2 { 
       margin-top: 0; 
-      color: #ffefef; 
+      color: #e6f7ff; 
       font-size: 28px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
@@ -297,7 +297,7 @@
 <body>
 
   <header>
-    <h1>🌍 Yer Afetleri - Yeni Nesil Eğitim</h1>
+    <h1>🌪️ Hava Afetleri - Yeni Nesil Eğitim</h1>
     <div class="nav-buttons">
       <button class="navbtn" id="homeBtn">🏠 Ana Sayfa</button>
       <button class="navbtn" id="aboutBtn">ℹ️ Hakkında</button>
@@ -310,22 +310,22 @@
     </div>
 
     <div class="grid" id="tiles">
-      <div class="tile" id="tile-deprem">
-        <span class="tile-icon">🌋</span>
-        <h3>Deprem</h3>
-        <p>Kısa sarsıntılar, bina güvenliği, çök-kapan-tutun gibi temel davranışları içerir.</p>
+      <div class="tile" id="tile-kasirga">
+        <span class="tile-icon">🌪️</span>
+        <h3>Kasırga</h3>
+        <p>Şiddetli rüzgarlar, dönen hava kolonları ve yıkıcı etkileri hakkında bilgiler.</p>
       </div>
 
-      <div class="tile" id="tile-heyelan">
-        <span class="tile-icon">🏞️</span>
-        <h3>Heyelan</h3>
-        <p>Yağış sonrası toprak hareketleri, zemin çatlakları ve hızlı tahliye kararları.</p>
+      <div class="tile" id="tile-yildirim">
+        <span class="tile-icon">⚡</span>
+        <h3>Yıldırım Fırtınası</h3>
+        <p>Elektrik boşalmaları, gök gürültüsü ve korunma yöntemleri.</p>
       </div>
 
-      <div class="tile" id="tile-volkan">
-        <span class="tile-icon">🌋</span>
-        <h3>Volkan Patlaması</h3>
-        <p>Volkanik kül, gaz ve tahliye önlemlerine dair bilgi ve senaryolar.</p>
+      <div class="tile" id="tile-dolu">
+        <span class="tile-icon">🌨️</span>
+        <h3>Şiddetli Dolu</h3>
+        <p>Büyük buz parçalarının oluşumu, hasar riskleri ve korunma yolları.</p>
       </div>
     </div>
 
@@ -351,26 +351,26 @@
 
 <script>
   var data = {
-    deprem: [
-      { q: "Deprem anında ilk yapılması gereken nedir?", opts: ["Çök–Kapan–Tutun", "Hemen dışarı koşmak", "Pencereye koşmak"], a: 0, explain: "Çök-Kapan-Tutun vücudu korur ve en güvenli ilk tepkidir." },
-      { q: "Sarsıntı sırasında asansör kullanmak güvenli midir?", opts: ["Hayır, asansör tehlikelidir", "Evet, hızlı çıkarır", "Fark etmez"], a: 0, explain: "Asansörlerde mahsur kalma riski vardır; merdiven tercih edilir." },
-      { q: "Dolap veya ağır eşyalardan uzak durmak neden önemlidir?", opts: ["Düşebilir ve yaralanma oluşturur", "Görüntü kötü olur", "Para kaybı olur"], a: 0, explain: "Devrilen eşyalar ciddi yaralanmalara neden olabilir." },
-      { q: "Deprem sonrası evine girmeden önce ne yapılmalı?", opts: ["Yapısal hasar kontrolü ve yetkili izin beklenmeli", "Hemen eşyaları almak için girilmeli", "Komşulara haber vermeli"], a: 0, explain: "Hasarlı binalar risklidir; yetkililerin kontrolü gerekir." },
-      { q: "Acil durum çantasında ne bulunmalıdır?", opts: ["Su, ilaç, fener ve kimlik", "Sadece telefon ve para", "Sadece yiyecek"], a: 0, explain: "Temel malzemeler hayatta kalma için kritik öneme sahiptir." }
+    kasirga: [
+      { q: "Kasırga uyarısı verildiğinde en güvenli yer neresidir?", opts: ["Bodrum katı veya iç oda", "Üst katlardaki geniş odalar", "Camları olan bir oda"], a: 0, explain: "Bodrum katları ve iç odalar rüzgardan ve uçan nesnelerden en iyi korunan yerlerdir." },
+      { q: "Kasırga sırasında pencerelerden neden uzak durmalısınız?", opts: ["Kırılan camlar ciddi yaralanmalara neden olabilir", "Pencereler sıcak tutar", "Dışarıyı görmek tehlikelidir"], a: 0, explain: "Kasırga sırasında kırılan pencereler hızla uçan cam parçaları oluşturur." },
+      { q: "Kasırga yaklaşırken dışarıda kalan eşyaları ne yapmalısınız?", opts: ["Sabitleyin veya içeri alın", "Olduğu gibi bırakın", "Üzerlerini örtün"], a: 0, explain: "Dışarıda kalan eşyalar rüzgarla uçarak tehlikeli projektil haline gelebilir." },
+      { q: "Kasırga sırasında elektrik kesintisi olursa ne yapmalısınız?", opts: ["Acil durum çantanızdaki feneri kullanın", "Açık ateş kullanın", "Pencereleri açın"], a: 0, explain: "Açık ateş yangın riski oluşturur, acil durum feneri en güvenli seçenektir." },
+      { q: "Kasırga sonrası dışarı çıkarken nelere dikkat etmelisiniz?", opts: ["Kopmuş elektrik tellerine ve hasarlı yapılara dikkat edin", "Hemen normal hayata dönün", "Sadece yollara bakın"], a: 0, explain: "Kasırga sonrası kopan elektrik telleri ve hasarlı yapılar büyük risk oluşturur." }
     ],
-    heyelan: [
-      { q: "Heyelan riski yaratan en önemli durum nedir?", opts: ["Ağır yağış ve doygun toprak", "Rüzgâr", "Sıcak hava"], a: 0, explain: "Uzun süreli yoğun yağış toprak doygunluğunu artırır." },
-      { q: "Zemin çatlakları görürsen ne yapmalısın?", opts: ["Hemen güvenli bölgeye gitmelisin", "Fotoğraf çekmelisin", "Bekleyip izlemelisin"], a: 0, explain: "Çatlaklar bölgenin kararsız olduğuna işaret eder." },
-      { q: "Heyelan anında hangi yöne hareket etmelisin?", opts: ["Yukarı/yanlara güvenli şekilde kaçılmalı", "Aşağı doğru hızla inilmeli", "Yerinde durmalı"], a: 0, explain: "Yamaçtan uzaklaşmak ve yüksek noktalara gitmek güvenlidir." },
-      { q: "Ev heyelan riskliyse hangi adım önemlidir?", opts: ["Tahliye planı oluşturmak ve uygulamak", "Eşyaları toplamayı beklemek", "Yetkilileri aramayı beklemek"], a: 0, explain: "Tahliye yaşamı kurtarır; eşyalar ikincildir." },
-      { q: "Heyelan sonrası bölgeye ne zaman yaklaşılmalı?", opts: ["Yetkililerin izni ve güvenlik onayı sonrası", "Hemen gidip kontrol edilmeli", "1 saat sonra"], a: 0, explain: "Profesyonel izin olmadan bölgeye yaklaşmamalısın." }
+    yildirim: [
+      { q: "Yıldırım fırtınası sırasında en güvenli yer neresidir?", opts: ["Kapalı ve sağlam bir bina", "Açık alan", "Ağaç altı"], a: 0, explain: "Kapalı binalar yıldırım çarpması riskini büyük ölçüde azaltır." },
+      { q: "Yıldırım çarpması riskini hesaplamak için ne yapabilirsiniz?", opts: ["Şimşek ile gök gürültüsü arasındaki süreyi sayın", "Rüzgarın şiddetine bakın", "Bulutların rengine bakın"], a: 0, explain: "Şimşek ve gök gürültüsü arasındaki her 3 saniye 1 km uzaklığı gösterir." },
+      { q: "Açık alanda yıldırım fırtınasına yakalanırsanız ne yapmalısınız?", opts: ["Mümkün olduğunca alçak bir pozisyon alın", "Ayakta durun", "Koşarak uzaklaşmaya çalışın"], a: 0, explain: "Alçak pozisyon yıldırım çarpma riskini azaltır, koşmak tehlikelidir." },
+      { q: "Yıldırım fırtınası sırasında hangi aktivitelerden kaçınmalısınız?", opts: ["Sudan ve metal nesnelerden uzak durun", "Yürüyüş yapın", "Ağaç dikin"], a: 0, explain: "Su ve metal nesneler elektriği iyi iletir, yıldırım çarpma riskini artırır." },
+      { q: "Yıldırım çarpması durumunda ilk yardım nasıl olmalıdır?", opts: ["Hemen 112'yi arayın ve güvenliyse CPR uygulayın", "Kişiyi hareket ettirin", "Üzerine su dökün"], a: 0, explain: "Yıldırım çarpan kişi elektrik yüklü değildir, güvenle ilk yardım uygulanabilir." }
     ],
-    volkan: [
-      { q: "Volkanik kül neden tehlikelidir?", opts: ["Solunum yollarını ve makineleri tıkar", "Sadece kirlilik yapar", "Kötü kokar"], a: 0, explain: "Kül solunum problemleri ve makine arızalarına yol açar." },
-      { q: "Kül yağışı sırasında dışarı çıkmalı mısın?", opts: ["Hayır, içerde kalıp pencereleri kapat", "Evet, dışarıdan temizlemelisin", "Fark etmez"], a: 0, explain: "İçeride kalmak ve filtre/maske kullanmak daha güvenlidir." },
-      { q: "Volkanik gazlara karşı ne yapılmalı?", opts: ["Tahliye ve kapalı alanlara sığınma", "Açıkta kalıp bekleme", "Derin nefes almak"], a: 0, explain: "Zararlı gazlar ciddi sağlık riski yaratır." },
-      { q: "Volkanik patlama sonrası su kaynakları neden kontrol edilmeli?", opts: ["Kül ve mineraller suyu kirletebilir", "Su aynen güvenlidir", "Sadece koku kontrolü için"], a: 0, explain: "Kirlenme varsa içme suyu tehlikeli olabilir." },
-      { q: "Afet çantasında volkan için ekstra ne bulundurulmalı?", opts: ["Maske, göz koruması, battaniye", "Sadece telefon", "Sadece su"], a: 0, explain: "Maske ve göz koruması külün zararını azaltır." }
+    dolu: [
+      { q: "Dolu fırtınası sırasında araçtaysanız ne yapmalısınız?", opts: ["Aracı güvenli bir yere çekip bekleyin", "Hızla yol almaya devam edin", "Aracı terk edin"], a: 0, explain: "Araç içinde kalmak doludan korunmak için en güvenli yoldur." },
+      { q: "Dolu taneleri ne kadar büyük olabilir?", opts: ["Bazı dolu taneleri tenis topu büyüklüğüne ulaşabilir", "En fazla bezelye büyüklüğünde olur", "Sadece pirinç tanesi kadar olur"], a: 0, explain: "Şiddetli dolu fırtınalarında tenis topu büyüklüğünde dolu taneleri oluşabilir." },
+      { q: "Dolu fırtınası öncesi hangi hazırlıklar yapılmalıdır?", opts: ["Araçları kapalı alana alın, camları koruyun", "Hiçbir şey yapmaya gerek yok", "Sadece bitkileri örtün"], a: 0, explain: "Araçların ve camların korunması dolu hasarını önlemede kritiktir." },
+      { q: "Dolu sırasında dışarıda kalan hayvanlar için ne yapılmalıdır?", opts: ["Mümkünse barınak sağlayın", "Olduğu gibi bırakın", "Su verin"], a: 0, explain: "Hayvanlar da dolu tanelerinden ciddi şekilde yaralanabilir." },
+      { q: "Dolu fırtınası sonrası nelere dikkat etmelisiniz?", opts: ["Yollardaki buzlanmaya ve hasarlara dikkat edin", "Hemen dışarı çıkın", "Dolu tanelerini toplayın"], a: 0, explain: "Dolu sonrası yollarda buzlanma ve çeşitli hasarlar oluşabilir." }
     ]
   };
 
@@ -394,15 +394,15 @@
     document.getElementById('tile-' + type).classList.add('selected');
 
     var titles = {
-      deprem: "🌋 Deprem",
-      heyelan: "🏞️ Heyelan",
-      volkan: "🌋 Volkan Patlaması"
+      kasirga: "🌪️ Kasırga",
+      yildirim: "⚡ Yıldırım Fırtınası",
+      dolu: "🌨️ Şiddetli Dolu"
     };
 
     var infos = {
-      deprem: "Deprem anında <strong>Çök–Kapan–Tutun</strong> uygulayın. Asansör kullanmayın, ağır eşyaları sabitleyin.",
-      heyelan: "Heyelan riskinde <strong>zemin çatlaklarını</strong> gözleyin, yüksek ve güvenli alanlara çekilin.",
-      volkan: "Volkanik durumlarda <strong>kül solunumu ve gaz zararlarına</strong> dikkat edin. Maske kullanın."
+      kasirga: "Kasırga sırasında <strong>bodrum katı veya iç odalarda</strong> kalın. Pencerelerden uzak durun ve dışarıdaki eşyaları sabitleyin.",
+      yildirim: "Yıldırım fırtınasında <strong>kapalı binalarda</strong> kalın. Açık alandaysanız alçak bir pozisyon alın ve sudan/metalden uzak durun.",
+      dolu: "Dolu fırtınasında <strong>araç içinde veya kapalı alanda</strong> kalın. Araçları korunaklı yere alın ve buzlanmaya dikkat edin."
     };
 
     document.getElementById('detailTitle').innerHTML = titles[type];
@@ -433,9 +433,9 @@
 
   function showInfoCard(type) {
     var detailedInfo = {
-      deprem: "<h3 style='color:#0ea5a4;'>📚 Deprem Hakkında</h3><p>Yer kabuğundaki ani kırılma ve enerji boşalması sonucu oluşur.</p><ul style='text-align:left;'><li><strong>Öncesi:</strong> Acil durum çantası hazırlayın</li><li><strong>Sırasında:</strong> Çök-Kapan-Tutun, asansör kullanmayın</li><li><strong>Sonrası:</strong> Hasarlı binalara girmeyin</li></ul>",
-      heyelan: "<h3 style='color:#0ea5a4;'>📚 Heyelan Hakkında</h3><p>Yoğun yağış sonucu toprağın ve kayaların yamaçtan kaymasıdır.</p><ul style='text-align:left;'><li><strong>Risk:</strong> Zemin çatlakları, ağaç eğilmeleri</li><li><strong>Tehlike:</strong> Yamaca dik yönde kaçın</li><li><strong>Sonrası:</strong> Yetkili onayı bekleyin</li></ul>",
-      volkan: "<h3 style='color:#0ea5a4;'>📚 Volkan Hakkında</h3><p>Yeraltındaki magmanın yüzeye çıkması ve kül, gaz salınımıdır.</p><ul style='text-align:left;'><li><strong>Tehlike:</strong> Kül yağışı, zehirli gazlar</li><li><strong>Korunma:</strong> Maske kullanın, içeride kalın</li><li><strong>Tahliye:</strong> Yetkililerin talimatlarını bekleyin</li></ul>"
+      kasirga: "<h3 style='color:#0ea5a4;'>📚 Kasırga Hakkında</h3><p>Şiddetli dönen rüzgar sistemleri, genellikle konvektif fırtınalarla ilişkilidir.</p><ul style='text-align:left;'><li><strong>Öncesi:</strong> Bodrum katı hazırlayın, acil durum çantası oluşturun</li><li><strong>Sırasında:</strong> İç odalarda kalın, pencerelerden uzak durun</li><li><strong>Sonrası:</strong> Kopmuş elektrik tellerine dikkat edin</li></ul>",
+      yildirim: "<h3 style='color:#0ea5a4;'>📚 Yıldırım Fırtınası Hakkında</h3><p>Bulut ile yer arasında elektrik boşalması sonucu oluşan tehlikeli meteorolojik olay.</p><ul style='text-align:left;'><li><strong>Risk:</strong> Açık alanlar, su kenarları, yüksek yerler</li><li><strong>Korunma:</strong> Kapalı binalarda kalın, metalden uzak durun</li><li><strong>İlk yardım:</strong> 112'yi arayın, CPR uygulayın</li></ul>",
+      dolu: "<h3 style='color:#0ea5a4;'>📚 Şiddetli Dolu Hakkında</h3><p>Kuvvetli yukarı hava akımlarıyla yükselen su damlacıklarının donmasıyla oluşan buz parçaları.</p><ul style='text-align:left;'><li><strong>Tehlike:</strong> Büyük dolu taneleri ciddi hasar verebilir</li><li><strong>Korunma:</strong> Kapalı alanlarda kalın, araçları koruyun</li><li><strong>Sonrası:</strong> Buzlanmaya ve yoldaki hasarlara dikkat edin</li></ul>"
     };
 
     document.getElementById('detailText').innerHTML = '<div class="info-card">' + detailedInfo[type] + '</div>';
@@ -567,16 +567,16 @@
     isAnswering = false;
   }
 
-  document.getElementById('tile-deprem').addEventListener('click', function() {
-    selectDisaster('deprem');
+  document.getElementById('tile-kasirga').addEventListener('click', function() {
+    selectDisaster('kasirga');
   });
 
-  document.getElementById('tile-heyelan').addEventListener('click', function() {
-    selectDisaster('heyelan');
+  document.getElementById('tile-yildirim').addEventListener('click', function() {
+    selectDisaster('yildirim');
   });
 
-  document.getElementById('tile-volkan').addEventListener('click', function() {
-    selectDisaster('volkan');
+  document.getElementById('tile-dolu').addEventListener('click', function() {
+    selectDisaster('dolu');
   });
 
   document.getElementById('homeBtn').addEventListener('click', function() {
