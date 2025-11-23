@@ -4,129 +4,562 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Afet Bilinci Portalı</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
+    :root {
+      --primary: #0288d1;
+      --primary-dark: #01579b;
+      --primary-light: #e3f2fd;
+      --secondary: #ff6f00;
+      --accent: #00c853;
+      --text-dark: #222;
+      --text-light: #444;
+      --white: #ffffff;
+      --shadow: 0 5px 15px rgba(0,0,0,0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #e0f7fa, #bbdefb);
-      color: #222;
+      color: var(--text-dark);
       text-align: center;
       min-height: 100vh;
+      line-height: 1.6;
     }
 
     header {
-      background: #0288d1;
-      color: white;
-      padding: 15px 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white);
+      padding: 20px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23007bb6" fill-opacity="0.2" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      font-weight: 300;
+      margin-bottom: 20px;
+      opacity: 0.9;
     }
 
     nav {
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
     nav a {
-      color: white;
+      color: var(--white);
       text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
-      transition: 0.3s;
+      margin: 0 20px;
+      font-weight: 500;
+      transition: var(--transition);
+      padding: 8px 16px;
+      border-radius: 30px;
+      position: relative;
     }
 
     nav a:hover {
-      text-decoration: underline;
-      color: #c5e1f6;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    nav a.active {
+      background: rgba(255, 255, 255, 0.25);
+      font-weight: 600;
     }
 
     main {
-      padding: 40px 20px;
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .intro-section {
+      margin-bottom: 50px;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+
+    .intro-text {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      min-width: 180px;
+      transition: var(--transition);
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
     }
 
     .card-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
       margin-top: 40px;
     }
 
     .card {
-      background: white;
+      background: var(--white);
       border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: 0.3s;
+      padding: 30px 25px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--primary);
     }
 
     .card:hover {
-      transform: scale(1.05);
-      background: #e3f2fd;
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .card-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      display: block;
     }
 
     .card h3 {
-      color: #01579b;
-      margin-bottom: 10px;
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+      font-size: 1.4rem;
     }
 
     .card p {
-      font-size: 15px;
-      color: #444;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+
+    .card-btn {
+      display: inline-block;
+      background: var(--primary);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .card-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+
+    .features-section {
+      margin-top: 80px;
+      padding: 50px 0;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+      padding: 0 20px;
+    }
+
+    .feature-item {
+      padding: 25px;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .feature-item h4 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: var(--primary-dark);
+    }
+
+    .feature-item p {
+      font-size: 0.9rem;
+      color: var(--text-light);
     }
 
     footer {
-      margin-top: 60px;
-      background: #01579b;
-      color: white;
-      padding: 15px 0;
-      font-size: 14px;
+      margin-top: 80px;
+      background: linear-gradient(135deg, var(--primary-dark), #014370);
+      color: var(--white);
+      padding: 30px 0;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--white);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-light);
+    }
+
+    .copyright {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      nav a {
+        margin: 0 10px;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+      
+      .card-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-container {
+        gap: 15px;
+      }
+      
+      .stat-item {
+        min-width: 140px;
+        padding: 15px;
+      }
+      
+      .stat-number {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.7rem;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      .stats-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .stat-item {
+        width: 100%;
+        max-width: 250px;
+      }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>🌍 Afet Bilinci Portalı</h1>
-    <nav>
-      <a href="index.html">Ana Sayfa</a>
-      <a href="hakkinda.html">Hakkında</a>
-    </nav>
+    <div class="header-content">
+      <h1>🌍 Afet Bilinci Portalı</h1>
+      <p class="tagline">Güvenli yaşam için afetlere hazırlık ve farkındalık</p>
+      <nav>
+        <a href="index.html" class="active">Ana Sayfa</a>
+        <a href="yer.html">Yer Afetleri</a>
+        <a href="su.html">Su Afetleri</a>
+        <a href="hava.html">Hava Afetleri</a>
+        <a href="insan.html">İnsan Kaynaklı</a>
+        <a href="hakkinda.html">Hakkında</a>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <h2>Afet Türünü Seç</h2>
-    <p>Afet bilinci oyununu oynamak veya bilgi kartlarını incelemek için bir kategori seç.</p>
-
-    <div class="card-container">
-      <div class="card" onclick="window.location.href='yer.html'">
-        <h3>🏔️ Yer Afetleri</h3>
-        <p>Deprem, heyelan, volkanik patlama gibi yer kaynaklı afetler hakkında bilgi ve senaryolar.</p>
+    <section class="intro-section fade-in">
+      <h2>Afetlere Hazır Mısınız?</h2>
+      <p class="intro-text">Afet Bilinci Portalı, doğal ve insan kaynaklı afetler hakkında bilgi edinmeniz, interaktif senaryolarla pratik yapmanız ve acil durumlarda doğru davranışları öğrenmeniz için tasarlanmıştır.</p>
+      
+      <div class="stats-container">
+        <div class="stat-item fade-in delay-1">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Afet Kategorisi</div>
+        </div>
+        <div class="stat-item fade-in delay-2">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Eğitim Senaryosu</div>
+        </div>
+        <div class="stat-item fade-in delay-3">
+          <div class="stat-number">100+</div>
+          <div class="stat-label">Test Sorusu</div>
+        </div>
+        <div class="stat-item fade-in delay-4">
+          <div class="stat-number">7/24</div>
+          <div class="stat-label">Erişim</div>
+        </div>
       </div>
+    </section>
 
-      <div class="card" onclick="window.location.href='su.html'">
-        <h3>🌊 Su Afetleri</h3>
-        <p>Sel, tsunami ve fırtına gibi suyla ilişkili afetleri tanı ve korunma yollarını öğren.</p>
-      </div>
+    <section class="categories-section">
+      <h2>Afet Türünü Seç</h2>
+      <p class="intro-text">Afet bilinci oyununu oynamak veya bilgi kartlarını incelemek için bir kategori seçin.</p>
 
-      <div class="card" onclick="window.location.href='hava.html'">
-        <h3>🌪️ Hava Afetleri</h3>
-        <p>Fırtına, hortum ve dolu gibi hava olaylarında güvenli kalmanın yolları.</p>
-      </div>
+      <div class="card-container">
+        <div class="card fade-in" onclick="window.location.href='yer.html'">
+          <span class="card-icon">🏔️</span>
+          <h3>Yer Afetleri</h3>
+          <p>Deprem, heyelan, volkanik patlama gibi yer kaynaklı afetler hakkında bilgi ve senaryolar.</p>
+          <a class="card-btn">Keşfet <i class="fas fa-arrow-right"></i></a>
+        </div>
 
-      <div class="card" onclick="window.location.href='insan.html'">
-        <h3>☢️ İnsan Kaynaklı Afetler</h3>
-        <p>Yangın, nükleer sızıntı, kimyasal tehlikeler ve savaş durumlarında yapılması gerekenler.</p>
+        <div class="card fade-in delay-1" onclick="window.location.href='su.html'">
+          <span class="card-icon">🌊</span>
+          <h3>Su Afetleri</h3>
+          <p>Sel, tsunami ve fırtına gibi suyla ilişkili afetleri tanı ve korunma yollarını öğren.</p>
+          <a class="card-btn">Keşfet <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="card fade-in delay-2" onclick="window.location.href='hava.html'">
+          <span class="card-icon">🌪️</span>
+          <h3>Hava Afetleri</h3>
+          <p>Kasırga, yıldırım fırtınası ve dolu gibi hava olaylarında güvenli kalmanın yolları.</p>
+          <a class="card-btn">Keşfet <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="card fade-in delay-3" onclick="window.location.href='insan.html'">
+          <span class="card-icon">☢️</span>
+          <h3>İnsan Kaynaklı Afetler</h3>
+          <p>Yangın, nükleer sızıntı, kimyasal tehlikeler ve savaş durumlarında yapılması gerekenler.</p>
+          <a class="card-btn">Keşfet <i class="fas fa-arrow-right"></i></a>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section class="features-section">
+      <h2>Neden Afet Bilinci Portalı?</h2>
+      <div class="features-grid">
+        <div class="feature-item fade-in">
+          <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+          <h4>Eğitici İçerik</h4>
+          <p>Doğru ve güncel bilgilerle afetler hakkında kapsamlı eğitim materyalleri.</p>
+        </div>
+        <div class="feature-item fade-in delay-1">
+          <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
+          <h4>İnteraktif Senaryolar</h4>
+          <p>Gerçekçi senaryolarla afet anında doğru kararlar vermeyi öğrenin.</p>
+        </div>
+        <div class="feature-item fade-in delay-2">
+          <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+          <h4>Mobil Uyumlu</h4>
+          <p>Her cihazdan kolayca erişebileceğiniz responsive tasarım.</p>
+        </div>
+        <div class="feature-item fade-in delay-3">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <h4>Güvenlik Odaklı</h4>
+          <p>Afet öncesi, sırası ve sonrası için hayat kurtaran bilgiler.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p>© 2025 Afet Bilinci Projesi | TÜBİTAK 4006 Fuarı için hazırlanmıştır</p>
+    <div class="footer-content">
+      <div class="footer-logo">Afet Bilinci Portalı</div>
+      <div class="footer-links">
+        <a href="index.html">Ana Sayfa</a>
+        <a href="yer.html">Yer Afetleri</a>
+        <a href="su.html">Su Afetleri</a>
+        <a href="hava.html">Hava Afetleri</a>
+        <a href="insan.html">İnsan Kaynaklı</a>
+        <a href="hakkinda.html">Hakkında</a>
+      </div>
+      <div class="copyright">
+        © 2025 Afet Bilinci Projesi | TÜBİTAK 4006 Fuarı için hazırlanmıştır
+      </div>
+    </div>
   </footer>
 
+  <script>
+    // Basit animasyonlar için
+    document.addEventListener('DOMContentLoaded', function() {
+      // Kartlara hover efekti
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-10px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+        });
+      });
+      
+      // İstatistik sayıları için artış animasyonu
+      const statNumbers = document.querySelectorAll('.stat-number');
+      const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const target = entry.target;
+            const finalValue = target.textContent;
+            let currentValue = 0;
+            const increment = finalValue / 20;
+            const timer = setInterval(() => {
+              currentValue += increment;
+              if (currentValue >= finalValue) {
+                target.textContent = finalValue;
+                clearInterval(timer);
+              } else {
+                target.textContent = Math.floor(currentValue);
+              }
+            }, 50);
+            observer.unobserve(target);
+          }
+        });
+      }, observerOptions);
+      
+      statNumbers.forEach(stat => {
+        observer.observe(stat);
+      });
+    });
+  </script>
 </body>
 </html>
