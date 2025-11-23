@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Yer Afetleri - Afet Bilinci</title>
+  <title>İnsan Kaynaklı Afetler - Afet Bilinci</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -25,9 +25,9 @@
     }
 
     header {
-      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+      background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%);
       padding: 18px 24px;
-      box-shadow: 0 8px 32px rgba(185, 28, 28, 0.4);
+      box-shadow: 0 8px 32px rgba(124, 45, 18, 0.4);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -108,7 +108,7 @@
 
     .tile h3 { 
       margin: 8px 0 12px; 
-      color: #ffdede; 
+      color: #fed7aa; 
       font-size: 22px;
       font-weight: 700;
     }
@@ -138,7 +138,7 @@
 
     #detail h2 { 
       margin-top: 0; 
-      color: #ffefef; 
+      color: #ffedd5; 
       font-size: 28px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
@@ -297,7 +297,7 @@
 <body>
 
   <header>
-    <h1>🌍 Yer Afetleri - Yeni Nesil Eğitim</h1>
+    <h1>👥 İnsan Kaynaklı Afetler - Yeni Nesil Eğitim</h1>
     <div class="nav-buttons">
       <button class="navbtn" id="homeBtn">🏠 Ana Sayfa</button>
       <button class="navbtn" id="aboutBtn">ℹ️ Hakkında</button>
@@ -310,22 +310,22 @@
     </div>
 
     <div class="grid" id="tiles">
-      <div class="tile" id="tile-deprem">
-        <span class="tile-icon">🌋</span>
-        <h3>Deprem</h3>
-        <p>Kısa sarsıntılar, bina güvenliği, çök-kapan-tutun gibi temel davranışları içerir.</p>
+      <div class="tile" id="tile-yangin">
+        <span class="tile-icon">🔥</span>
+        <h3>Yangın</h3>
+        <p>Ev, orman ve sanayi yangınları, yangın söndürme ve tahliye yöntemleri.</p>
       </div>
 
-      <div class="tile" id="tile-heyelan">
-        <span class="tile-icon">🏞️</span>
-        <h3>Heyelan</h3>
-        <p>Yağış sonrası toprak hareketleri, zemin çatlakları ve hızlı tahliye kararları.</p>
+      <div class="tile" id="tile-kimyasal">
+        <span class="tile-icon">🧪</span>
+        <h3>Kimyasal Sızıntı</h3>
+        <p>Endüstriyel kazalar, kimyasal madde sızıntıları ve acil müdahale protokolleri.</p>
       </div>
 
-      <div class="tile" id="tile-volkan">
-        <span class="tile-icon">🌋</span>
-        <h3>Volkan Patlaması</h3>
-        <p>Volkanik kül, gaz ve tahliye önlemlerine dair bilgi ve senaryolar.</p>
+      <div class="tile" id="tile-nukleer">
+        <span class="tile-icon">☢️</span>
+        <h3>Nükleer Kazalar</h3>
+        <p>Radyoaktif sızıntılar, nükleer santral kazaları ve korunma yöntemleri.</p>
       </div>
     </div>
 
@@ -351,26 +351,26 @@
 
 <script>
   var data = {
-    deprem: [
-      { q: "Deprem anında ilk yapılması gereken nedir?", opts: ["Çök–Kapan–Tutun", "Hemen dışarı koşmak", "Pencereye koşmak"], a: 0, explain: "Çök-Kapan-Tutun vücudu korur ve en güvenli ilk tepkidir." },
-      { q: "Sarsıntı sırasında asansör kullanmak güvenli midir?", opts: ["Hayır, asansör tehlikelidir", "Evet, hızlı çıkarır", "Fark etmez"], a: 0, explain: "Asansörlerde mahsur kalma riski vardır; merdiven tercih edilir." },
-      { q: "Dolap veya ağır eşyalardan uzak durmak neden önemlidir?", opts: ["Düşebilir ve yaralanma oluşturur", "Görüntü kötü olur", "Para kaybı olur"], a: 0, explain: "Devrilen eşyalar ciddi yaralanmalara neden olabilir." },
-      { q: "Deprem sonrası evine girmeden önce ne yapılmalı?", opts: ["Yapısal hasar kontrolü ve yetkili izin beklenmeli", "Hemen eşyaları almak için girilmeli", "Komşulara haber vermeli"], a: 0, explain: "Hasarlı binalar risklidir; yetkililerin kontrolü gerekir." },
-      { q: "Acil durum çantasında ne bulunmalıdır?", opts: ["Su, ilaç, fener ve kimlik", "Sadece telefon ve para", "Sadece yiyecek"], a: 0, explain: "Temel malzemeler hayatta kalma için kritik öneme sahiptir." }
+    yangin: [
+      { q: "Yangın çıktığını fark ettiğinizde ilk yapmanız gereken nedir?", opts: ["Yangın alarmını çalıştırın ve itfaiyeyi arayın", "Yangını kendiniz söndürmeye çalışın", "Eşyalarınızı kurtarmaya çalışın"], a: 0, explain: "Öncelikle yangın alarmı ve itfaiye çağrısı yapılmalı, güvenlik sağlanmalıdır." },
+      { q: "Yangın sırasında kapalı alandaysanız ne yapmalısınız?", opts: ["Kapıyı kapatıp ıslak bezle sızdırmazlık sağlayın", "Pencereyi açarak dumanı çıkarmaya çalışın", "Asansöre koşun"], a: 0, explain: "Kapıyı kapatmak ve sızdırmazlık yangının yayılmasını yavaşlatır." },
+      { q: "Yangın söndürücüyü nasıl kullanmalısınız?", opts: ["PÜSKÜRT - PİMİ ÇEK - TETİĞE BAS", "Tetiğe basıp yangına doğru tut", "Rastgele sallayarak kullan"], a: 0, explain: "PÜSKÜRT metodunu kullanarak yangın söndürücüyü doğru şekilde kullanabilirsiniz." },
+      { q: "Duman dolu bir ortamda nasıl hareket etmelisiniz?", opts: ["Yere yakın sürünerek ilerleyin", "Ayakta hızlıca yürüyün", "Koşarak çıkışa ulaşmaya çalışın"], a: 0, explain: "Duman yukarıda toplanır, yere yakın hareket etmek daha güvenlidir." },
+      { q: "Elektrik yangınında hangi yangın söndürücü kullanılmalıdır?", opts: ["Karbondioksit (CO2) veya kuru kimyevi toz", "Su", "Kum"], a: 0, explain: "Elektrik yangınlarında su iletken olduğu için tehlikelidir, CO2 veya kuru kimyevi toz kullanılmalıdır." }
     ],
-    heyelan: [
-      { q: "Heyelan riski yaratan en önemli durum nedir?", opts: ["Ağır yağış ve doygun toprak", "Rüzgâr", "Sıcak hava"], a: 0, explain: "Uzun süreli yoğun yağış toprak doygunluğunu artırır." },
-      { q: "Zemin çatlakları görürsen ne yapmalısın?", opts: ["Hemen güvenli bölgeye gitmelisin", "Fotoğraf çekmelisin", "Bekleyip izlemelisin"], a: 0, explain: "Çatlaklar bölgenin kararsız olduğuna işaret eder." },
-      { q: "Heyelan anında hangi yöne hareket etmelisin?", opts: ["Yukarı/yanlara güvenli şekilde kaçılmalı", "Aşağı doğru hızla inilmeli", "Yerinde durmalı"], a: 0, explain: "Yamaçtan uzaklaşmak ve yüksek noktalara gitmek güvenlidir." },
-      { q: "Ev heyelan riskliyse hangi adım önemlidir?", opts: ["Tahliye planı oluşturmak ve uygulamak", "Eşyaları toplamayı beklemek", "Yetkilileri aramayı beklemek"], a: 0, explain: "Tahliye yaşamı kurtarır; eşyalar ikincildir." },
-      { q: "Heyelan sonrası bölgeye ne zaman yaklaşılmalı?", opts: ["Yetkililerin izni ve güvenlik onayı sonrası", "Hemen gidip kontrol edilmeli", "1 saat sonra"], a: 0, explain: "Profesyonel izin olmadan bölgeye yaklaşmamalısın." }
+    kimyasal: [
+      { q: "Kimyasal sızıntı uyarısı aldığınızda ne yapmalısınız?", opts: ["İçeri girip kapı ve pencereleri kapatın", "Dışarı çıkıp sızıntıyı gözlemleyin", "Hemen bölgeden uzaklaşmaya çalışın"], a: 0, explain: "Kapalı alanlarda kalmak kimyasal maddelerden korunmak için en güvenli yoldur." },
+      { q: "Kimyasal sızıntı sırasında hangi malzemeleri kullanmalısınız?", opts: ["Maske ve koruyucu giysi", "Sadece eldiven", "Normal kıyafetler"], a: 0, explain: "Kimyasal maddelere karşı tam koruma sağlayan ekipmanlar kullanılmalıdır." },
+      { q: "Kimyasal madde bulaşmış giysiler nasıl çıkarılmalıdır?", opts: ["Makasla kesilerek çıkarılır", "Normal şekilde çıkarılır", "Üzerine su dökülerek çıkarılır"], a: 0, explain: "Kimyasal bulaşmış giysiler kesilerek çıkarılmalı, ciltle temas ettirilmemelidir." },
+      { q: "Kimyasal sızıntı sonrası su kaynakları ne yapılmalıdır?", opts: ["Kullanılmadan önce test edilmeli", "Hemen kullanılmalı", "Kaynatılarak kullanılmalı"], a: 0, explain: "Kimyasal sızıntı sonrası su kaynakları kirlenmiş olabilir, test edilmeden kullanılmamalıdır." },
+      { q: "Kimyasal sızıntı durumunda hangi numara aranmalıdır?", opts: ["112 Acil Çağrı Merkezi", "155 Polis", "177 Orman Yangını"], a: 0, explain: "Tüm acil durumlar için 112 Acil Çağrı Merkezi aranmalıdır." }
     ],
-    volkan: [
-      { q: "Volkanik kül neden tehlikelidir?", opts: ["Solunum yollarını ve makineleri tıkar", "Sadece kirlilik yapar", "Kötü kokar"], a: 0, explain: "Kül solunum problemleri ve makine arızalarına yol açar." },
-      { q: "Kül yağışı sırasında dışarı çıkmalı mısın?", opts: ["Hayır, içerde kalıp pencereleri kapat", "Evet, dışarıdan temizlemelisin", "Fark etmez"], a: 0, explain: "İçeride kalmak ve filtre/maske kullanmak daha güvenlidir." },
-      { q: "Volkanik gazlara karşı ne yapılmalı?", opts: ["Tahliye ve kapalı alanlara sığınma", "Açıkta kalıp bekleme", "Derin nefes almak"], a: 0, explain: "Zararlı gazlar ciddi sağlık riski yaratır." },
-      { q: "Volkanik patlama sonrası su kaynakları neden kontrol edilmeli?", opts: ["Kül ve mineraller suyu kirletebilir", "Su aynen güvenlidir", "Sadece koku kontrolü için"], a: 0, explain: "Kirlenme varsa içme suyu tehlikeli olabilir." },
-      { q: "Afet çantasında volkan için ekstra ne bulundurulmalı?", opts: ["Maske, göz koruması, battaniye", "Sadece telefon", "Sadece su"], a: 0, explain: "Maske ve göz koruması külün zararını azaltır." }
+    nukleer: [
+      { q: "Nükleer santral kazası uyarısı verildiğinde ne yapmalısınız?", opts: ["Kapalı alana girip havalandırmayı kapatın", "Hemen bölgeden uzaklaşın", "Dışarı çıkıp durumu gözlemleyin"], a: 0, explain: "Radyoaktif maddelerden korunmak için kapalı alanlarda kalınmalıdır." },
+      { q: "Radyoaktif serpinti riski varsa ne yapmalısınız?", opts: ["İyot tabletleri kullanın", "Bol su için", "Hiçbir şey yapmayın"], a: 0, explain: "İyot tabletleri tiroid bezinin radyoaktif iyot emilimini engeller." },
+      { q: "Nükleer kaza sonrası dışarı çıkarken nelere dikkat edilmeli?", opts: ["Yetkililerin talimatlarını bekleyin", "Hemen dışarı çıkın", "Sadece kısa süreliğine çıkın"], a: 0, explain: "Radyasyon seviyeleri yetkililerce kontrol edilmelidir." },
+      { q: "Radyoaktif madde bulaşmış giysiler nasıl değerlendirilir?", opts: ["Özel olarak paketlenip imha edilmeli", "Yıkanıp tekrar kullanılmalı", "Olduğu gibi saklanmalı"], a: 0, explain: "Radyoaktif bulaşmış giysiler özel prosedürlerle imha edilmelidir." },
+      { q: "Nükleer acil durum çantasında ne bulunmalıdır?", opts: ["Radyasyon ölçer, iyot tabletleri, su", "Sadece yiyecek", "Sadece su"], a: 0, explain: "Nükleer acil durumlar için özel ekipmanlar gereklidir." }
     ]
   };
 
@@ -394,15 +394,15 @@
     document.getElementById('tile-' + type).classList.add('selected');
 
     var titles = {
-      deprem: "🌋 Deprem",
-      heyelan: "🏞️ Heyelan",
-      volkan: "🌋 Volkan Patlaması"
+      yangin: "🔥 Yangın",
+      kimyasal: "🧪 Kimyasal Sızıntı",
+      nukleer: "☢️ Nükleer Kazalar"
     };
 
     var infos = {
-      deprem: "Deprem anında <strong>Çök–Kapan–Tutun</strong> uygulayın. Asansör kullanmayın, ağır eşyaları sabitleyin.",
-      heyelan: "Heyelan riskinde <strong>zemin çatlaklarını</strong> gözleyin, yüksek ve güvenli alanlara çekilin.",
-      volkan: "Volkanik durumlarda <strong>kül solunumu ve gaz zararlarına</strong> dikkat edin. Maske kullanın."
+      yangin: "Yangın durumunda <strong>ilk önce alarmı çalıştırın ve itfaiyeyi arayın</strong>. Dumanlı ortamda yere yakın hareket edin.",
+      kimyasal: "Kimyasal sızıntılarda <strong>içeri girip kapı ve pencereleri kapatın</strong>. Maske ve koruyucu giysi kullanın.",
+      nukleer: "Nükleer kazalarda <strong>kapalı alanda kalın ve havalandırmayı kapatın</strong>. İyot tabletleri kullanın."
     };
 
     document.getElementById('detailTitle').innerHTML = titles[type];
@@ -433,9 +433,9 @@
 
   function showInfoCard(type) {
     var detailedInfo = {
-      deprem: "<h3 style='color:#0ea5a4;'>📚 Deprem Hakkında</h3><p>Yer kabuğundaki ani kırılma ve enerji boşalması sonucu oluşur.</p><ul style='text-align:left;'><li><strong>Öncesi:</strong> Acil durum çantası hazırlayın</li><li><strong>Sırasında:</strong> Çök-Kapan-Tutun, asansör kullanmayın</li><li><strong>Sonrası:</strong> Hasarlı binalara girmeyin</li></ul>",
-      heyelan: "<h3 style='color:#0ea5a4;'>📚 Heyelan Hakkında</h3><p>Yoğun yağış sonucu toprağın ve kayaların yamaçtan kaymasıdır.</p><ul style='text-align:left;'><li><strong>Risk:</strong> Zemin çatlakları, ağaç eğilmeleri</li><li><strong>Tehlike:</strong> Yamaca dik yönde kaçın</li><li><strong>Sonrası:</strong> Yetkili onayı bekleyin</li></ul>",
-      volkan: "<h3 style='color:#0ea5a4;'>📚 Volkan Hakkında</h3><p>Yeraltındaki magmanın yüzeye çıkması ve kül, gaz salınımıdır.</p><ul style='text-align:left;'><li><strong>Tehlike:</strong> Kül yağışı, zehirli gazlar</li><li><strong>Korunma:</strong> Maske kullanın, içeride kalın</li><li><strong>Tahliye:</strong> Yetkililerin talimatlarını bekleyin</li></ul>"
+      yangin: "<h3 style='color:#0ea5a4;'>📚 Yangın Hakkında</h3><p>Kontrolsüz yanma olayı olup can ve mal kaybına neden olur.</p><ul style='text-align:left;'><li><strong>Öncesi:</strong> Yangın söndürücü bulundurun, kaçış planı yapın</li><li><strong>Sırasında:</strong> Alarmı çalıştırın, itfaiyeyi arayın, duman altında sürünün</li><li><strong>Sonrası:</strong> Yetkililer izin verene kadar binaya girmeyin</li></ul>",
+      kimyasal: "<h3 style='color:#0ea5a4;'>📚 Kimyasal Sızıntı Hakkında</h3><p>Endüstriyel kazalar sonucu tehlikeli kimyasalların çevreye yayılması.</p><ul style='text-align:left;'><li><strong>Risk:</strong> Zehirlenme, yanıklar, patlama</li><li><strong>Korunma:</strong> Kapalı alanda kalın, maske kullanın</li><li><strong>İlk yardım:</strong> 112'yi arayın, kimyasal bulaşmış giysileri çıkarın</li></ul>",
+      nukleer: "<h3 style='color:#0ea5a4;'>📚 Nükleer Kazalar Hakkında</h3><p>Nükleer santrallerdeki arızalar sonucu radyoaktif madde sızıntısı.</p><ul style='text-align:left;'><li><strong>Tehlike:</strong> Radyasyon hastalığı, kanser riski</li><li><strong>Korunma:</strong> Kapalı alanda kalın, iyot tableti kullanın</li><li><strong>Sonrası:</strong> Yetkililerin talimatlarını bekleyin</li></ul>"
     };
 
     document.getElementById('detailText').innerHTML = '<div class="info-card">' + detailedInfo[type] + '</div>';
@@ -567,16 +567,16 @@
     isAnswering = false;
   }
 
-  document.getElementById('tile-deprem').addEventListener('click', function() {
-    selectDisaster('deprem');
+  document.getElementById('tile-yangin').addEventListener('click', function() {
+    selectDisaster('yangin');
   });
 
-  document.getElementById('tile-heyelan').addEventListener('click', function() {
-    selectDisaster('heyelan');
+  document.getElementById('tile-kimyasal').addEventListener('click', function() {
+    selectDisaster('kimyasal');
   });
 
-  document.getElementById('tile-volkan').addEventListener('click', function() {
-    selectDisaster('volkan');
+  document.getElementById('tile-nukleer').addEventListener('click', function() {
+    selectDisaster('nukleer');
   });
 
   document.getElementById('homeBtn').addEventListener('click', function() {
