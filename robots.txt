@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://zorvion.github.io/afet_bilinci_oyun/sitemap.xml
