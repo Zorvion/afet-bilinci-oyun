@@ -1,1 +1,1 @@
-# afet bilinci oyun
+# afet_bilinci_oyun
