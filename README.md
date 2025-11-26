@@ -1,1 +1,1 @@
-# afet_bilinci_oyun
+# afet-bilinci-oyun
