@@ -1,594 +1,1779 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Hava Afetleri - Afet Bilinci</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0f1724 0%, #1f2937 50%, #0f1724 100%);
-      color: #fff;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      transition: background 0.5s ease;
-    }
-
-    body.bg-correct {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    }
-
-    body.bg-wrong {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-    }
-
-    header {
-      background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
-      padding: 18px 24px;
-      box-shadow: 0 8px 32px rgba(14, 165, 233, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 2px solid rgba(255,255,255,0.1);
-    }
-    header h1 { 
-      margin: 0; 
-      font-size: 24px; 
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    .nav-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    .navbtn { 
-      background: rgba(11, 18, 32, 0.8);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 10px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-    .navbtn:hover {
-      background: rgba(11, 18, 32, 1);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
-
-    main { 
-      padding: 32px 24px; 
-      max-width: 1200px; 
-      margin: 0 auto; 
-    }
-
-    .intro-text {
-      text-align: center;
-      font-size: 16px;
-      color: #94a3b8;
-      margin-bottom: 32px;
-      padding: 16px;
-      background: rgba(15, 23, 36, 0.6);
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    .tile {
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
-      padding: 24px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      cursor: pointer;
-      transition: all 0.4s ease;
-      border: 2px solid transparent;
-      position: relative;
-    }
-
-    .tile:hover {
-      transform: translateY(-12px) scale(1.02);
-      border-color: rgba(14, 165, 164, 0.5);
-      box-shadow: 0 20px 40px rgba(14, 165, 164, 0.3);
-    }
-
-    .tile-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .tile h3 { 
-      margin: 8px 0 12px; 
-      color: #e0f2fe; 
-      font-size: 22px;
-      font-weight: 700;
-    }
-
-    .tile p { 
-      margin: 0; 
-      color: #cbd5e1; 
-      font-size: 14px; 
-      line-height: 1.6;
-    }
-
-    .tile.selected {
-      border-color: #0ea5a4;
-      background: linear-gradient(145deg, rgba(14, 165, 164, 0.2), rgba(15, 23, 42, 0.9));
-      box-shadow: 0 20px 40px rgba(14, 165, 164, 0.4);
-    }
-
-    #detail {
-      margin-top: 32px;
-      padding: 28px;
-      background: linear-gradient(145deg, rgba(7, 16, 36, 0.95), rgba(15, 23, 36, 0.95));
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-      border: 1px solid rgba(255,255,255,0.08);
-      min-height: 300px;
-    }
-
-    #detail h2 { 
-      margin-top: 0; 
-      color: #e6f7ff; 
-      font-size: 28px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-
-    .info-card {
-      background: rgba(14, 165, 164, 0.1);
-      border-left: 4px solid #0ea5a4;
-      padding: 16px;
-      border-radius: 8px;
-      margin: 16px 0;
-      color: #e0f2f1;
-      line-height: 1.7;
-    }
-
-    .btn {
-      display: inline-block;
-      margin: 12px 12px 0 0;
-      background: linear-gradient(135deg, #0ea5a4 0%, #0891b2 100%);
-      color: #042027;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(14, 165, 164, 0.4);
-    }
-
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(14, 165, 164, 0.6);
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn.secondary { 
-      background: linear-gradient(135deg, #1f6feb 0%, #3b82f6 100%);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(31, 111, 235, 0.4);
-    }
-
-    .game-area { 
-      margin-top: 24px; 
-      background: linear-gradient(145deg, rgba(7, 17, 38, 0.9), rgba(2, 16, 36, 0.9));
-      padding: 28px; 
-      border-radius: 16px;
-      border: 1px solid rgba(14, 165, 164, 0.3);
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #0ea5a4, #22c55e);
-      transition: width 0.5s ease;
-      box-shadow: 0 0 10px rgba(14, 165, 164, 0.8);
-    }
-
-    .q { 
-      font-size: 20px; 
-      margin-bottom: 24px; 
-      color: #e6f7ff; 
-      font-weight: 600;
-      line-height: 1.6;
-      padding: 16px;
-      background: rgba(14, 165, 164, 0.05);
-      border-radius: 12px;
-      border-left: 4px solid #0ea5a4;
-    }
-
-    .choice { 
-      display: block; 
-      width: 100%; 
-      text-align: left; 
-      margin: 12px 0; 
-      padding: 16px 20px; 
-      background: linear-gradient(135deg, rgba(9, 34, 58, 0.8), rgba(7, 25, 45, 0.8));
-      color: #dbeafe; 
-      border-radius: 12px; 
-      border: 2px solid rgba(255,255,255,0.1);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .choice:hover { 
-      transform: translateX(8px);
-      background: linear-gradient(135deg, rgba(14, 165, 164, 0.2), rgba(9, 34, 58, 0.9));
-      border-color: rgba(14, 165, 164, 0.5);
-    }
-
-    .choice:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    .result { 
-      font-size: 18px; 
-      margin-top: 20px; 
-      color: #f1f5f9;
-      line-height: 1.8;
-    }
-
-    .result ul {
-      background: rgba(0,0,0,0.3);
-      padding: 20px 20px 20px 40px;
-      border-radius: 12px;
-      margin-top: 16px;
-    }
-
-    .result li {
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .score-display {
-      display: inline-block;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-size: 24px;
-      font-weight: 700;
-      margin: 16px 0;
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
-    }
-
-    .congrats {
-      font-size: 48px;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    @media(max-width: 768px) {
-      header h1 { font-size: 18px; }
-      .tile h3 { font-size: 18px; }
-      .q { font-size: 18px; }
-      main { padding: 20px 16px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Optimizasyonu -->
+    <title>Hava Afetleri - Afet Hazırlık Rehberi</title>
+    <meta name="description" content="Kasırga, yıldırım fırtınası, şiddetli dolu gibi hava afetleri için hazırlık rehberi ve interaktif testler.">
+    <meta name="keywords" content="kasırga, yıldırım, dolu, hava afetleri, fırtına, afet hazırlık, test">
+    
+    <style>
+        /* Modern Reset ve Değişkenler - Index ile aynı */
+        :root {
+            /* Renk Paleti */
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --primary-light: #38bdf8;
+            --accent: #f59e0b;
+            --warning: #ef4444;
+            
+            /* Nötr Renkler */
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            --white: #ffffff;
+            --black: #000000;
+            
+            /* Efektler */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Koyu Tema */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #38bdf8;
+                --primary-dark: #0ea5e9;
+                --primary-light: #7dd3fc;
+                --accent: #fbbf24;
+                
+                --gray-50: #111827;
+                --gray-100: #1f2937;
+                --gray-200: #374151;
+                --gray-300: #4b5563;
+                --gray-400: #6b7280;
+                --gray-500: #9ca3af;
+                --gray-600: #d1d5db;
+                --gray-700: #e5e7eb;
+                --gray-800: #f3f4f6;
+                --gray-900: #f9fafb;
+                
+                --white: #1f2937;
+                --black: #f9fafb;
+            }
+        }
+        
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Tipografi */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--gray-900);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            letter-spacing: -0.025em;
+        }
+        
+        h2 {
+            font-size: 2.25rem;
+            letter-spacing: -0.025em;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+        }
+        
+        p {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+        }
+        
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header - Index ile aynı */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 0;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            header {
+                background: rgba(31, 41, 55, 0.95);
+                border-bottom: 1px solid var(--gray-800);
+            }
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1.2;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+        
+        /* Navigation - Index ile aynı */
+        .nav-desktop {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-desktop {
+                display: flex;
+                gap: 2rem;
+            }
+        }
+        
+        .nav-link {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition-fast);
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+            background: var(--gray-100);
+        }
+        
+        .nav-link.active {
+            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+        }
+        
+        /* Mobile Menu Button - Index ile aynı */
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        .menu-line {
+            width: 1.5rem;
+            height: 2px;
+            background: var(--gray-600);
+            transition: var(--transition-fast);
+            border-radius: 1px;
+        }
+        
+        /* Page Hero */
+        .page-hero {
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .page-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page-hero h1 {
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        
+        .page-hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.25rem;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 4rem 1rem;
+        }
+        
+        /* Categories Grid */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-normal);
+            border: 1px solid var(--gray-200);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .card {
+                background: var(--gray-800);
+                border-color: var(--gray-700);
+            }
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+        
+        .card-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            color: var(--white);
+        }
+        
+        .card[data-type="kasirga"] .card-icon {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+        
+        .card[data-type="yildirim"] .card-icon {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .card[data-type="dolu"] .card-icon {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+        }
+        
+        .card p {
+            font-size: 1rem;
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+        
+        .card-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition-fast);
+            border: none;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .card-btn.primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .card-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .card-btn.secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .card-btn.secondary {
+                background: var(--gray-700);
+                color: var(--gray-300);
+            }
+        }
+        
+        .card-btn.secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .card-btn.secondary:hover {
+                background: var(--gray-600);
+            }
+        }
+        
+        /* Detail Section */
+        .detail-section {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            margin-top: 3rem;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .detail-section {
+                background: var(--gray-800);
+            }
+        }
+        
+        /* Fullscreen Test Overlay */
+        .test-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gray-50);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .test-overlay {
+                background: var(--gray-900);
+            }
+        }
+        
+        .test-overlay.active {
+            display: flex;
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .test-header {
+                border-bottom-color: var(--gray-700);
+            }
+        }
+        
+        .test-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Küçük Kapat Butonu */
+        .small-close-btn {
+            background: none;
+            border: none;
+            color: var(--gray-600);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+        }
+        
+        .small-close-btn:hover {
+            background: var(--gray-200);
+            color: var(--accent);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .small-close-btn:hover {
+                background: var(--gray-700);
+            }
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background: var(--gray-200);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .progress-bar {
+                background: var(--gray-700);
+            }
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 1rem;
+            transition: width 0.3s ease;
+        }
+        
+        /* Question */
+        .question {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 2rem;
+            line-height: 1.4;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .question {
+                background: var(--gray-800);
+            }
+        }
+        
+        /* Choices */
+        .choices {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .choice {
+            padding: 1.25rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-lg);
+            font-size: 1.125rem;
+            text-align: left;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            color: var(--gray-700);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .choice {
+                background: var(--gray-800);
+                border-color: var(--gray-600);
+                color: var(--gray-300);
+            }
+        }
+        
+        .choice:hover:not(:disabled) {
+            border-color: var(--primary);
+            transform: translateX(8px);
+            background: var(--primary-light);
+            color: var(--white);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .choice:hover:not(:disabled) {
+                background: var(--primary);
+            }
+        }
+        
+        .choice.correct {
+            background: #10b981;
+            border-color: #059669;
+            color: white;
+            animation: pulseCorrect 0.5s ease;
+        }
+        
+        .choice.wrong {
+            background: #ef4444;
+            border-color: #dc2626;
+            color: white;
+            animation: pulseWrong 0.5s ease;
+        }
+        
+        @keyframes pulseCorrect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes pulseWrong {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        .choice:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        
+        /* Feedback */
+        .feedback {
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feedback.correct {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .feedback.correct {
+                background: #064e3b;
+                border-color: #10b981;
+                color: #a7f3d0;
+            }
+        }
+        
+        .feedback.wrong {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #7f1d1d;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .feedback.wrong {
+                background: #7f1d1d;
+                border-color: #ef4444;
+                color: #fecaca;
+            }
+        }
+        
+        /* Auto Continue Button */
+        .auto-continue-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            width: 100%;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .auto-continue-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .auto-continue-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Otomatik Geçiş Sayacı */
+        .countdown-text {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        
+        /* Result Screen */
+        .result-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: bounce 1s ease infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .result-score {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1.5rem 0;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .result-message {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+        
+        .detailed-results {
+            text-align: left;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-md);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .detailed-results {
+                background: var(--gray-800);
+            }
+        }
+        
+        .result-item {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+            border-radius: var(--radius-md);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .result-item {
+                border-bottom-color: var(--gray-700);
+            }
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .result-item.correct {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+        }
+        
+        .result-item.wrong {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+        }
+        
+        .result-question {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--gray-900);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .result-question {
+                color: var(--gray-100);
+            }
+        }
+        
+        .result-answer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        .result-answer.correct {
+            color: #059669;
+        }
+        
+        .result-answer.wrong {
+            color: #dc2626;
+        }
+        
+        .result-explanation {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .result-explanation {
+                background: var(--gray-700);
+                color: var(--gray-300);
+            }
+        }
+        
+        /* Footer - Index ile aynı */
+        footer {
+            background: var(--gray-900);
+            color: var(--gray-300);
+            padding: 4rem 1rem 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .footer-column h4 {
+            color: var(--white);
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+            transform: translateX(4px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid var(--gray-800);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-delay-100 { animation-delay: 100ms; }
+        .animate-delay-200 { animation-delay: 200ms; }
+        .animate-delay-300 { animation-delay: 300ms; }
+        
+        /* Mobile Menu - Index ile aynı */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--white);
+            z-index: 100;
+            transition: var(--transition-normal);
+            padding: 2rem;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .mobile-menu {
+                background: var(--gray-800);
+            }
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .mobile-menu-link {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .mobile-menu-link {
+                color: var(--gray-300);
+            }
+        }
+        
+        .mobile-menu-link:hover,
+        .mobile-menu-link.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+        }
+        
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .page-hero h1 {
+                font-size: 2.75rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-actions {
+                flex-direction: column;
+            }
+            
+            .test-overlay {
+                padding: 0.5rem;
+            }
+            
+            .question {
+                font-size: 1.25rem;
+                padding: 1rem;
+            }
+            
+            .choice {
+                padding: 1rem 1.25rem;
+                font-size: 1rem;
+            }
+            
+            .result-screen {
+                padding: 1rem;
+            }
+            
+            .result-score {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Focus Styles */
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+    </style>
 </head>
 <body>
-
-  <header>
-    <h1>🌪️ Hava Afetleri - Yeni Nesil Eğitim</h1>
-    <div class="nav-buttons">
-      <button class="navbtn" id="homeBtn">🏠 Ana Sayfa</button>
-      <button class="navbtn" id="aboutBtn">ℹ️ Hakkında</button>
-    </div>
-  </header>
-
-  <main>
-    <div class="intro-text">
-      🎯 <strong>Aşağıdan bir afet türü seç:</strong> Bilgi kartını okuyarak öğren veya "Oyna" butonuyla 5 soruluk interaktif testi başlat!
-    </div>
-
-    <div class="grid" id="tiles">
-      <div class="tile" id="tile-kasirga">
-        <span class="tile-icon">🌪️</span>
-        <h3>Kasırga</h3>
-        <p>Şiddetli rüzgarlar, dönen hava kolonları ve yıkıcı etkileri hakkında bilgiler.</p>
-      </div>
-
-      <div class="tile" id="tile-yildirim">
-        <span class="tile-icon">⚡</span>
-        <h3>Yıldırım Fırtınası</h3>
-        <p>Elektrik boşalmaları, gök gürültüsü ve korunma yöntemleri.</p>
-      </div>
-
-      <div class="tile" id="tile-dolu">
-        <span class="tile-icon">🌨️</span>
-        <h3>Şiddetli Dolu</h3>
-        <p>Büyük buz parçalarının oluşumu, hasar riskleri ve korunma yolları.</p>
-      </div>
-    </div>
-
-    <div id="detail">
-      <h2 id="detailTitle">🎮 Bir Afet Türü Seçin</h2>
-      <p id="detailText" style="color:#94a3b8; font-size:16px;">Yukarıdaki kartlardan birini seçerek bilgi alabilir veya oyunu başlatabilirsiniz.</p>
-
-      <div id="detailButtons"></div>
-
-      <div id="game" class="game-area" style="display:none;">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    <!-- Header - Index ile aynı -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">🚨</div>
+                    <div class="logo-text">
+                        <div class="logo-title">Afet Hazırlık</div>
+                        <div class="logo-subtitle">Güvende Kal</div>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="nav-desktop" aria-label="Ana Navigasyon">
+                    <a href="index.html" class="nav-link">🏠 Ana Sayfa</a>
+                    <a href="yer.html" class="nav-link">🏔️ Yer Afetleri</a>
+                    <a href="su.html" class="nav-link">🌊 Su Afetleri</a>
+                    <a href="hava.html" class="nav-link active">🌪️ Hava Afetleri</a>
+                    <a href="insan.html" class="nav-link">🔥 İnsan Kaynaklı</a>
+                    <a href="hakkinda.html" class="nav-link">ℹ️ Hakkında</a>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü Aç">
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                </button>
+            </div>
         </div>
-        <div id="qbox"></div>
-        <div id="choicesBox"></div>
-        <div id="after" style="display:none;">
-          <div class="result" id="resultText"></div>
-          <button class="btn secondary" id="backBtn">🔙 Başka Afet Seç</button>
+    </header>
+
+    <!-- Mobile Menu - Index ile aynı -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <div class="logo-icon">🚨</div>
+                <div class="logo-text">
+                    <div class="logo-title">Afet Hazırlık</div>
+                </div>
+            </div>
+            <button id="closeMenuBtn" style="background:none;border:none;font-size:1.5rem;color:var(--gray-600);cursor:pointer;">×</button>
         </div>
-      </div>
+        <nav class="mobile-menu-links" aria-label="Mobil Navigasyon">
+            <a href="index.html" class="mobile-menu-link">🏠 Ana Sayfa</a>
+            <a href="yer.html" class="mobile-menu-link">🏔️ Yer Afetleri</a>
+            <a href="su.html" class="mobile-menu-link">🌊 Su Afetleri</a>
+            <a href="hava.html" class="mobile-menu-link active">🌪️ Hava Afetleri</a>
+            <a href="insan.html" class="mobile-menu-link">🔥 İnsan Kaynaklı</a>
+            <a href="hakkinda.html" class="mobile-menu-link">ℹ️ Hakkında</a>
+        </nav>
     </div>
-  </main>
 
-<script>
-  var data = {
-    kasirga: [
-      { q: "Kasırga uyarısı verildiğinde en güvenli yer neresidir?", opts: ["Bodrum katı veya iç oda", "Üst katlardaki geniş odalar", "Camları olan bir oda"], a: 0, explain: "Bodrum katları ve iç odalar rüzgardan ve uçan nesnelerden en iyi korunan yerlerdir." },
-      { q: "Kasırga sırasında pencerelerden neden uzak durmalısınız?", opts: ["Kırılan camlar ciddi yaralanmalara neden olabilir", "Pencereler sıcak tutar", "Dışarıyı görmek tehlikelidir"], a: 0, explain: "Kasırga sırasında kırılan pencereler hızla uçan cam parçaları oluşturur." },
-      { q: "Kasırga yaklaşırken dışarıda kalan eşyaları ne yapmalısınız?", opts: ["Sabitleyin veya içeri alın", "Olduğu gibi bırakın", "Üzerlerini örtün"], a: 0, explain: "Dışarıda kalan eşyalar rüzgarla uçarak tehlikeli projektil haline gelebilir." },
-      { q: "Kasırga sırasında elektrik kesintisi olursa ne yapmalısınız?", opts: ["Acil durum çantanızdaki feneri kullanın", "Açık ateş kullanın", "Pencereleri açın"], a: 0, explain: "Açık ateş yangın riski oluşturur, acil durum feneri en güvenli seçenektir." },
-      { q: "Kasırga sonrası dışarı çıkarken nelere dikkat etmelisiniz?", opts: ["Kopmuş elektrik tellerine ve hasarlı yapılara dikkat edin", "Hemen normal hayata dönün", "Sadece yollara bakın"], a: 0, explain: "Kasırga sonrası kopan elektrik telleri ve hasarlı yapılar büyük risk oluşturur." }
-    ],
-    yildirim: [
-      { q: "Yıldırım fırtınası sırasında en güvenli yer neresidir?", opts: ["Kapalı ve sağlam bir bina", "Açık alan", "Ağaç altı"], a: 0, explain: "Kapalı binalar yıldırım çarpması riskini büyük ölçüde azaltır." },
-      { q: "Yıldırım çarpması riskini hesaplamak için ne yapabilirsiniz?", opts: ["Şimşek ile gök gürültüsü arasındaki süreyi sayın", "Rüzgarın şiddetine bakın", "Bulutların rengine bakın"], a: 0, explain: "Şimşek ve gök gürültüsü arasındaki her 3 saniye 1 km uzaklığı gösterir." },
-      { q: "Açık alanda yıldırım fırtınasına yakalanırsanız ne yapmalısınız?", opts: ["Mümkün olduğunca alçak bir pozisyon alın", "Ayakta durun", "Koşarak uzaklaşmaya çalışın"], a: 0, explain: "Alçak pozisyon yıldırım çarpma riskini azaltır, koşmak tehlikelidir." },
-      { q: "Yıldırım fırtınası sırasında hangi aktivitelerden kaçınmalısınız?", opts: ["Sudan ve metal nesnelerden uzak durun", "Yürüyüş yapın", "Ağaç dikin"], a: 0, explain: "Su ve metal nesneler elektriği iyi iletir, yıldırım çarpma riskini artırır." },
-      { q: "Yıldırım çarpması durumunda ilk yardım nasıl olmalıdır?", opts: ["Hemen 112'yi arayın ve güvenliyse CPR uygulayın", "Kişiyi hareket ettirin", "Üzerine su dökün"], a: 0, explain: "Yıldırım çarpan kişi elektrik yüklü değildir, güvenle ilk yardım uygulanabilir." }
-    ],
-    dolu: [
-      { q: "Dolu fırtınası sırasında araçtaysanız ne yapmalısınız?", opts: ["Aracı güvenli bir yere çekip bekleyin", "Hızla yol almaya devam edin", "Aracı terk edin"], a: 0, explain: "Araç içinde kalmak doludan korunmak için en güvenli yoldur." },
-      { q: "Dolu taneleri ne kadar büyük olabilir?", opts: ["Bazı dolu taneleri tenis topu büyüklüğüne ulaşabilir", "En fazla bezelye büyüklüğünde olur", "Sadece pirinç tanesi kadar olur"], a: 0, explain: "Şiddetli dolu fırtınalarında tenis topu büyüklüğünde dolu taneleri oluşabilir." },
-      { q: "Dolu fırtınası öncesi hangi hazırlıklar yapılmalıdır?", opts: ["Araçları kapalı alana alın, camları koruyun", "Hiçbir şey yapmaya gerek yok", "Sadece bitkileri örtün"], a: 0, explain: "Araçların ve camların korunması dolu hasarını önlemede kritiktir." },
-      { q: "Dolu sırasında dışarıda kalan hayvanlar için ne yapılmalıdır?", opts: ["Mümkünse barınak sağlayın", "Olduğu gibi bırakın", "Su verin"], a: 0, explain: "Hayvanlar da dolu tanelerinden ciddi şekilde yaralanabilir." },
-      { q: "Dolu fırtınası sonrası nelere dikkat etmelisiniz?", opts: ["Yollardaki buzlanmaya ve hasarlara dikkat edin", "Hemen dışarı çıkın", "Dolu tanelerini toplayın"], a: 0, explain: "Dolu sonrası yollarda buzlanma ve çeşitli hasarlar oluşabilir." }
-    ]
-  };
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <h1 class="animate-fade-in-up">Hava Afetleri</h1>
+                <p class="animate-fade-in-up animate-delay-100">
+                    Kasırga, yıldırım fırtınası ve şiddetli dolu gibi hava kaynaklı afetler için hazırlık rehberi ve testler
+                </p>
+            </div>
+        </div>
+    </section>
 
-  var currentType = null;
-  var sceneIndex = 0;
-  var score = 0;
-  var mistakes = [];
-  var isAnswering = false;
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="section-title animate-fade-in-up">
+                <h2>Hava Afeti Türleri</h2>
+                <p class="animate-fade-in-up animate-delay-100">
+                    Bir afet türü seçerek bilgi alın veya testi başlatın
+                </p>
+            </div>
+            
+            <div class="grid">
+                <!-- Kasırga Kartı -->
+                <div class="card animate-fade-in-up" data-type="kasirga" id="kasirga-card">
+                    <div class="card-icon">🌪️</div>
+                    <h3>Kasırga</h3>
+                    <p>Şiddetli rüzgarlar, dönen hava kolonları ve yıkıcı etkiler. Bodrum katı güvenliği, pencere koruması.</p>
+                    <div class="card-actions">
+                        <button class="card-btn primary" onclick="startTest('kasirga')">
+                            <span>▶️ Testi Başlat</span>
+                        </button>
+                        <button class="card-btn secondary" onclick="showInfo('kasirga')">
+                            <span>📚 Bilgi Al</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Yıldırım Kartı -->
+                <div class="card animate-fade-in-up animate-delay-100" data-type="yildirim" id="yildirim-card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Yıldırım Fırtınası</h3>
+                    <p>Elektrik boşalmaları, gök gürültüsü ve korunma yöntemleri. Kapalı alan güvenliği, uzaklık hesaplama.</p>
+                    <div class="card-actions">
+                        <button class="card-btn primary" onclick="startTest('yildirim')">
+                            <span>▶️ Testi Başlat</span>
+                        </button>
+                        <button class="card-btn secondary" onclick="showInfo('yildirim')">
+                            <span>📚 Bilgi Al</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Dolu Kartı -->
+                <div class="card animate-fade-in-up animate-delay-200" data-type="dolu" id="dolu-card">
+                    <div class="card-icon">🌨️</div>
+                    <h3>Şiddetli Dolu</h3>
+                    <p>Büyük buz parçalarının oluşumu, hasar riskleri ve korunma yolları. Araç koruması, barınak önlemleri.</p>
+                    <div class="card-actions">
+                        <button class="card-btn primary" onclick="startTest('dolu')">
+                            <span>▶️ Testi Başlat</span>
+                        </button>
+                        <button class="card-btn secondary" onclick="showInfo('dolu')">
+                            <span>📚 Bilgi Al</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Detail Section -->
+            <div class="detail-section animate-fade-in-up" id="detailSection" style="display: none;">
+                <h2 id="detailTitle">Afet Bilgisi</h2>
+                <div class="info-content" id="detailContent"></div>
+                <button class="card-btn primary" style="margin-top: 2rem;" onclick="hideInfo()">
+                    <span>← Geri Dön</span>
+                </button>
+            </div>
+        </div>
+    </main>
 
-  function selectDisaster(type) {
-    currentType = type;
-    sceneIndex = 0;
-    score = 0;
-    mistakes = [];
-    isAnswering = false;
+    <!-- Fullscreen Test Overlay -->
+    <div class="test-overlay" id="testOverlay">
+        <div class="test-header">
+            <h2 id="testTitle">Test</h2>
+            <button class="small-close-btn" onclick="closeTest()" title="Testi Kapat">
+                ✕
+            </button>
+        </div>
+        
+        <div class="test-content" id="testContent">
+            <!-- Test içeriği JavaScript ile doldurulacak -->
+        </div>
+    </div>
 
-    var tiles = document.querySelectorAll('.tile');
-    for (var i = 0; i < tiles.length; i++) {
-      tiles[i].classList.remove('selected');
-    }
-    document.getElementById('tile-' + type).classList.add('selected');
+    <!-- Footer - Index ile aynı -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-column">
+                        <h4>
+                            <span>🚨</span>
+                            Afet Hazırlık
+                        </h4>
+                        <p style="color: var(--gray-400); margin-bottom: 1.5rem;">
+                            Doğal afetlere hazırlık için rehber ve bilgi kaynağı. Herkes için güvenlik.
+                        </p>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>
+                            <span>🔗</span>
+                            Hızlı Bağlantılar
+                        </h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><span>🏠</span> Ana Sayfa</a></li>
+                            <li><a href="yer.html"><span>🏔️</span> Yer Afetleri</a></li>
+                            <li><a href="su.html"><span>🌊</span> Su Afetleri</a></li>
+                            <li><a href="hava.html"><span>🌪️</span> Hava Afetleri</a></li>
+                            <li><a href="insan.html"><span>🔥</span> İnsan Kaynaklı</a></li>
+                            <li><a href="hakkinda.html"><span>ℹ️</span> Hakkında</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>
+                            <span>📞</span>
+                            Acil Kaynaklar
+                        </h4>
+                        <ul class="footer-links">
+                            <li><a href="https://www.afad.gov.tr" target="_blank" rel="noopener"><span>🏛️</span> AFAD</a></li>
+                            <li><a href="https://www.mgm.gov.tr" target="_blank" rel="noopener"><span>🌤️</span> Meteoroloji</a></li>
+                            <li><a href="https://www.112.gov.tr" target="_blank" rel="noopener"><span>🚨</span> 112 Acil</a></li>
+                            <li><a href="https://www.kizilay.org.tr" target="_blank" rel="noopener"><span>❤️</span> Kızılay</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p style="margin-top: 1rem;">
+                        © 2024 Afet Hazırlık Rehberi<br>
+                        <small>Bilgilendirme amaçlıdır. Acil durumlarda 112'yi arayınız.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    var titles = {
-      kasirga: "🌪️ Kasırga",
-      yildirim: "⚡ Yıldırım Fırtınası",
-      dolu: "🌨️ Şiddetli Dolu"
-    };
-
-    var infos = {
-      kasirga: "Kasırga sırasında <strong>bodrum katı veya iç odalarda</strong> kalın. Pencerelerden uzak durun ve dışarıdaki eşyaları sabitleyin.",
-      yildirim: "Yıldırım fırtınasında <strong>kapalı binalarda</strong> kalın. Açık alandaysanız alçak bir pozisyon alın ve sudan/metalden uzak durun.",
-      dolu: "Dolu fırtınasında <strong>araç içinde veya kapalı alanda</strong> kalın. Araçları korunaklı yere alın ve buzlanmaya dikkat edin."
-    };
-
-    document.getElementById('detailTitle').innerHTML = titles[type];
-    document.getElementById('detailText').innerHTML = '<div class="info-card">' + infos[type] + '</div>';
-
-    var db = document.getElementById('detailButtons');
-    db.innerHTML = '';
-
-    var playBtn = document.createElement('button');
-    playBtn.className = 'btn';
-    playBtn.innerHTML = '▶️ Oyunu Başlat';
-    playBtn.addEventListener('click', function() {
-      startGame(type);
-    });
-    db.appendChild(playBtn);
-
-    var infoBtn = document.createElement('button');
-    infoBtn.className = 'btn secondary';
-    infoBtn.innerHTML = '📋 Detaylı Bilgi';
-    infoBtn.addEventListener('click', function() {
-      showInfoCard(type);
-    });
-    db.appendChild(infoBtn);
-
-    document.getElementById('game').style.display = 'none';
-    document.getElementById('after').style.display = 'none';
-  }
-
-  function showInfoCard(type) {
-    var detailedInfo = {
-      kasirga: "<h3 style='color:#0ea5a4;'>📚 Kasırga Hakkında</h3><p>Şiddetli dönen rüzgar sistemleri, genellikle konvektif fırtınalarla ilişkilidir.</p><ul style='text-align:left;'><li><strong>Öncesi:</strong> Bodrum katı hazırlayın, acil durum çantası oluşturun</li><li><strong>Sırasında:</strong> İç odalarda kalın, pencerelerden uzak durun</li><li><strong>Sonrası:</strong> Kopmuş elektrik tellerine dikkat edin</li></ul>",
-      yildirim: "<h3 style='color:#0ea5a4;'>📚 Yıldırım Fırtınası Hakkında</h3><p>Bulut ile yer arasında elektrik boşalması sonucu oluşan tehlikeli meteorolojik olay.</p><ul style='text-align:left;'><li><strong>Risk:</strong> Açık alanlar, su kenarları, yüksek yerler</li><li><strong>Korunma:</strong> Kapalı binalarda kalın, metalden uzak durun</li><li><strong>İlk yardım:</strong> 112'yi arayın, CPR uygulayın</li></ul>",
-      dolu: "<h3 style='color:#0ea5a4;'>📚 Şiddetli Dolu Hakkında</h3><p>Kuvvetli yukarı hava akımlarıyla yükselen su damlacıklarının donmasıyla oluşan buz parçaları.</p><ul style='text-align:left;'><li><strong>Tehlike:</strong> Büyük dolu taneleri ciddi hasar verebilir</li><li><strong>Korunma:</strong> Kapalı alanlarda kalın, araçları koruyun</li><li><strong>Sonrası:</strong> Buzlanmaya ve yoldaki hasarlara dikkat edin</li></ul>"
-    };
-
-    document.getElementById('detailText').innerHTML = '<div class="info-card">' + detailedInfo[type] + '</div>';
-  }
-
-  function startGame(type) {
-    currentType = type;
-    sceneIndex = 0;
-    score = 0;
-    mistakes = [];
-    isAnswering = false;
-
-    document.getElementById('game').style.display = 'block';
-    document.getElementById('after').style.display = 'none';
-    renderScene();
-  }
-
-  function renderScene() {
-    var scenes = data[currentType];
-    if (!scenes) return;
-
-    if (sceneIndex >= scenes.length) {
-      return finishGame();
-    }
-
-    var scene = scenes[sceneIndex];
-    var progress = ((sceneIndex + 1) / scenes.length) * 100;
-    document.getElementById('progressFill').style.width = progress + '%';
-
-    var qbox = document.getElementById('qbox');
-    qbox.innerHTML = '<div class="q">Soru ' + (sceneIndex + 1) + ' / ' + scenes.length + ': ' + scene.q + '</div>';
-
-    var choicesBox = document.getElementById('choicesBox');
-    choicesBox.innerHTML = '';
-
-    for (var i = 0; i < scene.opts.length; i++) {
-      var btn = document.createElement('button');
-      btn.className = 'choice';
-      btn.textContent = scene.opts[i];
-      btn.setAttribute('data-index', i);
-      btn.addEventListener('click', function() {
-        if (!isAnswering) {
-          var selectedIndex = parseInt(this.getAttribute('data-index'));
-          chooseAnswer(selectedIndex);
+    <script>
+        // Mobile Menu Toggle - Index ile aynı
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
         }
-      });
-      choicesBox.appendChild(btn);
-    }
-  }
+        
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        closeMenuBtn.addEventListener('click', toggleMobileMenu);
+        menuOverlay.addEventListener('click', toggleMobileMenu);
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        });
+        
+        // Theme detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        
+        // Handle page load animations
+        window.addEventListener('load', () => {
+            const animatedElements = document.querySelectorAll('.animate-fade-in-up');
+            animatedElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
 
-  function chooseAnswer(selectedIndex) {
-    if (isAnswering) return;
-    isAnswering = true;
+        // Test Data - İkinci koddan alındı
+        const testData = {
+            kasirga: [
+                {
+                    question: "Kasırga uyarısı verildiğinde en güvenli yer neresidir?",
+                    choices: ["Bodrum katı veya iç oda", "Üst katlardaki geniş odalar", "Camları olan bir oda"],
+                    correctAnswer: 0,
+                    explanation: "Bodrum katları ve iç odalar rüzgardan ve uçan nesnelerden en iyi korunan yerlerdir."
+                },
+                {
+                    question: "Kasırga sırasında pencerelerden neden uzak durmalısınız?",
+                    choices: ["Kırılan camlar ciddi yaralanmalara neden olabilir", "Pencereler sıcak tutar", "Dışarıyı görmek tehlikelidir"],
+                    correctAnswer: 0,
+                    explanation: "Kasırga sırasında kırılan pencereler hızla uçan cam parçaları oluşturur."
+                },
+                {
+                    question: "Kasırga yaklaşırken dışarıda kalan eşyaları ne yapmalısınız?",
+                    choices: ["Sabitleyin veya içeri alın", "Olduğu gibi bırakın", "Üzerlerini örtün"],
+                    correctAnswer: 0,
+                    explanation: "Dışarıda kalan eşyalar rüzgarla uçarak tehlikeli projektil haline gelebilir."
+                },
+                {
+                    question: "Kasırga sırasında elektrik kesintisi olursa ne yapmalısınız?",
+                    choices: ["Acil durum çantanızdaki feneri kullanın", "Açık ateş kullanın", "Pencereleri açın"],
+                    correctAnswer: 0,
+                    explanation: "Açık ateş yangın riski oluşturur, acil durum feneri en güvenli seçenektir."
+                },
+                {
+                    question: "Kasırga sonrası dışarı çıkarken nelere dikkat etmelisiniz?",
+                    choices: ["Kopmuş elektrik tellerine ve hasarlı yapılara dikkat edin", "Hemen normal hayata dönün", "Sadece yollara bakın"],
+                    correctAnswer: 0,
+                    explanation: "Kasırga sonrası kopan elektrik telleri ve hasarlı yapılar büyük risk oluşturur."
+                }
+            ],
+            yildirim: [
+                {
+                    question: "Yıldırım fırtınası sırasında en güvenli yer neresidir?",
+                    choices: ["Kapalı ve sağlam bir bina", "Açık alan", "Ağaç altı"],
+                    correctAnswer: 0,
+                    explanation: "Kapalı binalar yıldırım çarpması riskini büyük ölçüde azaltır."
+                },
+                {
+                    question: "Yıldırım çarpması riskini hesaplamak için ne yapabilirsiniz?",
+                    choices: ["Şimşek ile gök gürültüsü arasındaki süreyi sayın", "Rüzgarın şiddetine bakın", "Bulutların rengine bakın"],
+                    correctAnswer: 0,
+                    explanation: "Şimşek ve gök gürültüsü arasındaki her 3 saniye 1 km uzaklığı gösterir."
+                },
+                {
+                    question: "Açık alanda yıldırım fırtınasına yakalanırsanız ne yapmalısınız?",
+                    choices: ["Mümkün olduğunca alçak bir pozisyon alın", "Ayakta durun", "Koşarak uzaklaşmaya çalışın"],
+                    correctAnswer: 0,
+                    explanation: "Alçak pozisyon yıldırım çarpma riskini azaltır, koşmak tehlikelidir."
+                },
+                {
+                    question: "Yıldırım fırtınası sırasında hangi aktivitelerden kaçınmalısınız?",
+                    choices: ["Sudan ve metal nesnelerden uzak durun", "Yürüyüş yapın", "Ağaç dikin"],
+                    correctAnswer: 0,
+                    explanation: "Su ve metal nesneler elektriği iyi iletir, yıldırım çarpma riskini artırır."
+                },
+                {
+                    question: "Yıldırım çarpması durumunda ilk yardım nasıl olmalıdır?",
+                    choices: ["Hemen 112'yi arayın ve güvenliyse CPR uygulayın", "Kişiyi hareket ettirin", "Üzerine su dökün"],
+                    correctAnswer: 0,
+                    explanation: "Yıldırım çarpan kişi elektrik yüklü değildir, güvenle ilk yardım uygulanabilir."
+                }
+            ],
+            dolu: [
+                {
+                    question: "Dolu fırtınası sırasında araçtaysanız ne yapmalısınız?",
+                    choices: ["Aracı güvenli bir yere çekip bekleyin", "Hızla yol almaya devam edin", "Aracı terk edin"],
+                    correctAnswer: 0,
+                    explanation: "Araç içinde kalmak doludan korunmak için en güvenli yoldur."
+                },
+                {
+                    question: "Dolu taneleri ne kadar büyük olabilir?",
+                    choices: ["Bazı dolu taneleri tenis topu büyüklüğüne ulaşabilir", "En fazla bezelye büyüklüğünde olur", "Sadece pirinç tanesi kadar olur"],
+                    correctAnswer: 0,
+                    explanation: "Şiddetli dolu fırtınalarında tenis topu büyüklüğünde dolu taneleri oluşabilir."
+                },
+                {
+                    question: "Dolu fırtınası öncesi hangi hazırlıklar yapılmalıdır?",
+                    choices: ["Araçları kapalı alana alın, camları koruyun", "Hiçbir şey yapmaya gerek yok", "Sadece bitkileri örtün"],
+                    correctAnswer: 0,
+                    explanation: "Araçların ve camların korunması dolu hasarını önlemede kritiktir."
+                },
+                {
+                    question: "Dolu sırasında dışarıda kalan hayvanlar için ne yapılmalıdır?",
+                    choices: ["Mümkünse barınak sağlayın", "Olduğu gibi bırakın", "Su verin"],
+                    correctAnswer: 0,
+                    explanation: "Hayvanlar da dolu tanelerinden ciddi şekilde yaralanabilir."
+                },
+                {
+                    question: "Dolu fırtınası sonrası nelere dikkat etmelisiniz?",
+                    choices: ["Yollardaki buzlanmaya ve hasarlara dikkat edin", "Hemen dışarı çıkın", "Dolu tanelerini toplayın"],
+                    correctAnswer: 0,
+                    explanation: "Dolu sonrası yollarda buzlanma ve çeşitli hasarlar oluşabilir."
+                }
+            ]
+        };
 
-    var scene = data[currentType][sceneIndex];
-    var isCorrect = (selectedIndex === scene.a);
+        // Test State
+        let currentTest = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let allAnswers = [];
+        let isAnswerSelected = false;
+        let autoContinueTimer = null;
 
-    var choices = document.querySelectorAll('.choice');
-    for (var i = 0; i < choices.length; i++) {
-      choices[i].disabled = true;
-    }
+        // Başlık Map
+        const testTitles = {
+            kasirga: "🌪️ Kasırga Testi",
+            yildirim: "⚡ Yıldırım Fırtınası Testi",
+            dolu: "🌨️ Şiddetli Dolu Testi"
+        };
 
-    var body = document.body;
-    if (isCorrect) {
-      body.classList.add('bg-correct');
-      score++;
-    } else {
-      body.classList.add('bg-wrong');
-      mistakes.push({
-        index: sceneIndex + 1,
-        q: scene.q,
-        selected: scene.opts[selectedIndex],
-        correct: scene.opts[scene.a],
-        why: scene.explain
-      });
-    }
+        // Bilgi Map
+        const infoData = {
+            kasirga: {
+                title: "Kasırga Hakkında",
+                content: `
+                    <div style="line-height: 1.8;">
+                        <p><strong>Kasırga:</strong> Şiddetli dönen rüzgar sistemleri, genellikle konvektif fırtınalarla ilişkilidir.</p>
+                        
+                        <h3 style="margin-top: 1.5rem; color: var(--primary);">📋 Temel Önlemler:</h3>
+                        <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                            <li><strong>Öncesi:</strong> Bodrum katı hazırlayın, acil durum çantası oluşturun</li>
+                            <li><strong>Sırasında:</strong> İç odalarda kalın, pencerelerden uzak durun</li>
+                            <li><strong>Sonrası:</strong> Kopmuş elektrik tellerine dikkat edin</li>
+                        </ul>
+                    </div>
+                `
+            },
+            yildirim: {
+                title: "Yıldırım Fırtınası Hakkında",
+                content: `
+                    <div style="line-height: 1.8;">
+                        <p><strong>Yıldırım Fırtınası:</strong> Bulut ile yer arasında elektrik boşalması sonucu oluşan tehlikeli meteorolojik olay.</p>
+                        
+                        <h3 style="margin-top: 1.5rem; color: var(--primary);">⚠️ Risk Belirtileri:</h3>
+                        <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                            <li>Şimşek çakmaları</li>
+                            <li>Gök gürültüsü sesleri</li>
+                            <li>Ani rüzgar ve yağış değişimi</li>
+                        </ul>
+                    </div>
+                `
+            },
+            dolu: {
+                title: "Şiddetli Dolu Hakkında",
+                content: `
+                    <div style="line-height: 1.8;">
+                        <p><strong>Şiddetli Dolu:</strong> Kuvvetli yukarı hava akımlarıyla yükselen su damlacıklarının donmasıyla oluşan buz parçaları.</p>
+                        
+                        <h3 style="margin-top: 1.5rem; color: var(--primary);">☁️ Korunma Yöntemleri:</h3>
+                        <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                            <li>Araçları kapalı garaja alın</li>
+                            <li>Camları koruyucu film veya tahta ile koruyun</li>
+                            <li>Dışarıda kalmayın, kapalı alanlara sığının</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
 
-    setTimeout(function() {
-      body.classList.remove('bg-correct', 'bg-wrong');
-      sceneIndex++;
-      isAnswering = false;
-      renderScene();
-    }, 1000);
-  }
+        // Test Başlatma Fonksiyonu
+        function startTest(type) {
+            currentTest = type;
+            currentQuestion = 0;
+            score = 0;
+            allAnswers = [];
+            isAnswerSelected = false;
+            
+            document.getElementById('testTitle').textContent = testTitles[type];
+            document.getElementById('testOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            renderQuestion();
+        }
 
-  function finishGame() {
-    document.getElementById('game').style.display = 'block';
-    document.getElementById('after').style.display = 'block';
-    document.getElementById('qbox').innerHTML = '';
-    document.getElementById('choicesBox').innerHTML = '';
+        // Test Kapatma Fonksiyonu
+        function closeTest() {
+            if (autoContinueTimer) {
+                clearTimeout(autoContinueTimer);
+            }
+            document.getElementById('testOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+            resetTest();
+        }
 
-    var total = data[currentType].length;
-    var res = document.getElementById('resultText');
-    var txt = '';
+        // Test Sıfırlama
+        function resetTest() {
+            currentTest = null;
+            currentQuestion = 0;
+            score = 0;
+            allAnswers = [];
+            isAnswerSelected = false;
+            if (autoContinueTimer) {
+                clearTimeout(autoContinueTimer);
+                autoContinueTimer = null;
+            }
+        }
 
-    if (mistakes.length === 0) {
-      txt = '<div class="congrats">🎉</div><div class="score-display">Mükemmel: ' + score + '/' + total + '</div><p>Tebrikler! Tüm sorular doğru!</p>';
-    } else {
-      txt = '<div class="score-display">Skor: ' + score + '/' + total + '</div>';
-      txt += '<p><strong>Yanlış yaptığın sorular:</strong></p><ul style="text-align:left;">';
-      for (var i = 0; i < mistakes.length; i++) {
-        var m = mistakes[i];
-        txt += '<li><b>Soru ' + m.index + ':</b> ' + m.q + '<br>';
-        txt += '<span style="color:#ff9999">❌ Senin cevabın: ' + m.selected + '</span><br>';
-        txt += '<span style="color:#99ff99">✅ Doğru cevap: ' + m.correct + '</span><br>';
-        txt += '<small style="color:#9aa5b1">💡 ' + m.why + '</small></li>';
-      }
-      txt += '</ul>';
-    }
-    res.innerHTML = txt;
-  }
+        // Soru Render
+        function renderQuestion() {
+            if (!currentTest || currentQuestion >= testData[currentTest].length) {
+                showResults();
+                return;
+            }
 
-  function backToSelection() {
-    document.getElementById('game').style.display = 'none';
-    document.getElementById('after').style.display = 'none';
-    document.getElementById('detailTitle').innerHTML = '🎮 Bir Afet Türü Seçin';
-    document.getElementById('detailText').innerHTML = '<p style="color:#94a3b8; font-size:16px;">Yukarıdaki kartlardan birini seçerek bilgi alabilir veya oyunu başlatabilirsiniz.</p>';
-    document.getElementById('detailButtons').innerHTML = '';
+            const testContent = document.getElementById('testContent');
+            const questionData = testData[currentTest][currentQuestion];
+            const progress = ((currentQuestion + 1) / testData[currentTest].length) * 100;
 
-    var tiles = document.querySelectorAll('.tile');
-    for (var i = 0; i < tiles.length; i++) {
-      tiles[i].classList.remove('selected');
-    }
+            testContent.innerHTML = `
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Soru ${currentQuestion + 1} / ${testData[currentTest].length}</span>
+                        <span>Skor: ${score}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                </div>
+                
+                <div class="question">${questionData.question}</div>
+                
+                <div class="choices" id="choicesContainer">
+                    ${questionData.choices.map((choice, index) => `
+                        <button class="choice" onclick="selectAnswer(${index})" id="choice-${index}">
+                            ${choice}
+                        </button>
+                    `).join('')}
+                </div>
+                
+                <div id="feedbackContainer"></div>
+            `;
+        }
 
-    currentType = null;
-    sceneIndex = 0;
-    score = 0;
-    mistakes = [];
-    isAnswering = false;
-  }
+        // Cevap Seçimi
+        function selectAnswer(choiceIndex) {
+            if (isAnswerSelected) return;
+            
+            isAnswerSelected = true;
+            const questionData = testData[currentTest][currentQuestion];
+            const isCorrect = choiceIndex === questionData.correctAnswer;
+            
+            // Tüm seçenekleri devre dışı bırak
+            const choices = document.querySelectorAll('.choice');
+            choices.forEach(choice => choice.disabled = true);
+            
+            // Doğru ve yanlış cevapları renklendir
+            document.getElementById(`choice-${choiceIndex}`).classList.add(isCorrect ? 'correct' : 'wrong');
+            if (!isCorrect) {
+                document.getElementById(`choice-${questionData.correctAnswer}`).classList.add('correct');
+            }
+            
+            // Cevabı kaydet
+            allAnswers.push({
+                question: questionData.question,
+                userAnswer: questionData.choices[choiceIndex],
+                correctAnswer: questionData.choices[questionData.correctAnswer],
+                isCorrect: isCorrect,
+                explanation: questionData.explanation
+            });
+            
+            // Skoru güncelle
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Feedback göster
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            feedbackContainer.innerHTML = `
+                <div class="feedback ${isCorrect ? 'correct' : 'wrong'}">
+                    <strong>${isCorrect ? '✅ Doğru!' : '❌ Yanlış!'}</strong><br>
+                    ${questionData.explanation}
+                </div>
+                
+                <button class="auto-continue-btn" id="autoContinueBtn" onclick="nextQuestion()">
+                    <span>${currentQuestion < testData[currentTest].length - 1 ? '⏭️ Sonraki Soru' : '🏁 Sonuçları Göster'}</span>
+                </button>
+                
+                <div class="countdown-text" id="countdownText">
+                    Otomatik geçiş: <span id="countdownNumber">3</span> saniye
+                </div>
+            `;
+            
+            // Otomatik geçiş sayacı başlat
+            startAutoContinue();
+        }
 
-  document.getElementById('tile-kasirga').addEventListener('click', function() {
-    selectDisaster('kasirga');
-  });
+        // Otomatik geçiş sayacı
+        function startAutoContinue() {
+            let countdown = 3;
+            const countdownElement = document.getElementById('countdownNumber');
+            const buttonElement = document.getElementById('autoContinueBtn');
+            
+            autoContinueTimer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(autoContinueTimer);
+                    nextQuestion();
+                }
+            }, 1000);
+        }
 
-  document.getElementById('tile-yildirim').addEventListener('click', function() {
-    selectDisaster('yildirim');
-  });
+        // Sonraki Soru
+        function nextQuestion() {
+            if (autoContinueTimer) {
+                clearTimeout(autoContinueTimer);
+            }
+            
+            currentQuestion++;
+            isAnswerSelected = false;
+            renderQuestion();
+        }
 
-  document.getElementById('tile-dolu').addEventListener('click', function() {
-    selectDisaster('dolu');
-  });
+        // Sonuçları Göster
+        function showResults() {
+            const testContent = document.getElementById('testContent');
+            const totalQuestions = testData[currentTest].length;
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            // Detaylı sonuçları hazırla
+            let detailedResultsHTML = '';
+            allAnswers.forEach((answer, index) => {
+                detailedResultsHTML += `
+                    <div class="result-item ${answer.isCorrect ? 'correct' : 'wrong'}">
+                        <div class="result-question">Soru ${index + 1}: ${answer.question}</div>
+                        
+                        <div class="result-answer ${answer.isCorrect ? 'correct' : 'wrong'}">
+                            ${answer.isCorrect ? '✅' : '❌'} 
+                            <strong>Senin cevabın:</strong> ${answer.userAnswer}
+                        </div>
+                        
+                        ${!answer.isCorrect ? `
+                            <div class="result-answer correct">
+                                ✅ <strong>Doğru cevap:</strong> ${answer.correctAnswer}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="result-explanation">
+                            💡 ${answer.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            let resultHTML = `
+                <div class="result-screen">
+                    <div class="result-icon">${percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '💡'}</div>
+                    <div class="result-score">${score}/${totalQuestions}</div>
+                    <div class="result-message">
+                        ${percentage >= 80 ? 'Mükemmel! 🏆 Tam bir hava afetleri uzmanısın!' : 
+                          percentage >= 60 ? 'İyi iş! 👍 Hava afetleri hakkında iyi bilgi sahibisin.' : 
+                          'Daha çok çalışmalısın! 💪 Hava afetleri bilincini geliştirmeye devam et.'}
+                        <br>Başarı oranın: <strong>%${percentage}</strong>
+                    </div>
+                    
+                    <div class="detailed-results">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--primary);">📊 Detaylı Sonuçlar:</h3>
+                        ${detailedResultsHTML}
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button class="card-btn primary" onclick="startTest('${currentTest}')" style="flex: 1;">
+                            <span>🔄 Testi Tekrarla</span>
+                        </button>
+                        <button class="card-btn secondary" onclick="closeTest()" style="flex: 1;">
+                            <span>🏠 Ana Sayfaya Dön</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            testContent.innerHTML = resultHTML;
+        }
 
-  document.getElementById('homeBtn').addEventListener('click', function() {
-    window.location.href = 'index.html';
-  });
+        // Bilgi Gösterme Fonksiyonu
+        function showInfo(type) {
+            const info = infoData[type];
+            document.getElementById('detailTitle').textContent = info.title;
+            document.getElementById('detailContent').innerHTML = info.content;
+            document.getElementById('detailSection').style.display = 'block';
+            
+            // Kartları gizle
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.display = 'none';
+            });
+            
+            // Başlığı gizle
+            document.querySelector('.section-title').style.display = 'none';
+            
+            // Sayfayı detail bölümüne kaydır
+            document.getElementById('detailSection').scrollIntoView({ behavior: 'smooth' });
+        }
 
-  document.getElementById('aboutBtn').addEventListener('click', function() {
-    window.location.href = 'hakkinda.html';
-  });
+        // Bilgi Gizleme Fonksiyonu
+        function hideInfo() {
+            document.getElementById('detailSection').style.display = 'none';
+            
+            // Kartları göster
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.display = 'flex';
+            });
+            
+            // Başlığı göster
+            document.querySelector('.section-title').style.display = 'block';
+        }
 
-  document.getElementById('backBtn').addEventListener('click', backToSelection);
-</script>
+        // Escape tuşu ile testi kapat
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('testOverlay').classList.contains('active')) {
+                closeTest();
+            }
+        });
 
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
