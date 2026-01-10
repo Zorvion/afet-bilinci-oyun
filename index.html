@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Yeni eklenen color-scheme meta etiketi -->
+    <meta name="color-scheme" content="light dark">
+
     <!-- SEO Optimizasyonu -->
     <title>Afet Hazırlık - Doğal Afetler İçin Hazırlık Rehberi</title>
     <meta name="description" content="Deprem, sel, yangın gibi doğal afetlere hazırlık için kapsamlı rehber ve bilgi kaynakları.">
     <meta name="keywords" content="deprem, sel, yangın, doğal afet, acil durum, hazırlık, güvenlik">
     <meta name="author" content="Afet Hazırlık Platformu">
-    
+
     <style>
         /* Modern Reset ve Değişkenler */
         :root {
+            /* Color-scheme eklemesi */
+            color-scheme: light dark;
+            
             /* Renk Paleti */
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #3b82f6;
             --accent: #dc2626;
             --warning: #f59e0b;
-            
+
             /* Nötr Renkler */
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
@@ -31,10 +37,10 @@
             --gray-700: #374151;
             --gray-800: #1f2937;
             --gray-900: #111827;
-            
+
             --white: #ffffff;
             --black: #000000;
-            
+
             /* Efektler */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -44,20 +50,20 @@
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
             --radius-xl: 1rem;
-            
+
             /* Transitions */
             --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
             --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        /* Koyu Tema */
+
+        /* Koyu Tema - GÜNCELLENDİ */
         @media (prefers-color-scheme: dark) {
             :root {
                 --primary: #3b82f6;
                 --primary-dark: #2563eb;
                 --primary-light: #60a5fa;
                 --accent: #ef4444;
-                
+
                 --gray-50: #111827;
                 --gray-100: #1f2937;
                 --gray-200: #374151;
@@ -66,26 +72,86 @@
                 --gray-500: #9ca3af;
                 --gray-600: #d1d5db;
                 --gray-700: #e5e7eb;
-                --gray-800: #f3f4f6;
-                --gray-900: #f9fafb;
-                
+                --gray-800: #f3f4f6;  /* Daha açık yapıldı */
+                --gray-900: #f9fafb;  /* Daha açık yapıldı */
+
                 --white: #1f2937;
                 --black: #f9fafb;
             }
+            
+            /* Koyu tema için metin renkleri düzenlemeleri */
+            body {
+                color: var(--gray-800);  /* Açık gri metin */
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                color: var(--gray-900);  /* Daha açık başlık */
+            }
+            
+            p {
+                color: var(--gray-700);  /* Okunabilir paragraf */
+            }
+            
+            .card h3 {
+                color: var(--gray-900);  /* Kart başlıkları */
+            }
+            
+            .card p {
+                color: var(--gray-600);  /* Kart paragrafları */
+            }
+            
+            .logo-title {
+                color: var(--gray-900);  /* Logo başlığı */
+            }
+            
+            .logo-subtitle {
+                color: var(--gray-500);  /* Logo alt başlığı */
+            }
+            
+            .nav-link {
+                color: var(--gray-400);  /* Navigasyon linkleri */
+            }
+            
+            .nav-link:hover {
+                color: var(--primary-light);  /* Hover durumu */
+            }
+            
+            footer {
+                color: var(--gray-300);  /* Footer metin rengi */
+            }
+            
+            .footer-links a {
+                color: var(--gray-400);  /* Footer linkleri */
+            }
+            
+            .footer-links a:hover {
+                color: var(--white);  /* Footer link hover */
+            }
+            
+            /* Mobil menü için düzenlemeler */
+            .mobile-menu-link {
+                color: var(--gray-300);  /* Mobil menü linkleri */
+            }
+            
+            .mobile-menu-link:hover,
+            .mobile-menu-link.active {
+                background: var(--primary);
+                color: var(--white);  /* Aktif/hover durumu */
+            }
         }
-        
+
         /* Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         html {
             scroll-behavior: smooth;
             font-size: 16px;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--gray-50);
@@ -94,33 +160,33 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
+
         /* Tipografi */
         h1, h2, h3, h4, h5, h6 {
             font-weight: 700;
             line-height: 1.2;
             color: var(--gray-900);
         }
-        
+
         h1 {
             font-size: 3rem;
             letter-spacing: -0.025em;
         }
-        
+
         h2 {
             font-size: 2.25rem;
             letter-spacing: -0.025em;
         }
-        
+
         h3 {
             font-size: 1.5rem;
         }
-        
+
         p {
             font-size: 1.125rem;
             color: var(--gray-600);
         }
-        
+
         /* Container */
         .container {
             width: 100%;
@@ -128,7 +194,7 @@
             margin: 0 auto;
             padding: 0 1rem;
         }
-        
+
         /* Header */
         header {
             position: sticky;
@@ -139,28 +205,28 @@
             border-bottom: 1px solid var(--gray-200);
             padding: 1rem 0;
         }
-        
+
         @media (prefers-color-scheme: dark) {
             header {
                 background: rgba(31, 41, 55, 0.95);
                 border-bottom: 1px solid var(--gray-800);
             }
         }
-        
+
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 2rem;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
         }
-        
+
         .logo-icon {
             width: 2.5rem;
             height: 2.5rem;
@@ -173,37 +239,37 @@
             font-size: 1.25rem;
             font-weight: 600;
         }
-        
+
         .logo-text {
             display: flex;
             flex-direction: column;
         }
-        
+
         .logo-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--gray-900);
             line-height: 1.2;
         }
-        
+
         .logo-subtitle {
             font-size: 0.875rem;
             color: var(--gray-500);
             font-weight: 500;
         }
-        
+
         /* Navigation */
         .nav-desktop {
             display: none;
         }
-        
+
         @media (min-width: 768px) {
             .nav-desktop {
                 display: flex;
                 gap: 2rem;
             }
         }
-        
+
         .nav-link {
             color: var(--gray-600);
             text-decoration: none;
@@ -213,18 +279,18 @@
             border-radius: var(--radius-md);
             transition: var(--transition-fast);
         }
-        
+
         .nav-link:hover {
             color: var(--primary);
             background: var(--gray-100);
         }
-        
+
         .nav-link.active {
             color: var(--primary);
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: var(--white);
         }
-        
+
         /* Mobile Menu Button */
         .mobile-menu-btn {
             display: flex;
@@ -236,13 +302,13 @@
             padding: 0.5rem;
             border-radius: var(--radius-md);
         }
-        
+
         @media (min-width: 768px) {
             .mobile-menu-btn {
                 display: none;
             }
         }
-        
+
         .menu-line {
             width: 1.5rem;
             height: 2px;
@@ -250,7 +316,7 @@
             transition: var(--transition-fast);
             border-radius: 1px;
         }
-        
+
         /* Hero Section */
         .hero {
             padding: 4rem 1rem;
@@ -258,7 +324,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .hero::before {
             content: '';
             position: absolute;
@@ -269,7 +335,7 @@
             background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
             opacity: 0.3;
         }
-        
+
         .hero-content {
             position: relative;
             z-index: 1;
@@ -277,20 +343,20 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .hero h1 {
             color: var(--white);
             margin-bottom: 1.5rem;
             font-size: 3.5rem;
             line-height: 1.1;
         }
-        
+
         @media (min-width: 768px) {
             .hero h1 {
                 font-size: 4rem;
             }
         }
-        
+
         .hero p {
             color: rgba(255, 255, 255, 0.9);
             font-size: 1.25rem;
@@ -299,7 +365,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .hero-badges {
             display: flex;
             flex-wrap: wrap;
@@ -307,7 +373,7 @@
             justify-content: center;
             margin-bottom: 2rem;
         }
-        
+
         .badge {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -322,12 +388,12 @@
             gap: 0.5rem;
             transition: var(--transition-fast);
         }
-        
+
         .badge:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
-        
+
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -342,44 +408,44 @@
             transition: var(--transition-fast);
             box-shadow: var(--shadow-xl);
         }
-        
+
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-xl), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        
+
         /* Grid System */
         .grid {
             display: grid;
             gap: 2rem;
         }
-        
+
         @media (min-width: 768px) {
             .grid-cols-2 {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        
+
         @media (min-width: 1024px) {
             .grid-cols-3 {
                 grid-template-columns: repeat(3, 1fr);
             }
-            
+
             .grid-cols-4 {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
-        
+
         /* Cards */
         .section {
             padding: 5rem 1rem;
         }
-        
+
         .section-title {
             text-align: center;
             margin-bottom: 3rem;
         }
-        
+
         .section-title h2 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -388,7 +454,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .card {
             background: var(--white);
             border-radius: var(--radius-xl);
@@ -401,20 +467,20 @@
             flex-direction: column;
             cursor: pointer;
         }
-        
+
         @media (prefers-color-scheme: dark) {
             .card {
                 background: var(--gray-800);
                 border-color: var(--gray-700);
             }
         }
-        
+
         .card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
             border-color: var(--primary-light);
         }
-        
+
         .card-icon {
             width: 4rem;
             height: 4rem;
@@ -426,36 +492,36 @@
             font-size: 1.75rem;
             color: var(--white);
         }
-        
+
         .card[data-category="yer"] .card-icon {
             background: linear-gradient(135deg, #f59e0b, #d97706);
         }
-        
+
         .card[data-category="su"] .card-icon {
             background: linear-gradient(135deg, #0ea5e9, #0284c7);
         }
-        
+
         .card[data-category="hava"] .card-icon {
             background: linear-gradient(135deg, #8b5cf6, #7c3aed);
         }
-        
+
         .card[data-category="insan"] .card-icon {
             background: linear-gradient(135deg, #ef4444, #dc2626);
         }
-        
+
         .card h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: var(--gray-900);
         }
-        
+
         .card p {
             font-size: 1rem;
             color: var(--gray-600);
             margin-bottom: 1.5rem;
             flex-grow: 1;
         }
-        
+
         .card-link {
             display: inline-flex;
             align-items: center;
@@ -466,12 +532,12 @@
             font-size: 0.95rem;
             transition: var(--transition-fast);
         }
-        
+
         .card-link:hover {
             gap: 1rem;
             color: var(--primary-dark);
         }
-        
+
         /* Emergency Banner */
         .emergency-banner {
             background: linear-gradient(135deg, var(--accent), #b91c1c);
@@ -488,75 +554,75 @@
             animation: pulse 2s infinite;
             cursor: pointer;
         }
-        
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
-        
+
         /* Features Section */
         .features {
             background: var(--gray-100);
             padding: 4rem 1rem;
         }
-        
+
         .feature-grid {
             display: grid;
             gap: 2rem;
         }
-        
+
         @media (min-width: 768px) {
             .feature-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-        
+
         .feature-item {
             text-align: center;
             padding: 2rem;
         }
-        
+
         .feature-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             display: inline-block;
         }
-        
+
         .feature-item h3 {
             margin-bottom: 1rem;
             color: var(--gray-900);
         }
-        
+
         .feature-item p {
             font-size: 1rem;
             color: var(--gray-600);
         }
-        
+
         /* Footer */
         footer {
             background: var(--gray-900);
             color: var(--gray-300);
             padding: 4rem 1rem 2rem;
         }
-        
+
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .footer-grid {
             display: grid;
             gap: 3rem;
             margin-bottom: 3rem;
         }
-        
+
         @media (min-width: 768px) {
             .footer-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-        
+
         .footer-column h4 {
             color: var(--white);
             font-size: 1.125rem;
@@ -565,15 +631,15 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .footer-links {
             list-style: none;
         }
-        
+
         .footer-links li {
             margin-bottom: 0.75rem;
         }
-        
+
         .footer-links a {
             color: var(--gray-400);
             text-decoration: none;
@@ -582,12 +648,12 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .footer-links a:hover {
             color: var(--white);
             transform: translateX(4px);
         }
-        
+
         .footer-bottom {
             border-top: 1px solid var(--gray-800);
             padding-top: 2rem;
@@ -595,7 +661,7 @@
             color: var(--gray-500);
             font-size: 0.875rem;
         }
-        
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -607,16 +673,16 @@
                 transform: translateY(0);
             }
         }
-        
+
         .animate-fade-in-up {
             animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
         }
-        
+
         .animate-delay-100 { animation-delay: 100ms; }
         .animate-delay-200 { animation-delay: 200ms; }
         .animate-delay-300 { animation-delay: 300ms; }
-        
+
         /* Mobile Menu */
         .mobile-menu {
             position: fixed;
@@ -632,30 +698,30 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         @media (prefers-color-scheme: dark) {
             .mobile-menu {
                 background: var(--gray-800);
             }
         }
-        
+
         .mobile-menu.active {
             right: 0;
         }
-        
+
         .mobile-menu-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
-        
+
         .mobile-menu-links {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
-        
+
         .mobile-menu-link {
             padding: 1rem;
             border-radius: var(--radius-md);
@@ -664,19 +730,19 @@
             font-weight: 500;
             transition: var(--transition-fast);
         }
-        
+
         @media (prefers-color-scheme: dark) {
             .mobile-menu-link {
                 color: var(--gray-300);
             }
         }
-        
+
         .mobile-menu-link:hover,
         .mobile-menu-link.active {
             background: var(--primary);
             color: var(--white);
         }
-        
+
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -689,62 +755,62 @@
             visibility: hidden;
             transition: var(--transition-normal);
         }
-        
+
         .menu-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
             }
-            
+
             h2 {
                 font-size: 2rem;
             }
-            
+
             .hero h1 {
                 font-size: 2.75rem;
             }
-            
+
             .section {
                 padding: 3rem 1rem;
             }
-            
+
             .feature-grid {
                 grid-template-columns: 1fr;
             }
         }
-        
+
         @media (max-width: 480px) {
             .hero-badges {
                 flex-direction: column;
                 align-items: center;
             }
         }
-        
+
         /* Focus Styles */
         :focus-visible {
             outline: 2px solid var(--primary);
             outline-offset: 2px;
         }
-        
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: var(--gray-100);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--gray-300);
             border-radius: 5px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--gray-400);
         }
@@ -762,7 +828,7 @@
                         <div class="logo-subtitle">Güvende Kal</div>
                     </div>
                 </a>
-                
+
                 <!-- Desktop Navigation -->
                 <nav class="nav-desktop" aria-label="Ana Navigasyon">
                     <a href="index.html" class="nav-link active">🏠 Ana Sayfa</a>
@@ -772,7 +838,7 @@
                     <a href="İnsan.html" class="nav-link">🔥 İnsan Kaynaklı</a>
                     <a href="hakkinda.html" class="nav-link">ℹ️ Hakkında</a>
                 </nav>
-                
+
                 <!-- Mobile Menu Button -->
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü Aç">
                     <span class="menu-line"></span>
@@ -814,7 +880,7 @@
                     Deprem, sel, yangın gibi doğal afetler için hazırlık rehberi. 
                     Doğru bilgi ve planlama ile güvende kalın.
                 </p>
-                
+
                 <div class="hero-badges animate-fade-in-up animate-delay-200">
                     <span class="badge">
                         <span>📚</span>
@@ -829,7 +895,7 @@
                         Her Yerde
                     </span>
                 </div>
-                
+
                 <a href="#categories" class="cta-button animate-fade-in-up animate-delay-300">
                     <span>Hazırlığa Başla</span>
                     <span>→</span>
@@ -860,7 +926,7 @@
                         Her afet türü için hazırlık rehberleri
                     </p>
                 </div>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Yer Afetleri -->
                     <div class="card animate-fade-in-up" data-category="yer">
@@ -872,7 +938,7 @@
                             <span>→</span>
                         </a>
                     </div>
-                    
+
                     <!-- Su Afetleri -->
                     <div class="card animate-fade-in-up animate-delay-100" data-category="su">
                         <div class="card-icon">🌊</div>
@@ -883,7 +949,7 @@
                             <span>→</span>
                         </a>
                     </div>
-                    
+
                     <!-- Hava Afetleri -->
                     <div class="card animate-fade-in-up animate-delay-200" data-category="hava">
                         <div class="card-icon">🌪️</div>
@@ -894,7 +960,7 @@
                             <span>→</span>
                         </a>
                     </div>
-                    
+
                     <!-- İnsan Kaynaklı -->
                     <div class="card animate-fade-in-up animate-delay-300" data-category="insan">
                         <div class="card-icon">🔥</div>
@@ -918,20 +984,20 @@
                         Temel hazırlık adımları
                     </p>
                 </div>
-                
+
                 <div class="feature-grid">
                     <div class="feature-item animate-fade-in-up">
                         <div class="feature-icon">📚</div>
                         <h3>Bilgi Edinin</h3>
                         <p>Yaşadığınız bölgedeki afet risklerini öğrenin ve güvenli alanları belirleyin.</p>
                     </div>
-                    
+
                     <div class="feature-item animate-fade-in-up animate-delay-100">
                         <div class="feature-icon">📋</div>
                         <h3>Plan Yapın</h3>
                         <p>Aile afet planı oluşturun, buluşma noktaları belirleyin ve iletişim kurun.</p>
                     </div>
-                    
+
                     <div class="feature-item animate-fade-in-up animate-delay-200">
                         <div class="feature-icon">🎒</div>
                         <h3>Çanta Hazırlayın</h3>
@@ -950,20 +1016,20 @@
                         Afet anında dikkat edilmesi gerekenler
                     </p>
                 </div>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="card animate-fade-in-up">
                         <div class="card-icon" style="background: var(--primary);">⚠️</div>
                         <h3>Sakin Olun</h3>
                         <p>Panik yapmayın, derin nefes alın ve durumu değerlendirin.</p>
                     </div>
-                    
+
                     <div class="card animate-fade-in-up animate-delay-100">
                         <div class="card-icon" style="background: var(--accent);">📱</div>
                         <h3>112'yi Arayın</h3>
                         <p>Acil durumlarda sakin bir şekilde 112'yi arayın ve konumunuzu bildirin.</p>
                     </div>
-                    
+
                     <div class="card animate-fade-in-up animate-delay-200">
                         <div class="card-icon" style="background: var(--warning);">👥</div>
                         <h3>Yardım Edin</h3>
@@ -988,7 +1054,7 @@
                             Doğal afetlere hazırlık için rehber ve bilgi kaynağı. Herkes için güvenlik.
                         </p>
                     </div>
-                    
+
                     <div class="footer-column">
                         <h4>
                             <span>🔗</span>
@@ -1003,7 +1069,7 @@
                             <li><a href="hakkinda.html"><span>ℹ️</span> Hakkında</a></li>
                         </ul>
                     </div>
-                    
+
                     <div class="footer-column">
                         <h4>
                             <span>📞</span>
@@ -1017,7 +1083,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="footer-bottom">
                     <p style="margin-top: 1rem;">
                         © 2026 Afet Hazırlık Rehberi<br>
@@ -1034,24 +1100,24 @@
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const menuOverlay = document.getElementById('menuOverlay');
-        
+
         function toggleMobileMenu() {
             mobileMenu.classList.toggle('active');
             menuOverlay.classList.toggle('active');
             document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
         }
-        
+
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         closeMenuBtn.addEventListener('click', toggleMobileMenu);
         menuOverlay.addEventListener('click', toggleMobileMenu);
-        
+
         // Close menu on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
                 toggleMobileMenu();
             }
         });
-        
+
         // Card click handlers
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', function(e) {
@@ -1062,7 +1128,7 @@
                     }
                 }
             });
-            
+
             // Keyboard navigation
             card.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -1072,22 +1138,22 @@
                     }
                 }
             });
-            
+
             // Make cards focusable
             card.setAttribute('tabindex', '0');
             card.setAttribute('role', 'button');
         });
-        
+
         // Theme detection
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.setAttribute('data-theme', 'dark');
         }
-        
+
         // Emergency banner click handler
         document.querySelector('.emergency-banner').addEventListener('click', () => {
             alert('ACİL DURUM NUMARASI: 112\n\n• Tüm acil durumlar için tek numara\n• Ücretsiz arama\n• 7/24 hizmet\n• Konum bilgisi otomatik paylaşılır\n\nSakin olun, net konuşun, adresinizi söyleyin.');
         });
-        
+
         // Handle page load animations
         window.addEventListener('load', () => {
             // Add animation classes to elements
@@ -1099,14 +1165,14 @@
                 }, index * 100);
             });
         });
-        
+
         // Simple visit counter
         if (localStorage) {
             const visits = parseInt(localStorage.getItem('afetHazirlikVisits') || 0) + 1;
             localStorage.setItem('afetHazirlikVisits', visits);
         }
-        
-        
+
+
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             // Ctrl + P for print
@@ -1115,14 +1181,14 @@
                 window.print();
             }
         });
-        
+
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
