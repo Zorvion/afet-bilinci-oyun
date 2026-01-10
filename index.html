@@ -1106,38 +1106,6 @@
             localStorage.setItem('afetHazirlikVisits', visits);
         }
         
-        // Print button
-        const printBtn = document.createElement('button');
-        printBtn.innerHTML = '🖨️ Yazdır';
-        printBtn.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            z-index: 40;
-            font-family: inherit;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition-fast);
-        `;
-        printBtn.addEventListener('click', () => window.print());
-        printBtn.addEventListener('mouseenter', () => {
-            printBtn.style.transform = 'translateY(-2px)';
-            printBtn.style.boxShadow = 'var(--shadow-xl)';
-        });
-        printBtn.addEventListener('mouseleave', () => {
-            printBtn.style.transform = 'translateY(0)';
-            printBtn.style.boxShadow = 'var(--shadow-lg)';
-        });
-        document.body.appendChild(printBtn);
         
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
