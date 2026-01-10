@@ -1,668 +1,978 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hakkında - Afet Bilinci Portalı</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #0288d1;
-      --primary-dark: #01579b;
-      --primary-light: #e3f2fd;
-      --secondary: #ff6f00;
-      --accent: #00c853;
-      --text-dark: #222;
-      --text-light: #444;
-      --white: #ffffff;
-      --shadow: 0 5px 15px rgba(0,0,0,0.1);
-      --transition: all 0.3s ease;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #bbdefb);
-      color: var(--text-dark);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    header {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: var(--white);
-      padding: 20px 0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23007bb6" fill-opacity="0.2" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-      background-size: cover;
-      background-position: center;
-    }
-
-    .header-content {
-      position: relative;
-      z-index: 1;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-      margin-bottom: 10px;
-    }
-
-    .tagline {
-      font-size: 1.1rem;
-      font-weight: 300;
-      margin-bottom: 20px;
-      opacity: 0.9;
-    }
-
-    nav {
-      margin-top: 15px;
-    }
-
-    nav a {
-      color: var(--white);
-      text-decoration: none;
-      margin: 0 20px;
-      font-weight: 500;
-      transition: var(--transition);
-      padding: 8px 16px;
-      border-radius: 30px;
-      position: relative;
-    }
-
-    nav a:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-
-    nav a.active {
-      background: rgba(255, 255, 255, 0.25);
-      font-weight: 600;
-    }
-
-    main {
-      padding: 60px 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .page-header h2 {
-      font-size: 2.5rem;
-      color: var(--primary-dark);
-      margin-bottom: 15px;
-      position: relative;
-      display: inline-block;
-    }
-
-    .page-header h2::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: var(--secondary);
-      border-radius: 2px;
-    }
-
-    .page-header p {
-      font-size: 1.1rem;
-      color: var(--text-light);
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .about-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 50px;
-      margin-bottom: 60px;
-      align-items: center;
-    }
-
-    .about-text {
-      padding-right: 20px;
-    }
-
-    .about-text h3 {
-      font-size: 1.8rem;
-      color: var(--primary-dark);
-      margin-bottom: 20px;
-    }
-
-    .about-text p {
-      margin-bottom: 20px;
-      color: var(--text-light);
-    }
-
-    .about-image {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-
-    .about-icon {
-      font-size: 5rem;
-      color: var(--primary);
-      margin-bottom: 20px;
-    }
-
-    .mission-vision {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      margin-bottom: 60px;
-    }
-
-    .mission, .vision {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      transition: var(--transition);
-    }
-
-    .mission:hover, .vision:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    .mission h3, .vision h3 {
-      font-size: 1.5rem;
-      color: var(--primary-dark);
-      margin-bottom: 15px;
-    }
-
-    .mission-icon, .vision-icon {
-      font-size: 3rem;
-      color: var(--secondary);
-      margin-bottom: 20px;
-    }
-
-    .team-section {
-      margin-bottom: 60px;
-    }
-
-    .team-section h3 {
-      text-align: center;
-      font-size: 2rem;
-      color: var(--primary-dark);
-      margin-bottom: 40px;
-    }
-
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-    }
-
-    .team-member {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      transition: var(--transition);
-    }
-
-    .team-member:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    .member-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: var(--primary-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      font-size: 2.5rem;
-      color: var(--primary);
-    }
-
-    .team-member h4 {
-      font-size: 1.3rem;
-      color: var(--primary-dark);
-      margin-bottom: 10px;
-    }
-
-    .team-member .role {
-      color: var(--secondary);
-      font-weight: 500;
-      margin-bottom: 15px;
-    }
-
-    .team-member p {
-      color: var(--text-light);
-      font-size: 0.9rem;
-    }
-
-    .features-section {
-      margin-bottom: 60px;
-    }
-
-    .features-section h3 {
-      text-align: center;
-      font-size: 2rem;
-      color: var(--primary-dark);
-      margin-bottom: 40px;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-    }
-
-    .feature-item {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      transition: var(--transition);
-    }
-
-    .feature-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    .feature-icon {
-      font-size: 3rem;
-      color: var(--primary);
-      margin-bottom: 20px;
-    }
-
-    .feature-item h4 {
-      font-size: 1.3rem;
-      color: var(--primary-dark);
-      margin-bottom: 15px;
-    }
-
-    .feature-item p {
-      color: var(--text-light);
-    }
-
-    .contact-section {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-
-    .contact-section h3 {
-      font-size: 2rem;
-      color: var(--primary-dark);
-      margin-bottom: 20px;
-    }
-
-    .contact-section p {
-      color: var(--text-light);
-      margin-bottom: 30px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .contact-info {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .contact-icon {
-      font-size: 1.5rem;
-      color: var(--primary);
-    }
-
-    footer {
-      margin-top: 80px;
-      background: linear-gradient(135deg, var(--primary-dark), #014370);
-      color: var(--white);
-      padding: 30px 0;
-      text-align: center;
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    .footer-logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      color: var(--white);
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: var(--primary-light);
-    }
-
-    .copyright {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in {
-      animation: fadeIn 0.8s ease forwards;
-    }
-
-    .delay-1 { animation-delay: 0.2s; }
-    .delay-2 { animation-delay: 0.4s; }
-    .delay-3 { animation-delay: 0.6s; }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 2rem;
-      }
-      
-      nav a {
-        margin: 0 10px;
-        padding: 6px 12px;
-        font-size: 0.9rem;
-      }
-      
-      .about-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-      
-      .about-text {
-        padding-right: 0;
-      }
-      
-      .mission-vision {
-        grid-template-columns: 1fr;
-      }
-      
-      .team-grid, .features-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header h1 {
-        font-size: 1.7rem;
-      }
-      
-      .page-header h2 {
-        font-size: 2rem;
-      }
-      
-      .contact-info {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Optimizasyonu -->
+    <title>Hakkında - Afet Hazırlık Platformu</title>
+    <meta name="description" content="Afet Hazırlık platformu hakkında bilgi, misyonumuz, vizyonumuz ve iletişim.">
+    <meta name="keywords" content="afet hazırlık, hakkında, misyon, vizyon, iletişim">
+    
+    <style>
+        /* Modern Reset ve Değişkenler - Index ile aynı */
+        :root {
+            /* Renk Paleti */
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --accent: #dc2626;
+            --warning: #f59e0b;
+            
+            /* Nötr Renkler */
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            --white: #ffffff;
+            --black: #000000;
+            
+            /* Efektler */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Koyu Tema */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #3b82f6;
+                --primary-dark: #2563eb;
+                --primary-light: #60a5fa;
+                --accent: #ef4444;
+                
+                --gray-50: #111827;
+                --gray-100: #1f2937;
+                --gray-200: #374151;
+                --gray-300: #4b5563;
+                --gray-400: #6b7280;
+                --gray-500: #9ca3af;
+                --gray-600: #d1d5db;
+                --gray-700: #e5e7eb;
+                --gray-800: #f3f4f6;
+                --gray-900: #f9fafb;
+                
+                --white: #1f2937;
+                --black: #f9fafb;
+            }
+        }
+        
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Tipografi */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--gray-900);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            letter-spacing: -0.025em;
+        }
+        
+        h2 {
+            font-size: 2.25rem;
+            letter-spacing: -0.025em;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+        }
+        
+        p {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+        }
+        
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header - Index ile aynı */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 0;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            header {
+                background: rgba(31, 41, 55, 0.95);
+                border-bottom: 1px solid var(--gray-800);
+            }
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1.2;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+        
+        /* Navigation - Index ile aynı */
+        .nav-desktop {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-desktop {
+                display: flex;
+                gap: 2rem;
+            }
+        }
+        
+        .nav-link {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition-fast);
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+            background: var(--gray-100);
+        }
+        
+        .nav-link.active {
+            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+        }
+        
+        /* Mobile Menu Button - Index ile aynı */
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        .menu-line {
+            width: 1.5rem;
+            height: 2px;
+            background: var(--gray-600);
+            transition: var(--transition-fast);
+            border-radius: 1px;
+        }
+        
+        /* Page Hero */
+        .page-hero {
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .page-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page-hero h1 {
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        
+        .page-hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.25rem;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 4rem 1rem;
+        }
+        
+        /* About Section */
+        .about-section {
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .about-grid {
+            display: grid;
+            gap: 3rem;
+        }
+        
+        @media (min-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+            }
+        }
+        
+        .about-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--gray-900);
+        }
+        
+        .about-image {
+            text-align: center;
+        }
+        
+        .about-icon {
+            font-size: 5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Mission Vision */
+        .mission-vision-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        @media (min-width: 768px) {
+            .mission-vision-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .mission-card, .vision-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            transition: var(--transition-normal);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .mission-card, .vision-card {
+                background: var(--gray-800);
+            }
+        }
+        
+        .mission-card:hover, .vision-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Features */
+        .features-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        
+        .feature-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            transition: var(--transition-normal);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .feature-card {
+                background: var(--gray-800);
+            }
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .feature-card .card-icon {
+            color: var(--accent);
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .contact-section {
+                background: var(--gray-800);
+            }
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            background: var(--gray-100);
+            transition: var(--transition-fast);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .contact-item {
+                background: var(--gray-700);
+            }
+        }
+        
+        .contact-item:hover {
+            background: var(--gray-200);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .contact-item:hover {
+                background: var(--gray-600);
+            }
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        /* Footer - Index ile aynı */
+        footer {
+            background: var(--gray-900);
+            color: var(--gray-300);
+            padding: 4rem 1rem 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .footer-column h4 {
+            color: var(--white);
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+            transform: translateX(4px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid var(--gray-800);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-delay-100 { animation-delay: 100ms; }
+        .animate-delay-200 { animation-delay: 200ms; }
+        .animate-delay-300 { animation-delay: 300ms; }
+        
+        /* Mobile Menu - Index ile aynı */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--white);
+            z-index: 100;
+            transition: var(--transition-normal);
+            padding: 2rem;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .mobile-menu {
+                background: var(--gray-800);
+            }
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .mobile-menu-link {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .mobile-menu-link {
+                color: var(--gray-300);
+            }
+        }
+        
+        .mobile-menu-link:hover,
+        .mobile-menu-link.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+        }
+        
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .page-hero h1 {
+                font-size: 2.75rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mission-vision-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Focus Styles */
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+    </style>
 </head>
 <body>
+    <!-- Header - Index ile aynı -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">🚨</div>
+                    <div class="logo-text">
+                        <div class="logo-title">Afet Hazırlık</div>
+                        <div class="logo-subtitle">Güvende Kal</div>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="nav-desktop" aria-label="Ana Navigasyon">
+                    <a href="index.html" class="nav-link">🏠 Ana Sayfa</a>
+                    <a href="yer.html" class="nav-link">🏔️ Yer Afetleri</a>
+                    <a href="su.html" class="nav-link">🌊 Su Afetleri</a>
+                    <a href="hava.html" class="nav-link">🌪️ Hava Afetleri</a>
+                    <a href="insan.html" class="nav-link">🔥 İnsan Kaynaklı</a>
+                    <a href="hakkinda.html" class="nav-link active">ℹ️ Hakkında</a>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü Aç">
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-  <header>
-    <div class="header-content">
-      <h1>🌍 Afet Bilinci Portalı</h1>
-      <p class="tagline">Güvenli yaşam için afetlere hazırlık ve farkındalık</p>
-      <nav>
-        <a href="index.html">Ana Sayfa</a>
-        <a href="yer.html">Yer Afetleri</a>
-        <a href="su.html">Su Afetleri</a>
-        <a href="hava.html">Hava Afetleri</a>
-        <a href="insan.html">İnsan Kaynaklı</a>
-        <a href="hakkinda.html" class="active">Hakkında</a>
-      </nav>
+    <!-- Mobile Menu - Index ile aynı -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <div class="logo-icon">🚨</div>
+                <div class="logo-text">
+                    <div class="logo-title">Afet Hazırlık</div>
+                </div>
+            </div>
+            <button id="closeMenuBtn" style="background:none;border:none;font-size:1.5rem;color:var(--gray-600);cursor:pointer;">×</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobil Navigasyon">
+            <a href="index.html" class="mobile-menu-link">🏠 Ana Sayfa</a>
+            <a href="yer.html" class="mobile-menu-link">🏔️ Yer Afetleri</a>
+            <a href="su.html" class="mobile-menu-link">🌊 Su Afetleri</a>
+            <a href="hava.html" class="mobile-menu-link">🌪️ Hava Afetleri</a>
+            <a href="insan.html" class="mobile-menu-link">🔥 İnsan Kaynaklı</a>
+            <a href="hakkinda.html" class="mobile-menu-link active">ℹ️ Hakkında</a>
+        </nav>
     </div>
-  </header>
 
-  <main>
-    <section class="page-header fade-in">
-      <h2>Hakkımızda</h2>
-      <p>Afet Bilinci Portalı'nın misyonu, vizyonu ve ekibimiz hakkında bilgi edinin</p>
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <h1 class="animate-fade-in-up">Hakkımızda</h1>
+                <p class="animate-fade-in-up animate-delay-100">
+                    Afet Hazırlık platformu hakkında bilgi edinin
+                </p>
+            </div>
+        </div>
     </section>
 
-    <section class="about-content fade-in">
-      <div class="about-text">
-        <h3>Afet Bilinci Portalı Nedir?</h3>
-        <p>Afet Bilinci Portalı, doğal ve insan kaynaklı afetler hakkında farkındalık oluşturmak, afet öncesi, sırası ve sonrasında doğru davranışları öğretmek amacıyla geliştirilmiş kapsamlı bir eğitim platformudur.</p>
-        <p>Platformumuz, interaktif senaryolar, bilgi kartları ve testler aracılığıyla kullanıcıların afet durumlarında nasıl hareket etmeleri gerektiğini öğrenmelerini sağlar. Amacımız, toplumun her kesiminin afetlere hazırlıklı olmasına katkıda bulunmaktır.</p>
-        <p>TÜBİTAK 4006 Bilim Fuarı kapsamında geliştirilen bu proje, öğrenciler ve toplumun tüm üyeleri için ücretsiz olarak sunulmaktadır.</p>
-      </div>
-      <div class="about-image fade-in delay-1">
-        <div class="about-icon">
-          <i class="fas fa-shield-alt"></i>
-        </div>
-        <h3>Güvenlik İlk Önceliğimiz</h3>
-        <p>Doğru bilgi hayat kurtarır</p>
-      </div>
-    </section>
+    <!-- Main Content -->
+    <main>
+        <!-- About Section -->
+        <section class="about-section">
+            <div class="container">
+                <div class="about-grid animate-fade-in-up">
+                    <div class="about-content">
+                        <h3>Afet Hazırlık Nedir?</h3>
+                        <p>Afet Hazırlık platformu, doğal ve insan kaynaklı afetler hakkında farkındalık oluşturmak, afet öncesi, sırası ve sonrasında doğru davranışları öğretmek amacıyla geliştirilmiş kapsamlı bir rehber platformudur.</p>
+                        <p>Platformumuz, kullanıcıların afet durumlarında nasıl hareket etmeleri gerektiğini öğrenmelerini sağlar. Amacımız, toplumun her kesiminin afetlere hazırlıklı olmasına katkıda bulunmaktır.</p>
+                        <p>Herkes için ücretsiz olarak sunulan bu platform, pratik bilgiler ve hazırlık rehberleri ile güvenli bir yaşam için destek sağlar.</p>
+                    </div>
+                    <div class="about-image animate-fade-in-up animate-delay-100">
+                        <div class="about-icon">🛡️</div>
+                        <h3>Güvenlik İlk Önceliğimiz</h3>
+                        <p>Doğru bilgi hayat kurtarır</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section class="mission-vision fade-in">
-      <div class="mission">
-        <div class="mission-icon">
-          <i class="fas fa-bullseye"></i>
-        </div>
-        <h3>Misyonumuz</h3>
-        <p>Toplumun afetler konusundaki farkındalığını artırmak, afet öncesi hazırlık, afet sırasında doğru davranış ve afet sonrası toparlanma süreçlerine ilişkin bilgi ve becerileri geliştirmek.</p>
-      </div>
-      <div class="vision">
-        <div class="vision-icon">
-          <i class="fas fa-eye"></i>
-        </div>
-        <h3>Vizyonumuz</h3>
-        <p>Afetlere karşı dirençli bir toplum oluşturmak, her bireyin afet durumunda kendisini ve sevdiklerini koruyabilecek bilgi ve beceriye sahip olmasını sağlamak.</p>
-      </div>
-    </section>
+        <!-- Mission & Vision -->
+        <section class="mission-vision-section">
+            <div class="container">
+                <div class="section-title animate-fade-in-up">
+                    <h2>Misyon ve Vizyon</h2>
+                </div>
+                <div class="mission-vision-grid">
+                    <div class="mission-card animate-fade-in-up">
+                        <div class="card-icon">🎯</div>
+                        <h3>Misyonumuz</h3>
+                        <p>Toplumun afetler konusundaki farkındalığını artırmak, afet öncesi hazırlık, afet sırasında doğru davranış ve afet sonrası toparlanma süreçlerine ilişkin bilgi ve becerileri geliştirmek.</p>
+                    </div>
+                    <div class="vision-card animate-fade-in-up animate-delay-100">
+                        <div class="card-icon">👁️</div>
+                        <h3>Vizyonumuz</h3>
+                        <p>Afetlere karşı dirençli bir toplum oluşturmak, her bireyin afet durumunda kendisini ve sevdiklerini koruyabilecek bilgi ve beceriye sahip olmasını sağlamak.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section class="team-section fade-in">
-      <h3>Proje Ekibimiz</h3>
-      <div class="team-grid">
-        <div class="team-member">
-          <div class="member-avatar">
-            <i class="fas fa-user-graduate"></i>
-          </div>
-          <h4>Mehmet Şaşmaz</h4>
-          <div class="role">Proje Lideri</div>
-          <p>Proje koordinasyonu ve içerik geliştirme sorumlusu</p>
-        </div>
-        <div class="team-member">
-          <div class="member-avatar">
-            <i class="fas fa-code"></i>
-          </div>
-          <h4>Mehmet Şaşmaz</h4>
-          <div class="role">Web Geliştirici</div>
-          <p>Front-end ve back-end kodlama, kullanıcı arayüzü tasarımı</p>
-        </div>
-        <div class="team-member">
-          <div class="member-avatar">
-            <i class="fas fa-pencil-alt"></i>
-          </div>
-          <h4>Mehmet Şaşmaz</h4>
-          <div class="role">İçerik Yazarı</div>
-          <p>Eğitim materyalleri ve senaryo yazımı</p>
-        </div>
-        <div class="team-member">
-          <div class="member-avatar">
-            <i class="fas fa-chart-bar"></i>
-          </div>
-          <h4>Mehmet Şaşmaz</h4>
-          <div class="role">Araştırmacı</div>
-          <p>Veri toplama, analiz ve doğrulama süreçleri</p>
-        </div>
-      </div>
-    </section>
+        <!-- Features -->
+        <section class="features-section">
+            <div class="container">
+                <div class="section-title animate-fade-in-up">
+                    <h2>Neler Sunuyoruz?</h2>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card animate-fade-in-up">
+                        <div class="card-icon">📚</div>
+                        <h4>Kapsamlı Bilgi</h4>
+                        <p>4 ana afet kategorisinde detaylı bilgi ve rehberler</p>
+                    </div>
+                    <div class="feature-card animate-fade-in-up animate-delay-100">
+                        <div class="card-icon">🎯</div>
+                        <h4>Pratik Öneriler</h4>
+                        <p>Uygulanabilir ve kolay anlaşılır hazırlık önerileri</p>
+                    </div>
+                    <div class="feature-card animate-fade-in-up animate-delay-200">
+                        <div class="card-icon">📱</div>
+                        <h4>Mobil Uyumluluk</h4>
+                        <p>Her cihazdan erişilebilen responsive tasarım</p>
+                    </div>
+                    <div class="feature-card animate-fade-in-up animate-delay-300">
+                        <div class="card-icon">🎓</div>
+                        <h4>Eğitim Odaklı</h4>
+                        <p>Öğrenmeyi kolaylaştıran görsel içerik</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section class="features-section fade-in">
-      <h3>Neler Sunuyoruz?</h3>
-      <div class="features-grid">
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-book-open"></i>
-          </div>
-          <h4>Kapsamlı Bilgi</h4>
-          <p>4 ana afet kategorisinde detaylı bilgi ve senaryolar</p>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-gamepad"></i>
-          </div>
-          <h4>İnteraktif Senaryolar</h4>
-          <p>Gerçek hayat senaryolarıyla pratik yapma imkanı</p>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-mobile-alt"></i>
-          </div>
-          <h4>Mobil Uyumluluk</h4>
-          <p>Her cihazdan erişilebilen responsive tasarım</p>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-graduation-cap"></i>
-          </div>
-          <h4>Eğitim Odaklı</h4>
-          <p>Öğrenmeyi kolaylaştıran görsel ve etkileşimli içerik</p>
-        </div>
-      </div>
-    </section>
+        <!-- Contact -->
+        <section class="contact-section animate-fade-in-up">
+            <div class="container">
+                <div class="section-title">
+                    <h2>İletişim</h2>
+                </div>
+                <p>Projemiz hakkında sorularınız veya önerileriniz varsa bizimle iletişime geçebilirsiniz.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>E-posta: bilgi@afethazirlik.com</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div>Telefon: (555) 123 4567</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>Konum: Denizli, Türkiye</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <section class="contact-section fade-in">
-      <h3>İletişim</h3>
-      <p>Projemiz hakkında sorularınız veya önerileriniz varsa bizimle iletişime geçebilirsiniz.</p>
-      <div class="contact-info">
-        <div class="contact-item">
-          <div class="contact-icon">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <div>(e-posta yada link)</div>
+    <!-- Footer - Index ile aynı -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-column">
+                        <h4>
+                            <span>🚨</span>
+                            Afet Hazırlık
+                        </h4>
+                        <p style="color: var(--gray-400); margin-bottom: 1.5rem;">
+                            Doğal afetlere hazırlık için rehber ve bilgi kaynağı. Herkes için güvenlik.
+                        </p>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>
+                            <span>🔗</span>
+                            Hızlı Bağlantılar
+                        </h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><span>🏠</span> Ana Sayfa</a></li>
+                            <li><a href="yer.html"><span>🏔️</span> Yer Afetleri</a></li>
+                            <li><a href="su.html"><span>🌊</span> Su Afetleri</a></li>
+                            <li><a href="hava.html"><span>🌪️</span> Hava Afetleri</a></li>
+                            <li><a href="insan.html"><span>🔥</span> İnsan Kaynaklı</a></li>
+                            <li><a href="hakkinda.html"><span>ℹ️</span> Hakkında</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>
+                            <span>📞</span>
+                            Acil Kaynaklar
+                        </h4>
+                        <ul class="footer-links">
+                            <li><a href="https://www.afad.gov.tr" target="_blank" rel="noopener"><span>🏛️</span> AFAD</a></li>
+                            <li><a href="https://www.mgm.gov.tr" target="_blank" rel="noopener"><span>🌤️</span> Meteoroloji</a></li>
+                            <li><a href="https://www.112.gov.tr" target="_blank" rel="noopener"><span>🚨</span> 112 Acil</a></li>
+                            <li><a href="https://www.kizilay.org.tr" target="_blank" rel="noopener"><span>❤️</span> Kızılay</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p style="margin-top: 1rem;">
+                        © 2024 Afet Hazırlık Rehberi<br>
+                        <small>Bilgilendirme amaçlıdır. Acil durumlarda 112'yi arayınız.</small>
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="contact-item">
-          <div class="contact-icon">
-            <i class="fas fa-phone"></i>
-          </div>
-          <div>(cep telefonu) </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">
-            <i class="fas fa-map-marker-alt"></i>
-          </div>
-          <div>Denizli, Türkiye</div>
-        </div>
-      </div>
-    </section>
-  </main>
+    </footer>
 
-  <footer>
-    <div class="footer-content">
-      <div class="footer-logo">Afet Bilinci Portalı</div>
-      <div class="footer-links">
-        <a href="index.html">Ana Sayfa</a>
-        <a href="yer.html">Yer Afetleri</a>
-        <a href="su.html">Su Afetleri</a>
-        <a href="hava.html">Hava Afetleri</a>
-        <a href="insan.html">İnsan Kaynaklı</a>
-        <a href="hakkinda.html">Hakkında</a>
-      </div>
-      <div class="copyright">
-        © 2025 Afet Bilinci Projesi | TÜBİTAK 4006 Fuarı için hazırlanmıştır
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // Basit animasyonlar için
-    document.addEventListener('DOMContentLoaded', function() {
-      // Öğeleri kaydırırken animasyon ekleme
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-      
-      const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-          }
+    <script>
+        // Mobile Menu Toggle - Index ile aynı
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+        
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        closeMenuBtn.addEventListener('click', toggleMobileMenu);
+        menuOverlay.addEventListener('click', toggleMobileMenu);
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
         });
-      }, observerOptions);
-      
-      // Animasyon uygulanacak öğeler
-      const animatedElements = document.querySelectorAll('.about-content, .mission-vision, .team-section, .features-section, .contact-section');
-      
-      animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-      });
-    });
-  </script>
+        
+        // Theme detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        
+        // Handle page load animations
+        window.addEventListener('load', () => {
+            // Add animation classes to elements
+            const animatedElements = document.querySelectorAll('.animate-fade-in-up');
+            animatedElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Escape to close menu
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
