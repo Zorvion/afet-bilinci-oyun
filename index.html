@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Yeni eklenen color-scheme meta etiketi -->
+    <!-- Google Dark Mode için gerekli meta etiketleri -->
     <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)">
 
     <!-- SEO Optimizasyonu -->
     <title>Afet Hazırlık - Doğal Afetler İçin Hazırlık Rehberi</title>
-    <meta name="description" content="Deprem, sel, yangın gibi doğal afetlere hazırlık için kapsamlı rehber ve bilgi kaynakları.">
+    <meta name="description" content="Deprem, sel, yangın gibi doğal afetler için hazırlık rehberi ve bilgi kaynakları.">
     <meta name="keywords" content="deprem, sel, yangın, doğal afet, acil durum, hazırlık, güvenlik">
     <meta name="author" content="Afet Hazırlık Platformu">
 
@@ -19,14 +21,14 @@
             /* Color-scheme eklemesi */
             color-scheme: light dark;
             
-            /* Renk Paleti */
+            /* Renk Paleti - DOĞRUDAN TANIMLANMIŞ */
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #3b82f6;
             --accent: #dc2626;
             --warning: #f59e0b;
 
-            /* Nötr Renkler */
+            /* Nötr Renkler - YÜKSEK KONTRAST */
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -40,6 +42,13 @@
 
             --white: #ffffff;
             --black: #000000;
+            
+            /* Koyu tema için doğrudan renkler */
+            --dark-bg: #0f172a;
+            --dark-text: #f8fafc;
+            --dark-card-bg: #1e293b;
+            --dark-gray-text: #cbd5e1;
+            --dark-light-text: #e2e8f0;
 
             /* Efektler */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -56,87 +65,146 @@
             --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Koyu Tema - GÜNCELLENDİ */
+        /* Koyu Tema için DOĞRUDAN CSS - Google için */
         @media (prefers-color-scheme: dark) {
             :root {
                 --primary: #3b82f6;
                 --primary-dark: #2563eb;
                 --primary-light: #60a5fa;
                 --accent: #ef4444;
-
-                --gray-50: #111827;
-                --gray-100: #1f2937;
-                --gray-200: #374151;
-                --gray-300: #4b5563;
-                --gray-400: #6b7280;
-                --gray-500: #9ca3af;
-                --gray-600: #d1d5db;
-                --gray-700: #e5e7eb;
-                --gray-800: #f3f4f6;  /* Daha açık yapıldı */
-                --gray-900: #f9fafb;  /* Daha açık yapıldı */
-
-                --white: #1f2937;
-                --black: #f9fafb;
+                --warning: #f59e0b;
+                
+                /* Daha yüksek kontrastlı renkler */
+                --gray-50: #0f172a;
+                --gray-100: #1e293b;
+                --gray-200: #334155;
+                --gray-300: #475569;
+                --gray-400: #64748b;
+                --gray-500: #94a3b8;
+                --gray-600: #cbd5e1;
+                --gray-700: #e2e8f0;
+                --gray-800: #f1f5f9;
+                --gray-900: #f8fafc;
             }
             
-            /* Koyu tema için metin renkleri düzenlemeleri */
+            /* Tüm sayfa için doğrudan renk tanımlamaları */
             body {
-                color: var(--gray-800);  /* Açık gri metin */
+                background-color: #0f172a !important;
+                color: #f1f5f9 !important;
             }
             
+            /* Başlıklar için DOĞRUDAN beyaz renk */
             h1, h2, h3, h4, h5, h6 {
-                color: var(--gray-900);  /* Daha açık başlık */
+                color: #ffffff !important;
             }
             
+            /* Paragraflar için DOĞRUDAN açık gri */
             p {
-                color: var(--gray-700);  /* Okunabilir paragraf */
+                color: #e2e8f0 !important;
             }
             
-            .card h3 {
-                color: var(--gray-900);  /* Kart başlıkları */
-            }
-            
-            .card p {
-                color: var(--gray-600);  /* Kart paragrafları */
-            }
-            
+            /* Logo için DOĞRUDAN beyaz */
             .logo-title {
-                color: var(--gray-900);  /* Logo başlığı */
+                color: #ffffff !important;
             }
             
             .logo-subtitle {
-                color: var(--gray-500);  /* Logo alt başlığı */
+                color: #94a3b8 !important;
             }
             
+            /* Kartlar için DOĞRUDAN renkler */
+            .card {
+                background-color: #1e293b !important;
+                border-color: #334155 !important;
+            }
+            
+            .card h3 {
+                color: #ffffff !important;
+            }
+            
+            .card p {
+                color: #cbd5e1 !important;
+            }
+            
+            /* Navigasyon için DOĞRUDAN renkler */
             .nav-link {
-                color: var(--gray-400);  /* Navigasyon linkleri */
+                color: #94a3b8 !important;
             }
             
             .nav-link:hover {
-                color: var(--primary-light);  /* Hover durumu */
+                color: #60a5fa !important;
+                background: rgba(96, 165, 250, 0.1) !important;
             }
             
+            .nav-link.active {
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+            }
+            
+            /* Hero section - değişmez, zaten açık renkli */
+            .hero h1 {
+                color: #ffffff !important;
+            }
+            
+            .hero p {
+                color: rgba(255, 255, 255, 0.9) !important;
+            }
+            
+            /* Features section */
+            .features {
+                background-color: #1e293b !important;
+            }
+            
+            .feature-item h3 {
+                color: #ffffff !important;
+            }
+            
+            .feature-item p {
+                color: #cbd5e1 !important;
+            }
+            
+            /* Header */
+            header {
+                background: rgba(30, 41, 59, 0.95) !important;
+                border-bottom-color: #334155 !important;
+            }
+            
+            /* Footer */
             footer {
-                color: var(--gray-300);  /* Footer metin rengi */
+                background-color: #0f172a !important;
+                color: #94a3b8 !important;
             }
             
             .footer-links a {
-                color: var(--gray-400);  /* Footer linkleri */
+                color: #94a3b8 !important;
             }
             
             .footer-links a:hover {
-                color: var(--white);  /* Footer link hover */
+                color: #ffffff !important;
             }
             
-            /* Mobil menü için düzenlemeler */
+            /* Mobile menu */
+            .mobile-menu {
+                background-color: #1e293b !important;
+            }
+            
             .mobile-menu-link {
-                color: var(--gray-300);  /* Mobil menü linkleri */
+                color: #cbd5e1 !important;
             }
             
             .mobile-menu-link:hover,
             .mobile-menu-link.active {
-                background: var(--primary);
-                color: var(--white);  /* Aktif/hover durumu */
+                background: #3b82f6 !important;
+                color: #ffffff !important;
+            }
+            
+            /* Scrollbar */
+            ::-webkit-scrollbar-track {
+                background: #1e293b !important;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: #475569 !important;
             }
         }
 
@@ -204,13 +272,6 @@
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--gray-200);
             padding: 1rem 0;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            header {
-                background: rgba(31, 41, 55, 0.95);
-                border-bottom: 1px solid var(--gray-800);
-            }
         }
 
         .header-content {
@@ -468,13 +529,6 @@
             cursor: pointer;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .card {
-                background: var(--gray-800);
-                border-color: var(--gray-700);
-            }
-        }
-
         .card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
@@ -699,12 +753,6 @@
             flex-direction: column;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .mobile-menu {
-                background: var(--gray-800);
-            }
-        }
-
         .mobile-menu.active {
             right: 0;
         }
@@ -729,12 +777,6 @@
             text-decoration: none;
             font-weight: 500;
             transition: var(--transition-fast);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .mobile-menu-link {
-                color: var(--gray-300);
-            }
         }
 
         .mobile-menu-link:hover,
