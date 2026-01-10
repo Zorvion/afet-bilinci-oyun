@@ -4,22 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Google Dark Mode için gerekli meta etiketleri -->
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)">
+
     <!-- SEO Optimizasyonu -->
     <title>Hakkında - Afet Hazırlık Platformu</title>
     <meta name="description" content="Afet Hazırlık platformu hakkında bilgi, misyonumuz, vizyonumuz ve iletişim.">
     <meta name="keywords" content="afet hazırlık, hakkında, misyon, vizyon, iletişim">
-    
+
     <style>
         /* Modern Reset ve Değişkenler - Index ile aynı */
         :root {
+            /* Color-scheme eklemesi */
+            color-scheme: light dark;
+            
             /* Renk Paleti */
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #3b82f6;
             --accent: #dc2626;
             --warning: #f59e0b;
-            
-            /* Nötr Renkler */
+
+            /* Nötr Renkler - YÜKSEK KONTRAST */
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -30,10 +38,10 @@
             --gray-700: #374151;
             --gray-800: #1f2937;
             --gray-900: #111827;
-            
+
             --white: #ffffff;
             --black: #000000;
-            
+
             /* Efektler */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -43,48 +51,261 @@
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
             --radius-xl: 1rem;
-            
+
             /* Transitions */
             --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
             --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        /* Koyu Tema */
+
+        /* Koyu Tema - DOĞRUDAN RENK TANIMLAMALARI */
         @media (prefers-color-scheme: dark) {
             :root {
                 --primary: #3b82f6;
                 --primary-dark: #2563eb;
                 --primary-light: #60a5fa;
                 --accent: #ef4444;
+                --warning: #f59e0b;
                 
-                --gray-50: #111827;
-                --gray-100: #1f2937;
-                --gray-200: #374151;
-                --gray-300: #4b5563;
-                --gray-400: #6b7280;
-                --gray-500: #9ca3af;
-                --gray-600: #d1d5db;
-                --gray-700: #e5e7eb;
-                --gray-800: #f3f4f6;
-                --gray-900: #f9fafb;
-                
-                --white: #1f2937;
-                --black: #f9fafb;
+                /* Daha yüksek kontrastlı renkler */
+                --gray-50: #0f172a;
+                --gray-100: #1e293b;
+                --gray-200: #334155;
+                --gray-300: #475569;
+                --gray-400: #64748b;
+                --gray-500: #94a3b8;
+                --gray-600: #cbd5e1;
+                --gray-700: #e2e8f0;
+                --gray-800: #f1f5f9;
+                --gray-900: #f8fafc;
+            }
+            
+            /* Tüm sayfa için doğrudan renk tanımlamaları */
+            body {
+                background-color: #0f172a !important;
+                color: #f1f5f9 !important;
+            }
+            
+            /* Başlıklar için DOĞRUDAN beyaz renk */
+            h1, h2, h3, h4, h5, h6 {
+                color: #ffffff !important;
+            }
+            
+            /* Paragraflar için DOĞRUDAN açık gri */
+            p {
+                color: #e2e8f0 !important;
+            }
+            
+            /* Logo için DOĞRUDAN beyaz */
+            .logo-title {
+                color: #ffffff !important;
+            }
+            
+            .logo-subtitle {
+                color: #94a3b8 !important;
+            }
+            
+            /* Kartlar için DOĞRUDAN renkler */
+            .mission-card, .vision-card, .feature-card, .contact-section {
+                background-color: #1e293b !important;
+                border: 1px solid #334155 !important;
+            }
+            
+            .mission-card h3, .vision-card h3, .feature-card h4 {
+                color: #ffffff !important;
+            }
+            
+            .mission-card p, .vision-card p, .feature-card p {
+                color: #cbd5e1 !important;
+            }
+            
+            /* About content */
+            .about-content h3 {
+                color: #ffffff !important;
+            }
+            
+            .about-content p {
+                color: #cbd5e1 !important;
+            }
+            
+            .about-image h3 {
+                color: #ffffff !important;
+            }
+            
+            .about-image p {
+                color: #94a3b8 !important;
+            }
+            
+            /* Contact items */
+            .contact-item {
+                background: #334155 !important;
+                border-color: #475569 !important;
+                color: #cbd5e1 !important;
+            }
+            
+            .contact-item:hover {
+                background: #475569 !important;
+                color: #f1f5f9 !important;
+            }
+            
+            .contact-icon {
+                color: #60a5fa !important;
+            }
+            
+            /* Navigasyon için DOĞRUDAN renkler */
+            .nav-link {
+                color: #94a3b8 !important;
+            }
+            
+            .nav-link:hover {
+                color: #60a5fa !important;
+                background: rgba(96, 165, 250, 0.1) !important;
+            }
+            
+            .nav-link.active {
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+            }
+            
+            /* Page Hero - değişmez, zaten açık renkli */
+            .page-hero h1 {
+                color: #ffffff !important;
+            }
+            
+            .page-hero p {
+                color: rgba(255, 255, 255, 0.9) !important;
+            }
+            
+            /* Section title */
+            .section-title h2 {
+                color: transparent !important;
+                background: linear-gradient(135deg, #3b82f6, #ef4444) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+            }
+            
+            .section-title p {
+                color: #cbd5e1 !important;
+            }
+            
+            /* Header */
+            header {
+                background: rgba(30, 41, 59, 0.95) !important;
+                border-bottom-color: #334155 !important;
+            }
+            
+            /* Butonlar */
+            .card-btn.primary {
+                background: #3b82f6 !important;
+                color: #ffffff !important;
+            }
+            
+            .card-btn.primary:hover {
+                background: #2563eb !important;
+            }
+            
+            .card-btn.secondary {
+                background: #475569 !important;
+                color: #cbd5e1 !important;
+            }
+            
+            .card-btn.secondary:hover {
+                background: #64748b !important;
+                color: #f1f5f9 !important;
+            }
+            
+            /* About icon */
+            .about-icon {
+                color: #3b82f6 !important;
+            }
+            
+            /* Card icons */
+            .card-icon {
+                color: #3b82f6 !important;
+            }
+            
+            .feature-card .card-icon {
+                color: #ef4444 !important;
+            }
+            
+            /* Footer */
+            footer {
+                background-color: #0f172a !important;
+                color: #94a3b8 !important;
+            }
+            
+            .footer-links a {
+                color: #94a3b8 !important;
+            }
+            
+            .footer-links a:hover {
+                color: #ffffff !important;
+            }
+            
+            .footer-column h4 {
+                color: #ffffff !important;
+            }
+            
+            .footer-column p {
+                color: #64748b !important;
+            }
+            
+            .footer-bottom {
+                border-top-color: #334155 !important;
+                color: #64748b !important;
+            }
+            
+            /* Mobile menu */
+            .mobile-menu {
+                background-color: #1e293b !important;
+            }
+            
+            .mobile-menu-link {
+                color: #cbd5e1 !important;
+            }
+            
+            .mobile-menu-link:hover,
+            .mobile-menu-link.active {
+                background: #3b82f6 !important;
+                color: #ffffff !important;
+            }
+            
+            /* Scrollbar */
+            ::-webkit-scrollbar-track {
+                background: #1e293b !important;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: #475569 !important;
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background: #64748b !important;
+            }
+            
+            /* Menu overlay */
+            .menu-overlay {
+                background: rgba(0, 0, 0, 0.7) !important;
+            }
+            
+            /* Menu button lines */
+            .menu-line {
+                background: #cbd5e1 !important;
             }
         }
-        
+
         /* Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         html {
             scroll-behavior: smooth;
             font-size: 16px;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--gray-50);
@@ -93,33 +314,33 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
+
         /* Tipografi */
         h1, h2, h3, h4, h5, h6 {
             font-weight: 700;
             line-height: 1.2;
             color: var(--gray-900);
         }
-        
+
         h1 {
             font-size: 3rem;
             letter-spacing: -0.025em;
         }
-        
+
         h2 {
             font-size: 2.25rem;
             letter-spacing: -0.025em;
         }
-        
+
         h3 {
             font-size: 1.5rem;
         }
-        
+
         p {
             font-size: 1.125rem;
             color: var(--gray-600);
         }
-        
+
         /* Container */
         .container {
             width: 100%;
@@ -127,7 +348,7 @@
             margin: 0 auto;
             padding: 0 1rem;
         }
-        
+
         /* Header - Index ile aynı */
         header {
             position: sticky;
@@ -138,28 +359,21 @@
             border-bottom: 1px solid var(--gray-200);
             padding: 1rem 0;
         }
-        
-        @media (prefers-color-scheme: dark) {
-            header {
-                background: rgba(31, 41, 55, 0.95);
-                border-bottom: 1px solid var(--gray-800);
-            }
-        }
-        
+
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 2rem;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
         }
-        
+
         .logo-icon {
             width: 2.5rem;
             height: 2.5rem;
@@ -172,37 +386,37 @@
             font-size: 1.25rem;
             font-weight: 600;
         }
-        
+
         .logo-text {
             display: flex;
             flex-direction: column;
         }
-        
+
         .logo-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--gray-900);
             line-height: 1.2;
         }
-        
+
         .logo-subtitle {
             font-size: 0.875rem;
             color: var(--gray-500);
             font-weight: 500;
         }
-        
+
         /* Navigation - Index ile aynı */
         .nav-desktop {
             display: none;
         }
-        
+
         @media (min-width: 768px) {
             .nav-desktop {
                 display: flex;
                 gap: 2rem;
             }
         }
-        
+
         .nav-link {
             color: var(--gray-600);
             text-decoration: none;
@@ -212,18 +426,18 @@
             border-radius: var(--radius-md);
             transition: var(--transition-fast);
         }
-        
+
         .nav-link:hover {
             color: var(--primary);
             background: var(--gray-100);
         }
-        
+
         .nav-link.active {
             color: var(--primary);
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: var(--white);
         }
-        
+
         /* Mobile Menu Button - Index ile aynı */
         .mobile-menu-btn {
             display: flex;
@@ -235,13 +449,13 @@
             padding: 0.5rem;
             border-radius: var(--radius-md);
         }
-        
+
         @media (min-width: 768px) {
             .mobile-menu-btn {
                 display: none;
             }
         }
-        
+
         .menu-line {
             width: 1.5rem;
             height: 2px;
@@ -249,7 +463,7 @@
             transition: var(--transition-fast);
             border-radius: 1px;
         }
-        
+
         /* Page Hero */
         .page-hero {
             padding: 4rem 1rem;
@@ -258,7 +472,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .page-hero::before {
             content: '';
             position: absolute;
@@ -269,39 +483,40 @@
             background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
             opacity: 0.3;
         }
-        
+
         .page-hero-content {
             position: relative;
             z-index: 1;
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .page-hero h1 {
             color: var(--white);
             margin-bottom: 1rem;
         }
-        
+
         .page-hero p {
             color: rgba(255, 255, 255, 0.9);
             font-size: 1.25rem;
         }
-        
+
         /* Main Content */
         main {
             padding: 4rem 1rem;
+            background-color: var(--gray-50);
         }
-        
+
         /* About Section */
         .about-section {
             margin-bottom: 4rem;
         }
-        
+
         .section-title {
             text-align: center;
             margin-bottom: 3rem;
         }
-        
+
         .section-title h2 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -310,48 +525,48 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .about-grid {
             display: grid;
             gap: 3rem;
         }
-        
+
         @media (min-width: 768px) {
             .about-grid {
                 grid-template-columns: 1fr 1fr;
                 align-items: center;
             }
         }
-        
+
         .about-content h3 {
             font-size: 1.8rem;
             margin-bottom: 1.5rem;
             color: var(--gray-900);
         }
-        
+
         .about-image {
             text-align: center;
         }
-        
+
         .about-icon {
             font-size: 5rem;
             color: var(--primary);
             margin-bottom: 1rem;
         }
-        
+
         /* Mission Vision */
         .mission-vision-grid {
             display: grid;
             gap: 2rem;
             margin-bottom: 4rem;
         }
-        
+
         @media (min-width: 768px) {
             .mission-vision-grid {
                 grid-template-columns: 1fr 1fr;
             }
         }
-        
+
         .mission-card, .vision-card {
             background: var(--white);
             border-radius: var(--radius-xl);
@@ -360,37 +575,31 @@
             text-align: center;
             transition: var(--transition-normal);
         }
-        
-        @media (prefers-color-scheme: dark) {
-            .mission-card, .vision-card {
-                background: var(--gray-800);
-            }
-        }
-        
+
         .mission-card:hover, .vision-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-xl);
         }
-        
+
         .card-icon {
             font-size: 3rem;
             color: var(--primary);
             margin-bottom: 1.5rem;
         }
-        
+
         /* Features */
         .features-grid {
             display: grid;
             gap: 2rem;
             margin-bottom: 4rem;
         }
-        
+
         @media (min-width: 768px) {
             .features-grid {
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             }
         }
-        
+
         .feature-card {
             background: var(--white);
             border-radius: var(--radius-xl);
@@ -399,22 +608,16 @@
             text-align: center;
             transition: var(--transition-normal);
         }
-        
-        @media (prefers-color-scheme: dark) {
-            .feature-card {
-                background: var(--gray-800);
-            }
-        }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-xl);
         }
-        
+
         .feature-card .card-icon {
             color: var(--accent);
         }
-        
+
         /* Contact Section */
         .contact-section {
             background: var(--white);
@@ -423,13 +626,7 @@
             box-shadow: var(--shadow-lg);
             text-align: center;
         }
-        
-        @media (prefers-color-scheme: dark) {
-            .contact-section {
-                background: var(--gray-800);
-            }
-        }
-        
+
         .contact-info {
             display: flex;
             flex-wrap: wrap;
@@ -437,7 +634,7 @@
             justify-content: center;
             margin-top: 2rem;
         }
-        
+
         .contact-item {
             display: flex;
             align-items: center;
@@ -446,29 +643,19 @@
             border-radius: var(--radius-lg);
             background: var(--gray-100);
             transition: var(--transition-fast);
+            border: 1px solid transparent;
         }
-        
-        @media (prefers-color-scheme: dark) {
-            .contact-item {
-                background: var(--gray-700);
-            }
-        }
-        
+
         .contact-item:hover {
             background: var(--gray-200);
+            transform: translateY(-2px);
         }
-        
-        @media (prefers-color-scheme: dark) {
-            .contact-item:hover {
-                background: var(--gray-600);
-            }
-        }
-        
+
         .contact-icon {
             font-size: 1.5rem;
             color: var(--primary);
         }
-        
+
         /* Footer - Index ile aynı */
         footer {
             background: var(--gray-900);
@@ -476,24 +663,24 @@
             padding: 4rem 1rem 2rem;
             margin-top: 4rem;
         }
-        
+
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .footer-grid {
             display: grid;
             gap: 3rem;
             margin-bottom: 3rem;
         }
-        
+
         @media (min-width: 768px) {
             .footer-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-        
+
         .footer-column h4 {
             color: var(--white);
             font-size: 1.125rem;
@@ -502,15 +689,15 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .footer-links {
             list-style: none;
         }
-        
+
         .footer-links li {
             margin-bottom: 0.75rem;
         }
-        
+
         .footer-links a {
             color: var(--gray-400);
             text-decoration: none;
@@ -519,12 +706,12 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .footer-links a:hover {
             color: var(--white);
             transform: translateX(4px);
         }
-        
+
         .footer-bottom {
             border-top: 1px solid var(--gray-800);
             padding-top: 2rem;
@@ -532,7 +719,7 @@
             color: var(--gray-500);
             font-size: 0.875rem;
         }
-        
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -544,16 +731,16 @@
                 transform: translateY(0);
             }
         }
-        
+
         .animate-fade-in-up {
             animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
         }
-        
+
         .animate-delay-100 { animation-delay: 100ms; }
         .animate-delay-200 { animation-delay: 200ms; }
         .animate-delay-300 { animation-delay: 300ms; }
-        
+
         /* Mobile Menu - Index ile aynı */
         .mobile-menu {
             position: fixed;
@@ -569,30 +756,24 @@
             display: flex;
             flex-direction: column;
         }
-        
-        @media (prefers-color-scheme: dark) {
-            .mobile-menu {
-                background: var(--gray-800);
-            }
-        }
-        
+
         .mobile-menu.active {
             right: 0;
         }
-        
+
         .mobile-menu-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
-        
+
         .mobile-menu-links {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
-        
+
         .mobile-menu-link {
             padding: 1rem;
             border-radius: var(--radius-md);
@@ -601,19 +782,13 @@
             font-weight: 500;
             transition: var(--transition-fast);
         }
-        
-        @media (prefers-color-scheme: dark) {
-            .mobile-menu-link {
-                color: var(--gray-300);
-            }
-        }
-        
+
         .mobile-menu-link:hover,
         .mobile-menu-link.active {
             background: var(--primary);
             color: var(--white);
         }
-        
+
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -626,64 +801,64 @@
             visibility: hidden;
             transition: var(--transition-normal);
         }
-        
+
         .menu-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
             }
-            
+
             h2 {
                 font-size: 2rem;
             }
-            
+
             .page-hero h1 {
                 font-size: 2.75rem;
             }
-            
+
             .section-title h2 {
                 font-size: 2rem;
             }
-            
+
             .about-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .mission-vision-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .contact-info {
                 flex-direction: column;
                 align-items: center;
             }
         }
-        
+
         /* Focus Styles */
         :focus-visible {
             outline: 2px solid var(--primary);
             outline-offset: 2px;
         }
-        
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: var(--gray-100);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--gray-300);
             border-radius: 5px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--gray-400);
         }
@@ -701,17 +876,17 @@
                         <div class="logo-subtitle">Güvende Kal</div>
                     </div>
                 </a>
-                
+
                 <!-- Desktop Navigation -->
                 <nav class="nav-desktop" aria-label="Ana Navigasyon">
                     <a href="index.html" class="nav-link">🏠 Ana Sayfa</a>
                     <a href="yer.html" class="nav-link">🏔️ Yer Afetleri</a>
                     <a href="su.html" class="nav-link">🌊 Su Afetleri</a>
                     <a href="hava.html" class="nav-link">🌪️ Hava Afetleri</a>
-                    <a href="insan.html" class="nav-link">🔥 İnsan Kaynaklı</a>
+                    <a href="İnsan.html" class="nav-link">🔥 İnsan Kaynaklı</a>
                     <a href="hakkinda.html" class="nav-link active">ℹ️ Hakkında</a>
                 </nav>
-                
+
                 <!-- Mobile Menu Button -->
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü Aç">
                     <span class="menu-line"></span>
@@ -739,7 +914,7 @@
             <a href="yer.html" class="mobile-menu-link">🏔️ Yer Afetleri</a>
             <a href="su.html" class="mobile-menu-link">🌊 Su Afetleri</a>
             <a href="hava.html" class="mobile-menu-link">🌪️ Hava Afetleri</a>
-            <a href="insan.html" class="mobile-menu-link">🔥 İnsan Kaynaklı</a>
+            <a href="İnsan.html" class="mobile-menu-link">🔥 İnsan Kaynaklı</a>
             <a href="hakkinda.html" class="mobile-menu-link active">ℹ️ Hakkında</a>
         </nav>
     </div>
@@ -868,7 +1043,7 @@
                             Doğal afetlere hazırlık için rehber ve bilgi kaynağı. Herkes için güvenlik.
                         </p>
                     </div>
-                    
+
                     <div class="footer-column">
                         <h4>
                             <span>🔗</span>
@@ -879,11 +1054,11 @@
                             <li><a href="yer.html"><span>🏔️</span> Yer Afetleri</a></li>
                             <li><a href="su.html"><span>🌊</span> Su Afetleri</a></li>
                             <li><a href="hava.html"><span>🌪️</span> Hava Afetleri</a></li>
-                            <li><a href="insan.html"><span>🔥</span> İnsan Kaynaklı</a></li>
+                            <li><a href="İnsan.html"><span>🔥</span> İnsan Kaynaklı</a></li>
                             <li><a href="hakkinda.html"><span>ℹ️</span> Hakkında</a></li>
                         </ul>
                     </div>
-                    
+
                     <div class="footer-column">
                         <h4>
                             <span>📞</span>
@@ -897,7 +1072,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="footer-bottom">
                     <p style="margin-top: 1rem;">
                         © 2026 Afet Hazırlık Rehberi<br>
@@ -914,32 +1089,31 @@
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const menuOverlay = document.getElementById('menuOverlay');
-        
+
         function toggleMobileMenu() {
             mobileMenu.classList.toggle('active');
             menuOverlay.classList.toggle('active');
             document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
         }
-        
+
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         closeMenuBtn.addEventListener('click', toggleMobileMenu);
         menuOverlay.addEventListener('click', toggleMobileMenu);
-        
+
         // Close menu on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
                 toggleMobileMenu();
             }
         });
-        
+
         // Theme detection
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.setAttribute('data-theme', 'dark');
         }
-        
+
         // Handle page load animations
         window.addEventListener('load', () => {
-            // Add animation classes to elements
             const animatedElements = document.querySelectorAll('.animate-fade-in-up');
             animatedElements.forEach((el, index) => {
                 setTimeout(() => {
@@ -948,7 +1122,7 @@
                 }, index * 100);
             });
         });
-        
+
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             // Escape to close menu
@@ -956,14 +1130,14 @@
                 toggleMobileMenu();
             }
         });
-        
+
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
