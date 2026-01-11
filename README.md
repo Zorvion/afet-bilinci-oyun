@@ -1,1 +1,1 @@
-# afet-bilinci-oyun
+# doğal-afet-hazırlık
